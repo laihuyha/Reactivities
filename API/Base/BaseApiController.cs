@@ -7,7 +7,7 @@ namespace API.Base
     [Route("api/[controller]")]
     public class BaseApiController : ControllerBase
     {
-        private IMediator mediator;
-        protected IMediator _mediator => mediator ??= (IMediator) HttpContext.RequestServices.GetService(typeof(IMediator));
+        private IMediator _mediator;
+        protected IMediator Mediator => _mediator ??= (IMediator) HttpContext.RequestServices.GetService(typeof(IMediator));
     }
 }

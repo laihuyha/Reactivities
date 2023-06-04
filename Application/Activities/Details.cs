@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Domain;
 using MediatR;
+using Persistence;
 
 namespace Application.Activities
 {
@@ -14,13 +15,15 @@ namespace Application.Activities
 
         public class Handler : IRequestHandler<Query, Activity>
         {
-            public Handler()
+            private readonly DataContext _context;
+            public Handler(DataContext context)
             {
+                _context = context;
             }
 
             public async Task<Activity> Handle(Query request, System.Threading.CancellationToken cancellationToken)
             {
-                throw new NotImplementedException();
+                return await _context.Activities.FindAsync(request.Id);
             }
         }
     }
