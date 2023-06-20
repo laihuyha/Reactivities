@@ -1,7 +1,10 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
+//theme
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+//core
+import "primereact/resources/primereact.min.css";
+import "./app/layout/index.css";
+import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
 import "fomantic-ui-css/semantic.css";
 
@@ -10,7 +13,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   // <React.StrictMode>
-    <App />
+  <App />
   // </React.StrictMode>
 );
 

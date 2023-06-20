@@ -10,6 +10,7 @@
     "@types/node": "^16.18.25",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
+    "axios": "^1.4.0",
     "fomantic-ui": "^2.9.2",
     "fomantic-ui-css": "^2.9.2",
     "primereact": "^9.5.0",
