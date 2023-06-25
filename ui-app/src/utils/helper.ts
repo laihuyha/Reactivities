@@ -1,4 +1,6 @@
-export default function ModelToColumns(T: any) {
+import constants from "./constanst";
+
+export default function ModelToColumns(T: any, ignoreKeys?: string[]) {
     let columns = [];
     for (const key in T) {
         if (T.hasOwnProperty(key)) {
@@ -6,5 +8,9 @@ export default function ModelToColumns(T: any) {
             columns.push(column);
         }
     }
-    return columns;
+    if (ignoreKeys) {
+        ignoreKeys = ignoreKeys.concat(constants.ignoreId);
+        return columns.filter(x => !ignoreKeys!.includes(x.field.toLowerCase()));
+    }
+    return columns.filter(x => !constants.ignoreId.includes(x.field.toLowerCase()));
 }

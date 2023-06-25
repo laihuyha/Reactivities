@@ -1,31 +1,29 @@
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeflex/primeflex.css";
+import "primeicons/primeicons.css";
+import "../layout/index.scss";
 import { useEffect, useState } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
+import { configurePrimeReact } from "../config/primeReactConfig";
 import axios from "axios";
-import ModelToColumns from "../../utils/helper";
 import Activity from "../models/activity";
+import Navbar from "./Navbar";
+import ActivitiesDashBoard from "../../features/activities/dashboard/ActivitiesDashBoard";
 
 const App = () => {
-  const [activities, setListActivities] = useState<Activity[]>();
-  const [columns, setColumns] = useState<any[]>();
+  configurePrimeReact();
+
+  const [activities, setListActivities] = useState<Activity[]>([]);
   useEffect(() => {
-    axios.get("https://localhost:5001/api/Activities").then((res) => {
+    axios.get(`${process.env.REACT_APP_API}/Activities`).then((res) => {
       setListActivities(res.data);
-      setColumns(ModelToColumns(res.data[0]));
     });
   }, []);
 
-  console.log(columns);
-
   return (
     <div className="App">
-      <DataTable value={activities} tableStyle={{ minWidth: "50rem" }}>
-        <Column field="title" header="Title"></Column>
-        <Column field="date" header="Date"></Column>
-        <Column field="description" header="Description"></Column>
-        <Column field="category" header="Category"></Column>
-        <Column field="city" header="City"></Column>
-      </DataTable>
+      <Navbar />
+      <ActivitiesDashBoard activities={activities} />
     </div>
   );
 };
