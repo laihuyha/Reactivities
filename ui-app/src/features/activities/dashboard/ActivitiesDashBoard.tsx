@@ -1,6 +1,7 @@
 import Activity from "../../../app/models/activity";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 import ActivitiesList from "./ActivitiesList";
+import ActivityDetails from "../details/ActivityDetails";
 
 interface Props {
   activities: Activity[];
@@ -29,7 +30,7 @@ const ActivitiesDashBoard = ({ activities }: Props) => {
           size={35}
           className="flex align-items-center justify-content-center"
         >
-          Panel 2
+          <ActivityDetails activity={sortedActivities[0]} />
         </SplitterPanel>
       </Splitter>
     </>

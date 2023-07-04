@@ -1,16 +1,38 @@
+import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-const ActivityDetails = () => {
-  return (
-    <div className="card">
-      <Card title="Title">
-        <p className="m-0">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-          sed consequuntur error repudiandae numquam deserunt quisquam repellat
-          libero asperiores earum nam nobis, culpa ratione quam perferendis
-          esse, cupiditate neque quas!
-        </p>
-      </Card>
+import Activity from "../../../app/models/activity";
+interface Props {
+  activity: Activity;
+}
+const ActivityDetails = ({ activity }: Props) => {
+  const header = (
+    <img
+      alt="Card"
+      src="https://primefaces.org/cdn/primereact/images/usercard.png"
+    />
+  );
+  const footer = (
+    <div className="flex flex-wrap justify-content-between gap-2">
+      <Button
+        label="Cancel"
+        icon="pi pi-times"
+        className="p-button-outlined p-button-secondary"
+      />
+      <Button label="Save" icon="pi pi-check" />
     </div>
+  );
+  return (
+    activity && (
+      <div className="card" style={{ maxWidth: "95%" }}>
+        <Card title={`${activity.title}`} header={header} footer={footer}>
+          <p className="m-2">{activity.date}</p>
+          <p className="m-2">{activity.description}</p>
+          <p className="m-2">{activity.category}</p>
+          <p className="m-2">{activity.city}</p>
+          <p className="m-2">{activity.venue}</p>
+        </Card>
+      </div>
+    )
   );
 };
 
