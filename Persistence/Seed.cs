@@ -10,29 +10,37 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context)
         {
-            if (context.Activities.Any()) return;
-            var activities = new List<Activity>
+            List<string> AvailabelCity = new List<string> { "London", "NewYork", "California", "WashingtonDC", "HoChiMinh", "Paris", "Tokyo", "Kyoto" };
+            List<string> AvailabelActivities = new List<string> { "eat", "drinks", "play games", "take photos", "fuck", "shopping", "rest", "go somewhere" };
+            List<string> AvailabelLocation = new List<string> { "Pub", "Bar", "Restaurant", "Gaming House", "Pagoda", "Shopping center", "House", "Downtown" };
+            Dictionary<int, string> AvailabelCityDictionary = new Dictionary<int, string>();
+            Dictionary<int, string> AvailabelActivitiesDictionary = new Dictionary<int, string>();
+            Dictionary<int, string> AvailabelLocationDictionary = new Dictionary<int, string>();
+            for (var i = 0; i < AvailabelActivities.Count; i++)
             {
-                new Activity {
-                    Title = "Past Activity 1",
-                    Date = DateTime.Now.AddMonths(-2),
-                    Description = "Activity 2 months ago",
-                    Category = "drinks",
-                    City = "London",
+                AvailabelActivitiesDictionary.TryAdd(i, AvailabelActivities[i]);
+                AvailabelCityDictionary.TryAdd(i, AvailabelCity[i]);
+                AvailabelLocationDictionary.TryAdd(i, AvailabelLocation[i]);
+            }
+
+            if (context.Activities.Any()) return;
+
+            for (var i = 0; i < 20; i++)
+            {
+                var random = new Random();
+                var activity = new Activity
+                {
+                    Title = $"Past Activity {i}",
+                    Date = DateTime.Now.AddMonths(random.Next(-10, 0)),
+                    Category = AvailabelActivitiesDictionary.GetValueOrDefault(random.Next(0, 8)),
+                    City = AvailabelCityDictionary.GetValueOrDefault(random.Next(0, 8)),
                     Id = Guid.NewGuid(),
-                    Venue = "Pub"
-                },
-                new Activity {
-                    Title = "Past Activity 2",
-                    Date = DateTime.Now.AddMonths(-1),
-                    Description = "Activity 1 months ago",
-                    Category = "drinks",
-                    City = "Paris",
-                    Id = Guid.NewGuid(),
-                    Venue = "Bar"
-                }
-            };
-            await context.Activities.AddRangeAsync(activities);
+                    Venue = AvailabelLocationDictionary.GetValueOrDefault(random.Next(0, 8))
+                };
+                activity.Description = $"Activity {DateTime.Now.Month - activity.Date.Month} months ago";
+
+                await context.Activities.AddAsync(activity);
+            }
             await context.SaveChangesAsync();
         }
     }
