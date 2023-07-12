@@ -35,3 +35,5 @@ msbuild.wrn
 **/bin
 **/obj
 **/node_modules
+*.db
+API.code-workspace
