@@ -5,9 +5,10 @@ import { Button } from "primereact/button";
 
 interface Props {
   activities: Activity[];
+  onClick: () => void;
 }
 
-const template = (activity: Activity) => {
+const template = (activity: Activity, onClick: () => void) => {
   return (
     <div className="col-12">
       <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
@@ -24,8 +25,14 @@ const template = (activity: Activity) => {
             </div>
           </div>
           <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-            <span className="text-2xl font-semibold">{activity.description}</span>
-            <Button icon="pi pi-map" className="p-button-rounded"></Button>
+            <span className="text-2xl font-semibold">
+              {activity.description}
+            </span>
+            <Button
+              icon="pi pi-map"
+              className="p-button-rounded"
+              onClick={onClick}
+            ></Button>
           </div>
         </div>
       </div>
@@ -33,7 +40,7 @@ const template = (activity: Activity) => {
   );
 };
 
-const ActivitiesList = ({ activities }: Props) => {
+const ActivitiesList = ({ activities, onClick }: Props) => {
   return (
     <DataView
       style={{
@@ -42,7 +49,7 @@ const ActivitiesList = ({ activities }: Props) => {
       paginator={true}
       rows={4}
       value={activities}
-      itemTemplate={template}
+      itemTemplate={(activity) => template(activity, onClick)}
     />
   );
 };
