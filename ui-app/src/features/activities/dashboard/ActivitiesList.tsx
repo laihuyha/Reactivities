@@ -1,23 +1,38 @@
 import Activity from "../../../app/models/activity";
 import { DataView } from "primereact/dataview";
 import { Tag } from "primereact/tag";
-import { Button } from "primereact/button";
 import { useRef } from "react";
 import { ContextMenu } from "primereact/contextmenu";
+import { MenuItem } from "primereact/menuitem";
 
 interface Props {
   activities: Activity[];
   onClick: () => void;
+  onEdit: () => void;
 }
 
-const ActivitiesList = ({ activities, onClick }: Props) => {
+const ActivitiesList = ({ activities, onClick, onEdit }: Props) => {
   const cm = useRef<any>(null);
-  const items = [
-    { label: "View", icon: "pi pi-fw pi-search" },
+
+  const items: MenuItem[] = [
+    {
+      label: "View",
+      icon: "pi pi-fw pi-search",
+      command: () => {
+        onClick();
+      },
+    },
+    {
+      label: "Edit",
+      icon: "pi pi-fw pi-file-edit",
+      command: () => {
+        onEdit();
+      },
+    },
     { label: "Delete", icon: "pi pi-fw pi-trash" },
   ];
 
-  const template = (activity: Activity, onClick: () => void) => {
+  const template = (activity: Activity) => {
     return (
       <div
         className="col-12"
@@ -45,11 +60,6 @@ const ActivitiesList = ({ activities, onClick }: Props) => {
               <span className="text-2xl font-semibold">
                 {activity.description}
               </span>
-              <Button
-                icon="pi pi-map"
-                className="p-button-rounded"
-                onClick={onClick}
-              ></Button>
             </div>
           </div>
         </div>
@@ -67,7 +77,7 @@ const ActivitiesList = ({ activities, onClick }: Props) => {
         paginator={true}
         rows={5}
         value={activities}
-        itemTemplate={(activity) => template(activity, onClick)}
+        itemTemplate={(activity) => template(activity)}
       />
     </>
   );
