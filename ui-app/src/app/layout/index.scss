@@ -24,3 +24,15 @@
     color: #ffe6e6 !important;
   }
 }
+
+@font-face {
+  font-family: "Ysabeau Infant";
+  src: url(../../assets/fonts/Ysabeau_Infant/YsabeauInfant-Italic-VariableFont_wght.ttf)
+    format("truetype")
+    url(../../assets/fonts/Ysabeau_Infant/YsabeauInfant-VariableFont_wght.ttf)
+    format("truetype");
+}
+
+.body {
+  font-family: "Ysabeau Infant";
+}

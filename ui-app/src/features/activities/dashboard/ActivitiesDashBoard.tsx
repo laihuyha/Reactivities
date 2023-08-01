@@ -43,11 +43,12 @@ const ActivitiesDashBoard = ({ activities }: Props) => {
   };
 
   const dialogProps: DialogProps = {
+    header: "Edit Activity",
     draggable: false,
     maximizable: true,
     position: "center",
     visible: modalVisible,
-    children: [<ActivityForm />],
+    children: [<ActivityForm key={"activeForm"} />],
     onHide: () => setModalVisible(false),
   };
   //#endregion
