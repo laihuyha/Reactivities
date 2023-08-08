@@ -8,6 +8,6 @@ namespace API.Base
     public class BaseApiController : ControllerBase
     {
         private IMediator _mediator;
-        protected IMediator Mediator => _mediator ??= (IMediator) HttpContext.RequestServices.GetService(typeof(IMediator));
+        protected IMediator Mediator => _mediator ??= (IMediator)HttpContext.RequestServices.GetService(typeof(IMediator));
     }
 }
