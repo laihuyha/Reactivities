@@ -27,12 +27,16 @@
 
 @font-face {
   font-family: "Ysabeau Infant";
-  src: url(../../assets/fonts/Ysabeau_Infant/YsabeauInfant-Italic-VariableFont_wght.ttf)
-    format("truetype")
-    url(../../assets/fonts/Ysabeau_Infant/YsabeauInfant-VariableFont_wght.ttf)
-    format("truetype");
+  src: url(../../assets/fonts/Ysabeau_Infant/YsabeauInfant-VariableFont_wght.ttf)
+      format("truetype"),
+    url(../../assets/fonts/Ysabeau_Infant/YsabeauInfant-Italic-VariableFont_wght.ttf)
+      format("truetype");
+  font-weight: 200 1000;
 }
 
-.body {
-  font-family: "Ysabeau Infant";
+.App,
+.p-component {
+  font-family: "Ysabeau Infant", sans-serif !important;
+  font-size: 1rem;
+  font-weight: normal;
 }

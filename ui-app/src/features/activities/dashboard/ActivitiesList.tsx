@@ -47,19 +47,25 @@ const ActivitiesList = ({ activities, onClick, onEdit }: Props) => {
               <div className="text-2xl font-bold text-900">
                 {activity.title}
               </div>
-              <div className="font-semibold text-600">{activity.date}</div>
+              <div className="font-semibold font-italic text-700">
+                {activity.date}
+              </div>
               <div className="flex align-items-center gap-3">
                 <span className="flex align-items-center gap-2">
                   <i className="pi pi-tag"></i>
-                  <span className="font-semibold">{activity.category}</span>
+                  <span className="font-semibold font-italic">
+                    {activity.category}
+                  </span>
                 </span>
-                <Tag value={activity.city} severity="info"></Tag>
+                <Tag
+                  className="font-italic"
+                  value={activity.city}
+                  severity="info"
+                ></Tag>
               </div>
             </div>
             <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-              <span className="text-2xl font-semibold">
-                {activity.description}
-              </span>
+              <span className="text-2xl font-bold">{activity.description}</span>
             </div>
           </div>
         </div>
