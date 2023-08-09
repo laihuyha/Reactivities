@@ -1,7 +1,7 @@
 import Activity from "../../../app/models/activity";
 import { DataView } from "primereact/dataview";
 import { Tag } from "primereact/tag";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ContextMenu } from "primereact/contextmenu";
 import { MenuItem } from "primereact/menuitem";
 
@@ -9,9 +9,19 @@ interface Props {
   activities: Activity[];
   onClick: () => void;
   onEdit: () => void;
+  getReturnData: (selectedActivity: Activity) => void;
 }
 
-const ActivitiesList = ({ activities, onClick, onEdit }: Props) => {
+const ActivitiesList = ({
+  activities,
+  onClick,
+  onEdit,
+  getReturnData,
+}: Props) => {
+  const [selectedActivity, setSelectedActivity] = useState<
+    Activity | undefined
+  >(undefined);
+
   const cm = useRef<any>(null);
 
   const items: MenuItem[] = [
@@ -32,17 +42,27 @@ const ActivitiesList = ({ activities, onClick, onEdit }: Props) => {
     { label: "Delete", icon: "pi pi-fw pi-trash" },
   ];
 
+  useEffect(() => {
+    if (selectedActivity) {
+      getReturnData(selectedActivity);
+    }
+  }, [selectedActivity, getReturnData]);
+
   const template = (activity: Activity) => {
     return (
       <div
         className="col-12"
         onContextMenu={(e) => {
           e.preventDefault();
+          setSelectedActivity(activity);
           cm.current.show(e);
         }}
       >
         <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-          <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+          <div
+            className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
+            key={activity.id}
+          >
             <div className="flex flex-column align-items-center sm:align-items-start gap-3">
               <div className="text-2xl font-bold text-900">
                 {activity.title}

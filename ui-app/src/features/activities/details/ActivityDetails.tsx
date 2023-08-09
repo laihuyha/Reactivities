@@ -1,7 +1,7 @@
 import { Card } from "primereact/card";
 import Activity from "../../../app/models/activity";
 interface Props {
-  activity: Activity;
+  activity?: Activity;
 }
 const ActivityDetails = ({ activity }: Props) => {
   const header = (
@@ -20,22 +20,22 @@ const ActivityDetails = ({ activity }: Props) => {
   //     <Button label="Save" icon="pi pi-check" />
   //   </div>
   // );
-  return (
-    activity && (
-      <div className="card" style={{ width: "100%", height: "100%" }}>
-        <Card
-          style={{ height: "100%" }}
-          title={`${activity.title}`}
-          header={header} /*footer={footer}*/
-        >
-          <p className="m-2">{activity.date}</p>
-          <p className="m-2">{activity.description}</p>
-          <p className="m-2">{activity.category}</p>
-          <p className="m-2">{activity.city}</p>
-          <p className="m-2">{activity.venue}</p>
-        </Card>
-      </div>
-    )
+  return activity ? (
+    <div className="card" style={{ width: "100%", height: "100%" }}>
+      <Card
+        style={{ height: "100%" }}
+        title={`${activity.title}`}
+        header={header} /*footer={footer}*/
+      >
+        <p className="m-2">{activity.date}</p>
+        <p className="m-2">{activity.description}</p>
+        <p className="m-2">{activity.category}</p>
+        <p className="m-2">{activity.city}</p>
+        <p className="m-2">{activity.venue}</p>
+      </Card>
+    </div>
+  ) : (
+    <></>
   );
 };
 
