@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Domain.ViewModels;
 
 namespace Application.Core.Helpers
@@ -23,7 +24,7 @@ namespace Application.Core.Helpers
     public abstract partial class DirectoryTreeBase
     {
         public readonly byte DT_DIR = 4; // Unix Directory
-        public abstract List<TreeNode> GetDirectoryTreeStructure(string path, string configPath);
+        public abstract Task<List<TreeNode>> GetDirectoryTreeStructure(string path, string configPath);
 
         public readonly Regex ArchiveRegex = ArchiveExtensionRegex();
 
