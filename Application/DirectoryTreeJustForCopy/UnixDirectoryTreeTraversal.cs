@@ -10,18 +10,18 @@ namespace Business.Helpers.DirectoryTree
     /// </summary>
     public partial class UnixDirectoryTreeTraversal : DirectoryHelper, IDisposable
     {
-        nint dirPtr;
+        // private nint dirPtr;
 
-        [DllImport("libc", EntryPoint = "opendir", CharSet = CharSet.Unicode)]
+        [DllImport("libc", EntryPoint = "opendir", CharSet = CharSet.Auto)]
         private static extern nint Opendir(string name);
 
-        [DllImport("libc", EntryPoint = "readdir")]
+        [DllImport("libc", EntryPoint = "readdir", CharSet = CharSet.Auto)]
         private static extern nint Readdir(nint dirp);
 
         [DllImport("libc", EntryPoint = "closedir")]
         private static extern int Closedir(nint dirp);
 
-        private bool disposed = false;
+        private bool disposed;
 
         public void Dispose()
         {
@@ -51,7 +51,7 @@ namespace Business.Helpers.DirectoryTree
             {
                 if (disposing)
                 {
-                    dirPtr = nint.Zero; // now i know what to do
+                    // dirPtr = nint.Zero; // now i know what to do
                     // Dispose managed resources here, if any
                 }
 
@@ -78,7 +78,7 @@ namespace Business.Helpers.DirectoryTree
 
         private async Task RecursiveProcessDirectory(string currentPath, string configPath, List<JSTreeNode> result)
         {
-            dirPtr = Opendir(currentPath);
+            nint dirPtr = Opendir(currentPath);
 
             if (dirPtr == nint.Zero)
             {
@@ -94,7 +94,7 @@ namespace Business.Helpers.DirectoryTree
                     var entry = Marshal.PtrToStructure<Dirent>(entryPtr);
                     var entryName = entry.d_name;
 
-                    if (entryName == "." || entryName == "..")
+                    if (entryName is "." or ".." or "@eaDir")
                     {
                         continue; // Skip current and parent directories
                     }
@@ -202,7 +202,7 @@ namespace Business.Helpers.DirectoryTree
             {
                 var currentPath = stack.Pop();
 
-                tasks.Add(Task.Run(async () =>
+                tasks.Add(Task.Run(() =>
                 {
                     var directoryContents = GetDirectoryContents(currentPath);
 
@@ -259,7 +259,7 @@ namespace Business.Helpers.DirectoryTree
                 var entry = Marshal.PtrToStructure<Dirent>(entryPtr);
                 var entryName = entry.d_name;
 
-                if (entryName == "." || entryName == "..")
+                if (entryName is "." or "..")
                 {
                     continue;
                 }

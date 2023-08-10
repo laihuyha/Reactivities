@@ -1,12 +1,10 @@
-using System.Text.RegularExpressions;
 using Business.DTOs;
-using Core.Business;
 
 namespace Business.Helpers.DirectoryTree
 {
-    public class DirectoryNonDependOnSystem
+    public class DirectoryNonDependOnSystem : DirectoryHelper
     {
-        public static List<JSTreeNode> GetDirectoryTree(string path, string configPath)
+        public override async Task<List<JSTreeNode>> GetDirectoryTreeStructure(string path, string configPath)
         {
             var rootDir = new DirectoryInfo(path);
 
@@ -23,7 +21,7 @@ namespace Business.Helpers.DirectoryTree
 
                 foreach (var item in childItems)
                 {
-                    if (item is FileInfo file && Regex.IsMatch(file.Extension, Constants.ARCHIVEFILE_EXT))
+                    if (item is FileInfo file && ArchiveRegex.IsMatch(file.Extension))
                     {
                         childNodes.Add(new JSTreeNode
                         {
@@ -32,7 +30,7 @@ namespace Business.Helpers.DirectoryTree
                             IsDirectory = false
                         });
                     }
-                    else if (item is DirectoryInfo directory)
+                    else if (item is DirectoryInfo directory && Path.GetDirectoryName(directory.FullName) != "@eaDir")
                     {
                         var node = new JSTreeNode
                         {
@@ -56,7 +54,7 @@ namespace Business.Helpers.DirectoryTree
                     result.AddRange(childNodes);
                 }
             }
-            return result;
+            return await Task.FromResult(result);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using Business.Data.DTOs;
+using Business.DTOs;
 using static Business.Data.DTOs.AdditionalInfo;
 
 namespace Business.Helpers.DirectoryTree
@@ -9,8 +8,9 @@ namespace Business.Helpers.DirectoryTree
     /// NOTE : This is a helper class just only for Windows System, doesn't work on Linux
     /// Using OS Apis
     /// </summary>
-    public partial class WindowsDirectoryTreeTraversal : IDisposable
+    public partial class WindowsDirectoryTreeTraversal : DirectoryHelper, IDisposable
     {
+        // private IntPtr hFindFile;
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern nint FindFirstFile(string lpFileName, out WIN32_FIND_DATA lpFindFileData);
 
@@ -20,7 +20,12 @@ namespace Business.Helpers.DirectoryTree
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool FindClose(nint hFindFile);
 
-        private bool disposed = false;
+        private bool disposed;
+
+        ~WindowsDirectoryTreeTraversal()
+        {
+            Dispose(false);
+        }
 
         public void Dispose()
         {
@@ -35,6 +40,7 @@ namespace Business.Helpers.DirectoryTree
                 if (disposing)
                 {
                     // Dispose managed resources here, if any
+                    // hFindFile = IntPtr.Zero;
                 }
 
                 // Release unmanaged resources (close opened directories, etc.)
@@ -44,27 +50,20 @@ namespace Business.Helpers.DirectoryTree
             }
         }
 
-        private static bool IsArchive(WIN32_FIND_DATA findFileData)
+        public override async Task<List<JSTreeNode>> GetDirectoryTreeStructure(string path, string configPath)
         {
-            return (findFileData.dwFileAttributes & FileAttributes.Archive) != 0;
-        }
-
-        public async Task<DirectoryNode> GetDirectoryTreeAsync(string path)
-        {
-            var directoryNode = new DirectoryNode(path, true);
+            var rootNode = new List<JSTreeNode>();
             var tasks = new List<Task>();
-
             try
             {
-                tasks.Add(ProcessDirectoryAsync(directoryNode, path));
+                tasks.Add(ProcessDirectoryAsync(path, configPath, rootNode));
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error accessing {path}: {e.Message}");
             }
-
-            return directoryNode;
+            return rootNode;
         }
 
         /// <summary>
@@ -73,9 +72,9 @@ namespace Business.Helpers.DirectoryTree
         /// <param name="currentNode"></param>
         /// <param name="currentPath"></param>
         /// <returns></returns>
-        private async Task ProcessDirectoryAsync(DirectoryNode currentNode, string currentPath)
+        private async Task ProcessDirectoryAsync(string currentPath, string configPath, List<JSTreeNode> result)
         {
-            IntPtr hFindFile = FindFirstFile(Path.Combine(currentPath, "*"), out WIN32_FIND_DATA findFileData);
+            var hFindFile = FindFirstFile(Path.Combine(currentPath, "*"), out WIN32_FIND_DATA findFileData);
             if (hFindFile == IntPtr.Zero)
             {
                 Console.WriteLine($"Error finding files in directory {currentPath}");
@@ -88,20 +87,33 @@ namespace Business.Helpers.DirectoryTree
                 {
                     string entryName = findFileData.cFileName;
 
-                    if (entryName == "." || entryName == ".." || entryName == "@eaDir")
+                    if (entryName is "." or ".." or "@eaDir")
+                    {
                         continue;
+                    }
 
                     string entryPath = Path.Combine(currentPath, entryName);
 
                     if ((findFileData.dwFileAttributes & FileAttributes.Directory) != 0)
                     {
-                        var subNode = new DirectoryNode(entryPath, true);
-                        currentNode.Subitems.Add(subNode);
-                        await ProcessDirectoryAsync(subNode, entryPath);
+                        var subNode = new JSTreeNode
+                        {
+                            Key = entryPath[configPath.Length..],
+                            Title = entryName,
+                            IsDirectory = true,
+                            Children = new List<JSTreeNode>()
+                        };
+                        result.Add(subNode);
+                        await ProcessDirectoryAsync(entryPath, configPath, subNode.Children);
                     }
-                    else if (findFileData.dwFileAttributes == FileAttributes.Archive && ArchiveRegex().IsMatch(entryName[entryName.LastIndexOf(".")..]))
+                    else if (findFileData.dwFileAttributes == FileAttributes.Archive && ArchiveRegex.IsMatch(entryName))
                     {
-                        currentNode.Subitems.Add(new DirectoryNode(entryPath, false));
+                        result.Add(new JSTreeNode
+                        {
+                            Key = entryPath[configPath.Length..],
+                            Title = entryName,
+                            IsDirectory = false
+                        });
                     }
                 } while (FindNextFile(hFindFile, out findFileData));
             }
@@ -111,11 +123,8 @@ namespace Business.Helpers.DirectoryTree
             }
             finally
             {
-                FindClose(hFindFile);
+                _ = FindClose(hFindFile);
             }
         }
-
-        [GeneratedRegex("\\.(zip|tar|7z|rar|zipx)$")]
-        private static partial Regex ArchiveRegex();
     }
 }
