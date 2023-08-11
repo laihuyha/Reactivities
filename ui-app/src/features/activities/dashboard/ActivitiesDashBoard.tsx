@@ -19,10 +19,6 @@ const ActivitiesDashBoard = ({ activities }: Props) => {
   >(undefined);
   //#endregion
 
-  // useEffect(() => {
-  //   if (selectedActivity) console.log(selectedActivity); // Move the console.log here
-  // }, [selectedActivity]);
-
   const mappedActivities = new Map<number, Activity>();
   if (activities.length > 0) {
     activities.map((x) =>
@@ -42,11 +38,18 @@ const ActivitiesDashBoard = ({ activities }: Props) => {
   const onClick = () => {
     setVisible(true);
   };
+  const onCancel = () => {
+    setModalVisible(false);
+    setSelectedActivity(undefined);
+  };
 
   //#region Props
   const sidebarProps: SidebarProps = {
     visible: visible,
-    onHide: () => setVisible(false),
+    onHide: () => {
+      setVisible(false);
+      setSelectedActivity(undefined);
+    },
     position: "right",
     style: {
       width: "40vw",
@@ -60,7 +63,7 @@ const ActivitiesDashBoard = ({ activities }: Props) => {
     position: "center",
     visible: modalVisible,
     children: [<ActivityForm key={"activeForm"} activity={selectedActivity} />],
-    onHide: () => setModalVisible(false),
+    onHide: onCancel,
   };
   //#endregion
 

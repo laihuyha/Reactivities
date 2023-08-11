@@ -2,28 +2,37 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
-import "../layout/index.scss";
+import "../layout/styles/index.scss";
 import { useEffect, useState } from "react";
 import { configurePrimeReact } from "../config/primeReactConfig";
-import axios from "axios";
 import Activity from "../models/activity";
 import Navbar from "./Navbar";
 import ActivitiesDashBoard from "../../features/activities/dashboard/ActivitiesDashBoard";
+import ActivityServices from "../api/services/activities";
+import LoadingComponent from "./LoadingComponent";
+// import { v4 as uuid } from "uuid";
 
 const App = () => {
   configurePrimeReact();
 
   const [activities, setListActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API}/Activities`).then((res) => {
-      setListActivities(res.data);
+    ActivityServices.list().then((response) => {
+      setListActivities(response);
     });
+    setLoading(false);
   }, []);
 
   return (
     <div className="App">
       <Navbar />
-      <ActivitiesDashBoard activities={activities} />
+      {loading ? (
+        <LoadingComponent />
+      ) : (
+        <ActivitiesDashBoard activities={activities} />
+      )}
     </div>
   );
 };

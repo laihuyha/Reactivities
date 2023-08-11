@@ -26,6 +26,9 @@ const Navbar = () => {
         backgroundColor: "var(--green-400)",
       },
       url: "",
+      command: () => {
+        console.log("command");
+      },
     },
   ];
 
