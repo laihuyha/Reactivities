@@ -4,13 +4,13 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "../layout/styles/index.scss";
 import Navbar from "./Navbar";
-import ActivitiesDashBoard from "../../features/activities/dashboard/ActivitiesDashBoard";
 import LoadingComponent from "./LoadingComponent";
 import { configurePrimeReact } from "../config/primeReactConfig";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   configurePrimeReact();
@@ -29,7 +29,7 @@ const App = () => {
     <div className="App" style={{ position: "relative" }}>
       <Toast ref={toast} />
       <Navbar />
-      {appLoading ? <LoadingComponent /> : <ActivitiesDashBoard />}
+      {appLoading ? <LoadingComponent /> : <Outlet />}
     </div>
   );
 };

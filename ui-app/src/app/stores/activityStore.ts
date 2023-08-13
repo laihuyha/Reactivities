@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { v4 as uuid } from "uuid";
 import Activity from "../models/activity";
 import ActivityServices from "../api/services/activities";
@@ -28,11 +28,15 @@ export default class ActivityStore {
     this.isLoading = true;
     try {
       const activities = await ActivityServices.list();
-      this.activities = activities;
+      runInAction(() => {
+        this.activities = activities;
+      });
     } catch (error) {
       console.log(error);
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   };
 
