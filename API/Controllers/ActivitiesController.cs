@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Base;
 using Application.Activities;
-using Domain;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -25,6 +25,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateActivity(Activity activity)
         {
+            activity.Date = DateTime.Now.ToString("yyyyMMdd");
             return Ok(await Mediator.Send(new Create.Command { Activity = activity }));
         }
 

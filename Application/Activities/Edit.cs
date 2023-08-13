@@ -1,13 +1,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Domain;
+using Domain.Entities;
 using MediatR;
 using Persistence;
 
 namespace Application.Activities
 {
-    public class Edit
+    public static class Edit
     {
         public class Command : IRequest
         {
@@ -18,7 +18,8 @@ namespace Application.Activities
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            public Handler(DataContext context, IMapper mapper)
+
+            public Handler(DataContext context, IMapper mapper = null)
             {
                 _context = context;
                 _mapper = mapper;
@@ -26,7 +27,7 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Activity.Id); // Find activity by ID
+                var activity = await _context.Activities.FindAsync(new object[] { request.Activity.Id }, cancellationToken: cancellationToken); // Find activity by ID
                 if (activity != null)
                 {
                     // activity.Title = request.Activity.Title ?? activity.Title; // If request.Activity.Title is null, then use activity.Title
@@ -38,7 +39,7 @@ namespace Application.Activities
 
                     _mapper.Map(request.Activity, activity); // Map request.Activity to activity
 
-                    await _context.SaveChangesAsync(); // Save changes to DB
+                    await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
                     return Unit.Value;
                 }
                 return Unit.Value;

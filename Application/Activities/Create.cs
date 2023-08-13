@@ -1,12 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Domain;
+using Domain.Entities;
 using MediatR;
 using Persistence;
 
 namespace Application.Activities
 {
-    public class Create
+    public static class Create
     {
         public class Command : IRequest
         {
@@ -23,8 +23,9 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                await _context.Activities.AddAsync(request.Activity);
-                await _context.SaveChangesAsync(); // Save changes to DB
+                await _context.Activities.AddAsync(request.Activity, cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
+
                 return Unit.Value;
             }
         }

@@ -4,9 +4,9 @@ namespace Application.Core
 {
     public class MappingProfile : Profile
     {
-        protected MappingProfile()
+        public MappingProfile()
         {
-            CreateMap<Domain.Activity, Domain.Activity>();
+            CreateMap<Domain.Entities.Activity, Domain.Entities.Activity>();
         }
     }
 }

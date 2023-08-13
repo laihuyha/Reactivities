@@ -6,10 +6,10 @@ const ActivityServices = {
     requests.get<Activity[]>("/activities").then((listActivities) => {
       return listActivities;
     }),
-  details: (id: number) => requests.get<Activity>(`/activities/${id}`).then((activity) => activity),
+  details: (id: string) => requests.get<Activity>(`/activities/${id}`).then((activity) => activity),
   create: (activity: Activity) => requests.post("/activities", activity).then((response) => response),
   update: (activity: Activity) => requests.put(`/activities/${activity.id}`, activity).then((response) => response),
-  delete: (id: number) => requests.delete(`/activities/${id}`).then((response) => response),
+  delete: (id: string) => requests.delete(`/activities/${id}`).then((response) => response),
 };
 
 export default ActivityServices;

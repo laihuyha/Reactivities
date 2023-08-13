@@ -6,7 +6,7 @@ using Persistence;
 
 namespace Application.Activities
 {
-    public class Delete
+    public static class Delete
     {
         public class Command : IRequest
         {
@@ -23,11 +23,11 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id); // Find activity by ID
+                var activity = await _context.Activities.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken); // Find activity by ID
                 if (activity != null)
                 {
                     _context.Remove(activity); // Remove activity
-                    await _context.SaveChangesAsync(); // Save changes to DB
+                    await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
                     return Unit.Value;
                 }
                 return Unit.Value;

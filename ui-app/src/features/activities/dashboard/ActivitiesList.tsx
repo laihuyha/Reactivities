@@ -6,11 +6,14 @@ import { ContextMenu } from "primereact/contextmenu";
 import { MenuItem } from "primereact/menuitem";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { confirmDialog } from "primereact/confirmdialog";
+import { dateTimeHelper } from "../../../utils/helper";
 
 const ActivitiesList = () => {
   const { activityStore } = useStore();
   const { sortedActivities, isLoading } = activityStore;
-  const { setIsView, setIsEdit, setSelectedActivity } = activityStore;
+  const { setIsView, setIsEdit, setSelectedActivity, deleteActivity } = activityStore;
+  const { toDisplayDateTime } = dateTimeHelper;
   const cm = useRef<any>(null);
 
   const items: MenuItem[] = [
@@ -28,7 +31,22 @@ const ActivitiesList = () => {
         setIsEdit(true);
       },
     },
-    { label: "Delete", icon: "pi pi-fw pi-trash" },
+    {
+      label: "Delete",
+      icon: "pi pi-fw pi-trash",
+      command: () => {
+        confirmDialog({
+          message: "Are you sure you want to delete this activity?",
+          header: "Confirm",
+          icon: "pi pi-exclamation-triangle",
+          acceptClassName: "p-button-danger",
+          accept: deleteActivity,
+          reject: () => {
+            setSelectedActivity(undefined);
+          },
+        });
+      },
+    },
   ];
 
   const template = (activity: Activity) => {
@@ -48,7 +66,7 @@ const ActivitiesList = () => {
           >
             <div className="flex flex-column align-items-center sm:align-items-start gap-3">
               <div className="text-2xl font-bold text-900">{activity.title}</div>
-              <div className="font-semibold font-italic text-700">{activity.date}</div>
+              <div className="font-semibold font-italic text-700">{toDisplayDateTime(activity.date)}</div>
               <div className="flex align-items-center gap-3">
                 <span className="flex align-items-center gap-2">
                   <i className="pi pi-tag"></i>

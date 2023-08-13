@@ -4,29 +4,32 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "../layout/styles/index.scss";
 import Navbar from "./Navbar";
-import ActivitiesDashBoard from "../../features/activities/dashboard/ActivitiesDashBoard";
 import LoadingComponent from "./LoadingComponent";
 import { configurePrimeReact } from "../config/primeReactConfig";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   configurePrimeReact();
   const { appStore } = useStore();
-  const { appLoading, setToastRef } = appStore;
+  const { appLoading } = appStore;
+  const { setToastRef, setUpToast } = appStore;
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
     setToastRef(toast);
-  }, [appStore, setToastRef]);
+    setUpToast();
+    // AppStore.notify?.infoNotif("Welcome to Reactivities");
+  }, [appStore, setToastRef, setUpToast]);
 
   return (
     <div className="App" style={{ position: "relative" }}>
       <Toast ref={toast} />
       <Navbar />
-      {appLoading ? <LoadingComponent /> : <ActivitiesDashBoard />}
+      {appLoading ? <LoadingComponent /> : <Outlet />}
     </div>
   );
 };
