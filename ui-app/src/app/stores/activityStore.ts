@@ -1,7 +1,8 @@
 import { makeAutoObservable } from "mobx";
+import { v4 as uuid } from "uuid";
 import Activity from "../models/activity";
 import ActivityServices from "../api/services/activities";
-import { v4 as uuid } from "uuid";
+import AppStore from "./appStore";
 
 export default class ActivityStore {
   activities: Activity[] = [];
@@ -52,16 +53,37 @@ export default class ActivityStore {
     try {
       if (this.isCreate && !this.isEdit) {
         await ActivityServices.create(activity);
-        // this.successNotif("Create Successfully");
+        this.activities = [...this.activities, activity];
+        AppStore.notify?.success("Activity Created Successfully!");
       }
       if (this.isEdit && !this.isCreate) {
         await ActivityServices.update(activity);
-        // this.successNotif("Update Successfully");
+        let exist = this.activities.findIndex((e) => e.id === activity.id);
+        this.activities[exist] = { ...this.activities[exist], ...activity };
+        AppStore.notify?.success("Activity Updated Successfully!");
       }
     } catch (error) {
       console.log(error);
-      // this.errorNotif(`Error!. Details: ${error}`);
+      AppStore.notify?.error(`Something went wrong! Details: ${error}`);
     } finally {
+      this.isLoading = false;
+      this.setIsCreate(false);
+      this.setIsEdit(false);
+    }
+  };
+
+  deleteActivity = async () => {
+    if (!this.selectedActivity) return;
+    this.isLoading = true;
+    try {
+      await ActivityServices.delete(this.selectedActivity?.id);
+      AppStore.notify?.success("Activity Deleted Successfully!");
+    } catch (error) {
+      console.log(error);
+      AppStore.notify?.error(`Something went wrong! Details: ${error}`);
+    } finally {
+      this.activities = this.activities.filter((e) => e.id !== this.selectedActivity?.id);
+      this.setSelectedActivity(undefined);
       this.isLoading = false;
     }
   };
@@ -71,7 +93,7 @@ export default class ActivityStore {
     let activity = this.activities.find((e) => e.id === activityId);
 
     if (activity) {
-      this.selectedActivity = activity;
+      this.selectedActivity = { ...activity };
     } else {
       this.selectedActivity = undefined;
     }

@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using Domain;
+using Domain.Entities;
 using MediatR;
 using Persistence;
 
 namespace Application.Activities
 {
-    public class Details
+    public static class Details
     {
         public class Query : IRequest<Activity>
         {
@@ -23,7 +23,7 @@ namespace Application.Activities
 
             public async Task<Activity> Handle(Query request, System.Threading.CancellationToken cancellationToken)
             {
-                return await _context.Activities.FindAsync(request.Id);
+                return await _context.Activities.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
             }
         }
     }

@@ -3,6 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import Activity from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
+import { dateTimeHelper } from "../../../utils/helper";
 
 interface Props {
   activity?: Activity;
@@ -11,14 +12,15 @@ interface Props {
 const ActivityForm = ({ activity }: Props) => {
   const { activityStore } = useStore();
   const { handleChangeFormData } = activityStore;
-  return activity ? (
+  const { convertTimeString } = dateTimeHelper;
+  return (
     <>
       <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
       <div className="flex justify-content-center">
         <InputText
           className="col-12"
           placeholder="Title"
-          defaultValue={activity.title}
+          defaultValue={activity?.title}
           onChange={(e) => {
             handleChangeFormData("title", e.target.value);
           }}
@@ -26,7 +28,7 @@ const ActivityForm = ({ activity }: Props) => {
       </div>
       <Calendar
         className="col-12 p-0 mt-2 mb-2"
-        value={new Date(activity.date)}
+        value={convertTimeString(activity?.date)}
         dateFormat="dd/mm/yy"
         onChange={(e: CalendarChangeEvent) => {
           const value = e.target.value?.toLocaleString("vi-VN", {
@@ -43,7 +45,7 @@ const ActivityForm = ({ activity }: Props) => {
         <InputText
           className="col-12"
           placeholder="Category"
-          defaultValue={activity.category}
+          defaultValue={activity?.category}
           onChange={(e) => {
             handleChangeFormData("category", e.target.value);
           }}
@@ -53,7 +55,7 @@ const ActivityForm = ({ activity }: Props) => {
         <InputText
           className="col-12"
           placeholder="Venue"
-          defaultValue={activity.venue}
+          defaultValue={activity?.venue}
           onChange={(e) => {
             handleChangeFormData("venue", e.target.value);
           }}
@@ -63,7 +65,7 @@ const ActivityForm = ({ activity }: Props) => {
         <InputText
           className="col-12"
           placeholder="City"
-          defaultValue={activity.city}
+          defaultValue={activity?.city}
           onChange={(e) => {
             handleChangeFormData("city", e.target.value);
           }}
@@ -73,15 +75,13 @@ const ActivityForm = ({ activity }: Props) => {
         <InputTextarea
           className="col-12"
           placeholder="Descriptions"
-          defaultValue={activity.description}
+          defaultValue={activity?.description}
           onChange={(e) => {
             handleChangeFormData("description", e.target.value);
           }}
         />
       </div>
     </>
-  ) : (
-    <></>
   );
 };
 export default ActivityForm;

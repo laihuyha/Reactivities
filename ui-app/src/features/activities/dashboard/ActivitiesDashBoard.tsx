@@ -3,6 +3,7 @@ import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
 import { Sidebar, SidebarProps } from "primereact/sidebar";
 import { Dialog, DialogProps } from "primereact/dialog";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import { useStore } from "../../../app/stores/store";
 import { useLayoutEffect } from "react";
 import { observer } from "mobx-react-lite";
@@ -10,8 +11,8 @@ import { Button } from "primereact/button";
 
 const ActivitiesDashBoard = () => {
   const { activityStore } = useStore();
-  const { selectedActivity, isEdit, isView, isCreate } = activityStore;
-  const { setIsView, setIsEdit, setIsCreate, setSelectedActivity, loadActivitiesData } = activityStore;
+  const { selectedActivity, isEdit, isView, isCreate, isLoading } = activityStore;
+  const { setIsView, setIsEdit, setIsCreate, setSelectedActivity, loadActivitiesData, submitForm } = activityStore;
 
   useLayoutEffect(() => {
     loadActivitiesData();
@@ -40,8 +41,9 @@ const ActivitiesDashBoard = () => {
           label="Save"
           icon="pi pi-check"
           className="p-button bg-primary"
+          loading={isLoading}
           onClick={() => {
-            console.log(selectedActivity);
+            selectedActivity && submitForm(selectedActivity);
           }}
         />
       </div>,
@@ -63,6 +65,7 @@ const ActivitiesDashBoard = () => {
       <ActivitiesList />
       <Sidebar {...sidebarProps} />
       <Dialog {...dialogProps} />
+      <ConfirmDialog />
     </>
   );
 };

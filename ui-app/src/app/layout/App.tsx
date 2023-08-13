@@ -15,12 +15,15 @@ import { Toast } from "primereact/toast";
 const App = () => {
   configurePrimeReact();
   const { appStore } = useStore();
-  const { appLoading, setToastRef } = appStore;
+  const { appLoading } = appStore;
+  const { setToastRef, setUpToast } = appStore;
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
     setToastRef(toast);
-  }, [appStore, setToastRef]);
+    setUpToast();
+    // AppStore.notify?.infoNotif("Welcome to Reactivities");
+  }, [appStore, setToastRef, setUpToast]);
 
   return (
     <div className="App" style={{ position: "relative" }}>
