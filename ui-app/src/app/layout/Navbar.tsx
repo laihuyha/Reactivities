@@ -2,11 +2,12 @@ import { Menubar } from "primereact/menubar";
 import { InputText } from "primereact/inputtext";
 import { MenuItem } from "primereact/menuitem";
 import { useStore } from "../stores/store";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const { activityStore } = useStore();
   const { setIsCreate, initFormData } = activityStore;
+  const location = useLocation();
 
   const start = (
     <NavLink
@@ -30,11 +31,14 @@ const Navbar = () => {
       style: {
         backgroundColor: "var(--green-400)",
       },
-      url: "",
-      command: () => {
-        initFormData();
-        setIsCreate(true);
-      },
+      ...(location.pathname === "/"
+        ? { url: "createActivity" }
+        : {
+            command: () => {
+              setIsCreate(true);
+              initFormData();
+            },
+          }),
     },
   ];
 
