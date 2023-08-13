@@ -1,27 +1,16 @@
 import Activity from "../../../app/models/activity";
 import { DataView } from "primereact/dataview";
 import { Tag } from "primereact/tag";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { ContextMenu } from "primereact/contextmenu";
 import { MenuItem } from "primereact/menuitem";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-interface Props {
-  activities: Activity[];
-  onClick: () => void;
-  onEdit: () => void;
-  getReturnData: (selectedActivity: Activity) => void;
-}
-
-const ActivitiesList = ({
-  activities,
-  onClick,
-  onEdit,
-  getReturnData,
-}: Props) => {
-  const [selectedActivity, setSelectedActivity] = useState<
-    Activity | undefined
-  >(undefined);
-
+const ActivitiesList = () => {
+  const { activityStore } = useStore();
+  const { sortedActivities, isLoading } = activityStore;
+  const { setIsView, setIsEdit, setSelectedActivity } = activityStore;
   const cm = useRef<any>(null);
 
   const items: MenuItem[] = [
@@ -29,24 +18,18 @@ const ActivitiesList = ({
       label: "View",
       icon: "pi pi-fw pi-search",
       command: () => {
-        onClick();
+        setIsView(true);
       },
     },
     {
       label: "Edit",
       icon: "pi pi-fw pi-file-edit",
       command: () => {
-        onEdit();
+        setIsEdit(true);
       },
     },
     { label: "Delete", icon: "pi pi-fw pi-trash" },
   ];
-
-  useEffect(() => {
-    if (selectedActivity) {
-      getReturnData(selectedActivity);
-    }
-  }, [selectedActivity, getReturnData]);
 
   const template = (activity: Activity) => {
     return (
@@ -54,7 +37,7 @@ const ActivitiesList = ({
         className="col-12"
         onContextMenu={(e) => {
           e.preventDefault();
-          setSelectedActivity(activity);
+          setSelectedActivity(activity.id);
           cm.current.show(e);
         }}
       >
@@ -64,24 +47,14 @@ const ActivitiesList = ({
             key={activity.id}
           >
             <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-              <div className="text-2xl font-bold text-900">
-                {activity.title}
-              </div>
-              <div className="font-semibold font-italic text-700">
-                {activity.date}
-              </div>
+              <div className="text-2xl font-bold text-900">{activity.title}</div>
+              <div className="font-semibold font-italic text-700">{activity.date}</div>
               <div className="flex align-items-center gap-3">
                 <span className="flex align-items-center gap-2">
                   <i className="pi pi-tag"></i>
-                  <span className="font-semibold font-italic">
-                    {activity.category}
-                  </span>
+                  <span className="font-semibold font-italic">{activity.category}</span>
                 </span>
-                <Tag
-                  className="font-italic"
-                  value={activity.city}
-                  severity="info"
-                ></Tag>
+                <Tag className="font-italic" value={activity.city} severity="info"></Tag>
               </div>
             </div>
             <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
@@ -98,15 +71,18 @@ const ActivitiesList = ({
       <ContextMenu model={items} ref={cm} breakpoint="767px" />
       <DataView
         style={{
-          width: "95%",
+          width: "100%",
         }}
         paginator={true}
         rows={5}
-        value={activities}
-        itemTemplate={(activity) => template(activity)}
+        value={sortedActivities}
+        loading={isLoading}
+        itemTemplate={(activity) => {
+          return template(activity);
+        }}
       />
     </>
   );
 };
 
-export default ActivitiesList;
+export default observer(ActivitiesList);
