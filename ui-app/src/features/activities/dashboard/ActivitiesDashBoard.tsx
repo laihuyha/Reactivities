@@ -1,86 +1,70 @@
-import Activity from "../../../app/models/activity";
 import ActivitiesList from "./ActivitiesList";
 import ActivityDetails from "../details/ActivityDetails";
-import { Sidebar, SidebarProps } from "primereact/sidebar";
-import { useState } from "react";
-import { Dialog, DialogProps } from "primereact/dialog";
 import ActivityForm from "../form/ActivityForm";
+import { Sidebar, SidebarProps } from "primereact/sidebar";
+import { Dialog, DialogProps } from "primereact/dialog";
+import { useStore } from "../../../app/stores/store";
+import { useLayoutEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { Button } from "primereact/button";
 
-interface Props {
-  activities: Activity[];
-}
+const ActivitiesDashBoard = () => {
+  const { activityStore } = useStore();
+  const { selectedActivity, isEdit, isView, isCreate } = activityStore;
+  const { setIsView, setIsEdit, setIsCreate, setSelectedActivity, loadActivitiesData } = activityStore;
 
-const ActivitiesDashBoard = ({ activities }: Props) => {
-  //#region Modal and Sidebar state
-  const [visible, setVisible] = useState<boolean>(false);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [selectedActivity, setSelectedActivity] = useState<
-    Activity | undefined
-  >(undefined);
-  //#endregion
-
-  const mappedActivities = new Map<number, Activity>();
-  if (activities.length > 0) {
-    activities.map((x) =>
-      mappedActivities.set(Number(x.title.substring(14)), x)
-    );
-  }
-  const sortedArr = [...mappedActivities].sort((a, b) => a[0] - b[0]);
-  const sortedActivities = sortedArr.map((x) => x[1]);
-
-  const getReturnData = (activity: Activity) => {
-    if (activity) setSelectedActivity(activity);
-  };
-
-  const onEdit = () => {
-    setModalVisible(true);
-  };
-  const onClick = () => {
-    setVisible(true);
-  };
-  const onCancel = () => {
-    setModalVisible(false);
-    setSelectedActivity(undefined);
-  };
+  useLayoutEffect(() => {
+    loadActivitiesData();
+  }, [activityStore, loadActivitiesData]);
 
   //#region Props
   const sidebarProps: SidebarProps = {
-    visible: visible,
+    visible: isView,
     onHide: () => {
-      setVisible(false);
+      setIsView(false);
       setSelectedActivity(undefined);
     },
     position: "right",
     style: {
       width: "40vw",
     },
+    children: [<ActivityDetails key={"activityDetails"} activity={selectedActivity} />],
   };
 
   const dialogProps: DialogProps = {
     header: "Edit Activity",
+    footer: [
+      <div className="card flex justify-content-center" key={"footer"}>
+        <Button
+          key={"saveBtn"}
+          label="Save"
+          icon="pi pi-check"
+          className="p-button bg-primary"
+          onClick={() => {
+            console.log(selectedActivity);
+          }}
+        />
+      </div>,
+    ],
     draggable: false,
-    // maximizable: true,
     position: "center",
-    visible: modalVisible,
-    children: [<ActivityForm key={"activeForm"} activity={selectedActivity} />],
-    onHide: onCancel,
+    visible: isEdit || isCreate,
+    children: [<ActivityForm key={"activityForm"} activity={selectedActivity} />],
+    onHide: () => {
+      setIsEdit(false);
+      setIsCreate(false);
+      setSelectedActivity(undefined);
+    },
   };
   //#endregion
 
   return (
     <>
-      <ActivitiesList
-        activities={sortedActivities}
-        onClick={onClick}
-        onEdit={onEdit}
-        getReturnData={getReturnData}
-      />
-      <Sidebar {...sidebarProps}>
-        <ActivityDetails activity={selectedActivity} />
-      </Sidebar>
+      <ActivitiesList />
+      <Sidebar {...sidebarProps} />
       <Dialog {...dialogProps} />
     </>
   );
 };
 
-export default ActivitiesDashBoard;
+export default observer(ActivitiesDashBoard);

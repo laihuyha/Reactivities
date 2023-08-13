@@ -1,62 +1,84 @@
-import { Card } from "primereact/card";
 import { Calendar, CalendarChangeEvent } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import Activity from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
 
 interface Props {
   activity?: Activity;
 }
 
 const ActivityForm = ({ activity }: Props) => {
-  const header = (
-    <img
-      alt="Card"
-      src="https://primefaces.org/cdn/primereact/images/usercard.png"
-    />
-  );
+  const { activityStore } = useStore();
+  const { handleChangeFormData } = activityStore;
   return activity ? (
     <>
-      <Card header={header}>
-        <div className="flex justify-content-center">
-          <InputText
-            className="col-12"
-            placeholder="Title"
-            value={activity.title}
-          />
-        </div>
-        <Calendar
-          className="col-12 p-0 mt-2 mb-2"
-          value={new Date(activity.date)}
-          dateFormat="dd/mm/yy"
-          onChange={(e: CalendarChangeEvent) => {
-            console.log(e);
+      <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
+      <div className="flex justify-content-center">
+        <InputText
+          className="col-12"
+          placeholder="Title"
+          defaultValue={activity.title}
+          onChange={(e) => {
+            handleChangeFormData("title", e.target.value);
           }}
-          inputClassName="col-12"
-          placeholder="Select a date"
         />
-        <div className="flex justify-content-center mb-2">
-          <InputText
-            className="col-12"
-            placeholder="Category"
-            value={activity.category}
-          />
-        </div>
-        <div className="flex justify-content-center mb-2">
-          <InputText
-            className="col-12"
-            placeholder="City"
-            value={activity.city}
-          />
-        </div>
-        <div className="flex justify-content-center">
-          <InputTextarea
-            className="col-12"
-            placeholder="Descriptions"
-            value={activity.description}
-          />
-        </div>
-      </Card>
+      </div>
+      <Calendar
+        className="col-12 p-0 mt-2 mb-2"
+        value={new Date(activity.date)}
+        dateFormat="dd/mm/yy"
+        onChange={(e: CalendarChangeEvent) => {
+          const value = e.target.value?.toLocaleString("vi-VN", {
+            day: "numeric",
+            month: "numeric",
+            year: "numeric",
+          });
+          handleChangeFormData("date", value?.replaceAll("/", ""));
+        }}
+        inputClassName="col-12"
+        placeholder="Select a date"
+      />
+      <div className="flex justify-content-center mb-2">
+        <InputText
+          className="col-12"
+          placeholder="Category"
+          defaultValue={activity.category}
+          onChange={(e) => {
+            handleChangeFormData("category", e.target.value);
+          }}
+        />
+      </div>
+      <div className="flex justify-content-center mb-2">
+        <InputText
+          className="col-12"
+          placeholder="Venue"
+          defaultValue={activity.venue}
+          onChange={(e) => {
+            handleChangeFormData("venue", e.target.value);
+          }}
+        />
+      </div>
+      <div className="flex justify-content-center mb-2">
+        <InputText
+          className="col-12"
+          placeholder="City"
+          defaultValue={activity.city}
+          onChange={(e) => {
+            handleChangeFormData("city", e.target.value);
+          }}
+        />
+      </div>
+      <div className="flex justify-content-center">
+        <InputTextarea
+          className="col-12"
+          placeholder="Descriptions"
+          defaultValue={activity.description}
+          onChange={(e) => {
+            handleChangeFormData("description", e.target.value);
+          }}
+        />
+      </div>
     </>
   ) : (
     <></>
