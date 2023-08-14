@@ -10,7 +10,8 @@ import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import HomePage from "../../features/home/HomePage";
 
 const App = () => {
   configurePrimeReact();
@@ -18,18 +19,24 @@ const App = () => {
   const { appLoading } = appStore;
   const { setToastRef, setUpToast } = appStore;
   const toast = useRef<Toast>(null);
+  const location = useLocation();
 
   useEffect(() => {
     setToastRef(toast);
     setUpToast();
-    // AppStore.notify?.infoNotif("Welcome to Reactivities");
   }, [appStore, setToastRef, setUpToast]);
 
   return (
     <div className="App" style={{ position: "relative" }}>
       <Toast ref={toast} />
-      <Navbar />
-      {appLoading ? <LoadingComponent /> : <Outlet />}
+      {location.pathname === "/" && !appLoading ? (
+        <HomePage />
+      ) : (
+        <>
+          <Navbar />
+          {appLoading ? <LoadingComponent /> : <Outlet />}
+        </>
+      )}
     </div>
   );
 };
