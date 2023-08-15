@@ -48,6 +48,7 @@ const Navbar = () => {
       style={{
         position: "sticky",
         top: 0,
+        zIndex: 999,
       }}
     >
       <Menubar model={items} start={start} end={end} />
