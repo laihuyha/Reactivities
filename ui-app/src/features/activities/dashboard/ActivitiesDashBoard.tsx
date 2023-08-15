@@ -5,9 +5,10 @@ import { Sidebar, SidebarProps } from "primereact/sidebar";
 import { Dialog, DialogProps } from "primereact/dialog";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { useStore } from "../../../app/stores/store";
-import { useLayoutEffect } from "react";
+import { Suspense, useLayoutEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Button } from "primereact/button";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 const ActivitiesDashBoard = () => {
   const { activityStore } = useStore();
@@ -61,12 +62,12 @@ const ActivitiesDashBoard = () => {
   //#endregion
 
   return (
-    <>
+    <Suspense fallback={<LoadingComponent />}>
       <ActivitiesList />
       <Sidebar {...sidebarProps} />
       <Dialog {...dialogProps} />
       <ConfirmDialog />
-    </>
+    </Suspense>
   );
 };
 

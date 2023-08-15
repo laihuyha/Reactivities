@@ -24,6 +24,22 @@ export default class ActivityStore {
     return [...mappedActivities].sort((a, b) => a[0] - b[0]).map((x) => x[1]);
   }
 
+  get groupedActivities() {
+    let x = Object.entries(
+      this.activities.reduce((acc, curr) => {
+        const date = curr.date;
+        acc[date] = acc[date] ? [...acc[date], curr] : [curr];
+        return acc;
+      }, {} as { [key: string]: Activity[] })
+    ).sort((a, b) => a[0].localeCompare(b[0]));
+
+    x.forEach((activities) => {
+      activities[1].sort((a, b) => a.title.localeCompare(b.title));
+    });
+
+    return x;
+  }
+
   loadActivitiesData = async () => {
     this.isLoading = true;
     try {
@@ -76,10 +92,11 @@ export default class ActivityStore {
     }
   };
 
-  deleteActivity = async () => {
+  deleteActivity = async (id?: string) => {
     if (!this.selectedActivity) return;
     this.isLoading = true;
     try {
+      if (id) await ActivityServices.delete(id);
       await ActivityServices.delete(this.selectedActivity?.id);
       AppStore.notify?.success("Activity Deleted Successfully!");
     } catch (error) {

@@ -1,104 +1,27 @@
-import Activity from "../../../app/models/activity";
-import { DataView } from "primereact/dataview";
-import { Tag } from "primereact/tag";
-import { useRef } from "react";
-import { ContextMenu } from "primereact/contextmenu";
-import { MenuItem } from "primereact/menuitem";
+import { Fragment } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
-import { confirmDialog } from "primereact/confirmdialog";
 import { dateTimeHelper } from "../../../utils/helper";
+import { Fieldset } from "primereact/fieldset";
+import ActivityItem from "./ActivityItem";
+import "./styles/styles.scss";
 
 const ActivitiesList = () => {
   const { activityStore } = useStore();
-  const { sortedActivities, isLoading } = activityStore;
-  const { setIsView, setIsEdit, setSelectedActivity, deleteActivity } = activityStore;
+  const { groupedActivities } = activityStore;
   const { toDisplayDateTime } = dateTimeHelper;
-  const cm = useRef<any>(null);
-
-  const items: MenuItem[] = [
-    {
-      label: "View",
-      icon: "pi pi-fw pi-search",
-      command: () => {
-        setIsView(true);
-      },
-    },
-    {
-      label: "Edit",
-      icon: "pi pi-fw pi-file-edit",
-      command: () => {
-        setIsEdit(true);
-      },
-    },
-    {
-      label: "Delete",
-      icon: "pi pi-fw pi-trash",
-      command: () => {
-        confirmDialog({
-          message: "Are you sure you want to delete this activity?",
-          header: "Confirm",
-          icon: "pi pi-exclamation-triangle",
-          acceptClassName: "p-button-danger",
-          accept: deleteActivity,
-          reject: () => {
-            setSelectedActivity(undefined);
-          },
-        });
-      },
-    },
-  ];
-
-  const template = (activity: Activity) => {
-    return (
-      <div
-        className="col-12"
-        onContextMenu={(e) => {
-          e.preventDefault();
-          setSelectedActivity(activity.id);
-          cm.current.show(e);
-        }}
-      >
-        <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-          <div
-            className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
-            key={activity.id}
-          >
-            <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-              <div className="text-2xl font-bold text-900">{activity.title}</div>
-              <div className="font-semibold font-italic text-700">{toDisplayDateTime(activity.date)}</div>
-              <div className="flex align-items-center gap-3">
-                <span className="flex align-items-center gap-2">
-                  <i className="pi pi-tag"></i>
-                  <span className="font-semibold font-italic">{activity.category}</span>
-                </span>
-                <Tag className="font-italic" value={activity.city} severity="info"></Tag>
-              </div>
-            </div>
-            <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-              <span className="text-2xl font-bold">{activity.description}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <>
-      <ContextMenu model={items} ref={cm} breakpoint="767px" />
-      <DataView
-        style={{
-          width: "100%",
-        }}
-        paginator={true}
-        rows={5}
-        value={sortedActivities}
-        loading={isLoading}
-        itemTemplate={(activity) => {
-          return template(activity);
-        }}
-      />
+      {groupedActivities.map(([groupKey, actitvities]) => (
+        <Fragment key={groupKey}>
+          <Fieldset className="mb-3" legend={toDisplayDateTime(groupKey)} toggleable>
+            {actitvities.map((e) => (
+              <ActivityItem key={e.id} activity={e} />
+            ))}
+          </Fieldset>
+        </Fragment>
+      ))}
     </>
   );
 };
