@@ -5,7 +5,7 @@ import { Sidebar, SidebarProps } from "primereact/sidebar";
 import { Dialog, DialogProps } from "primereact/dialog";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { useStore } from "../../../app/stores/store";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Button } from "primereact/button";
 
@@ -14,7 +14,7 @@ const ActivitiesDashBoard = () => {
   const { selectedActivity, isEdit, isView, isCreate, isLoading } = activityStore;
   const { setIsView, setIsEdit, setIsCreate, setSelectedActivity, loadActivitiesData, submitForm } = activityStore;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     loadActivitiesData();
   }, [activityStore, loadActivitiesData]);
 

@@ -24,6 +24,22 @@ export default class ActivityStore {
     return [...mappedActivities].sort((a, b) => a[0] - b[0]).map((x) => x[1]);
   }
 
+  get groupedActivities() {
+    let x = Object.entries(
+      this.activities.reduce((acc, curr) => {
+        const date = curr.date;
+        acc[date] = acc[date] ? [...acc[date], curr] : [curr];
+        return acc;
+      }, {} as { [key: string]: Activity[] })
+    ).sort((a, b) => a[0].localeCompare(b[0]));
+
+    x.forEach((activities) => {
+      activities[1].sort((a, b) => a.title.localeCompare(b.title));
+    });
+
+    return x;
+  }
+
   loadActivitiesData = async () => {
     this.isLoading = true;
     try {
@@ -86,9 +102,11 @@ export default class ActivityStore {
       console.log(error);
       AppStore.notify?.error(`Something went wrong! Details: ${error}`);
     } finally {
-      this.activities = this.activities.filter((e) => e.id !== this.selectedActivity?.id);
-      this.setSelectedActivity(undefined);
-      this.isLoading = false;
+      runInAction(() => {
+        this.activities = this.activities.filter((e) => e.id !== this.selectedActivity?.id);
+        this.setSelectedActivity(undefined);
+        this.isLoading = false;
+      });
     }
   };
 

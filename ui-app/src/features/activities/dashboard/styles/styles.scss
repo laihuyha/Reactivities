@@ -1,0 +1,18 @@
+.activities-list {
+  .custom-card {
+    opacity: 0.8;
+    transition: all 0.6s;
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+    .p-card-title > .flex > div > a {
+      text-decoration: none;
+      color: var(--blue-400);
+    }
+  }
+
+  .custom-card:hover ~ .custom-card {
+    opacity: 0.4;
+  }
+}
