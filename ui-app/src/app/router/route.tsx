@@ -24,6 +24,18 @@ export const routes: RouteObject[] = [
           return { Component: ActivityFormComponent };
         },
       },
+      {
+        path: "activity/:id",
+        loader: async ({ params }) => {
+          return params.id;
+        },
+        lazy: async () => {
+          const { default: ActivityDetailsComponent } = await import(
+            "../../features/activities/details/ActivityDetails"
+          );
+          return { Component: ActivityDetailsComponent };
+        },
+      },
     ],
   },
 ];

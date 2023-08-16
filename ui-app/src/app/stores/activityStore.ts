@@ -92,20 +92,21 @@ export default class ActivityStore {
     }
   };
 
-  deleteActivity = async (id?: string) => {
+  deleteActivity = async () => {
     if (!this.selectedActivity) return;
     this.isLoading = true;
     try {
-      if (id) await ActivityServices.delete(id);
       await ActivityServices.delete(this.selectedActivity?.id);
       AppStore.notify?.success("Activity Deleted Successfully!");
     } catch (error) {
       console.log(error);
       AppStore.notify?.error(`Something went wrong! Details: ${error}`);
     } finally {
-      this.activities = this.activities.filter((e) => e.id !== this.selectedActivity?.id);
-      this.setSelectedActivity(undefined);
-      this.isLoading = false;
+      runInAction(() => {
+        this.activities = this.activities.filter((e) => e.id !== this.selectedActivity?.id);
+        this.setSelectedActivity(undefined);
+        this.isLoading = false;
+      });
     }
   };
 

@@ -10,7 +10,7 @@ import { configurePrimeReact } from "../config/primeReactConfig";
 import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -36,7 +36,9 @@ const App = () => {
       ) : (
         <>
           <Navbar />
-          {appLoading ? <LoadingComponent /> : <Outlet />}
+          <Suspense fallback={<LoadingComponent />}>
+            <Outlet />
+          </Suspense>
         </>
       )}
     </div>
