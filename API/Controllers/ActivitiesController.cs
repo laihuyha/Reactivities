@@ -11,15 +11,16 @@ namespace API.Controllers
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Activity>>> GetActivities()
+        public async Task<IActionResult> GetActivities()
         {
-            return await Mediator.Send(new List.Query());
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivityById(string id)
+        public async Task<IActionResult> GetActivityById(string id)
         {
-            return await Mediator.Send(new Details.Query { Id = Guid.Parse(id) });
+            var result = await Mediator.Send(new Details.Query { Id = Guid.Parse(id) });
+            return HandleResult(result);
         }
 
         [HttpPost]

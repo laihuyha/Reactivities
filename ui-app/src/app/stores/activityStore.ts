@@ -11,6 +11,7 @@ export default class ActivityStore {
   isEdit: boolean = false;
   isView: boolean = false;
   isLoading: boolean = false;
+  initLoading: boolean = false;
   constructor() {
     makeAutoObservable(this);
   }
@@ -40,8 +41,18 @@ export default class ActivityStore {
     return x;
   }
 
+  testToast = async () => {
+    try {
+      if (this.activities.length > 0) {
+        await ActivityServices.details(`${this.activities[0].id}1e2`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   loadActivitiesData = async () => {
-    this.isLoading = true;
+    this.initLoading = true;
     try {
       const activities = await ActivityServices.list();
       runInAction(() => {
@@ -51,7 +62,7 @@ export default class ActivityStore {
       console.log(error);
     } finally {
       runInAction(() => {
-        this.isLoading = false;
+        this.initLoading = false;
       });
     }
   };

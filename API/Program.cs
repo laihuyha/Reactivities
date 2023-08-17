@@ -1,15 +1,24 @@
 using System;
 using API.Extensions;
+using API.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAppServicesExtension(builder.Configuration);
+
+Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console()
+.WriteTo.File("Logs/system.log", rollingInterval: RollingInterval.Day, restrictedToMinimumLevel: LogEventLevel.Information)
+.CreateBootstrapLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 
@@ -34,6 +43,8 @@ app.MapControllers();
 
 app.UseCors("CorsPolicy");
 
+app.UseMiddleware<ExceptionMiddleWare>();
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -49,4 +60,5 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred during migration");
     }
 }
+
 app.Run();
