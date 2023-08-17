@@ -36,6 +36,13 @@ export const routes: RouteObject[] = [
           return { Component: ActivityDetailsComponent };
         },
       },
+      {
+        path: "not-found",
+        lazy: async () => {
+          const { default: NotFoundComponent } = await import("../../features/errors/NotFound");
+          return { Component: NotFoundComponent };
+        },
+      },
     ],
   },
 ];
