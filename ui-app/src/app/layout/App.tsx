@@ -5,7 +5,8 @@ import "primeicons/primeicons.css";
 import "../layout/styles/index.scss";
 import Navbar from "./Navbar";
 import LoadingComponent from "./LoadingComponent";
-import HomePage from "../../features/home/HomePage";
+// import HomePage from "../../features/home/HomePage";
+import NotFound from "../../features/errors/NotFound";
 import { configurePrimeReact } from "../config/primeReactConfig";
 import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
 import { useStore } from "../stores/store";
@@ -29,10 +30,14 @@ const App = () => {
   }, [appStore, setToastRef, setUpToast]);
 
   return (
-    <div className="App" style={{ position: "relative" }}>
+    <div
+      className="App flex flex-column align-content-center justify-content-center h-screen"
+      style={{ position: "relative" }}
+    >
       <Toast ref={toast} />
       {location.pathname === "/" && !appLoading ? (
-        <HomePage />
+        // <HomePage />
+        <NotFound />
       ) : (
         <>
           <Navbar />
