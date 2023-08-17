@@ -8,10 +8,11 @@ import { useStore } from "../../../app/stores/store";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Button } from "primereact/button";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 const ActivitiesDashBoard = () => {
   const { activityStore } = useStore();
-  const { selectedActivity, isEdit, isView, isCreate, isLoading } = activityStore;
+  const { selectedActivity, isEdit, isView, isCreate, isLoading, initLoading } = activityStore;
   const { setIsView, setIsEdit, setIsCreate, setSelectedActivity, loadActivitiesData, submitForm } = activityStore;
 
   useEffect(() => {
@@ -59,6 +60,7 @@ const ActivitiesDashBoard = () => {
     },
   };
   //#endregion
+  if (initLoading) return <LoadingComponent />;
 
   return (
     <>

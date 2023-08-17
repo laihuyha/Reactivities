@@ -48,14 +48,11 @@ export default class Notify {
     this.toastRef?.current?.show({ ...this.ToastMessageProps, severity: "warn", detail: message, summary: "Warning" });
   };
 
-  error = (message: string | ReactNode, content?: string | ReactNode) => {
-    if (content) {
-      this.toastRef?.current?.show({ ...this.ToastMessageProps, severity: "error", content: content });
-    }
+  error = (content: any) => {
     this.toastRef?.current?.show({
       ...this.ToastMessageProps,
       severity: "error",
-      detail: message,
+      detail: content,
       summary: "Something went wrong",
     });
   };
