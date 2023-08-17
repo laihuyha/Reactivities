@@ -98,8 +98,7 @@ export default class ActivityStore {
         AppStore.notify?.success("Activity Updated Successfully!");
       }
     } catch (error) {
-      console.log(error);
-      AppStore.notify?.error(`Something went wrong! Details: ${error}`);
+      AppStore.notify?.error(`Something went wrong! Details: \n${error}`);
     } finally {
       runInAction(() => {
         this.isLoading = false;
