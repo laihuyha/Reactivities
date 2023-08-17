@@ -4,14 +4,12 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "../layout/styles/index.scss";
 import Navbar from "./Navbar";
-import LoadingComponent from "./LoadingComponent";
-// import HomePage from "../../features/home/HomePage";
-import NotFound from "../../features/errors/NotFound";
+import HomePage from "../../features/home/HomePage";
 import { configurePrimeReact } from "../config/primeReactConfig";
 import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -19,7 +17,6 @@ const App = () => {
   configurePrimeReact();
   fontAwesomeConfig();
   const { appStore } = useStore();
-  const { appLoading } = appStore;
   const { setToastRef, setUpToast } = appStore;
   const toast = useRef<Toast>(null);
   const location = useLocation();
@@ -30,20 +27,19 @@ const App = () => {
   }, [appStore, setToastRef, setUpToast]);
 
   return (
-    <div className="App" style={{ position: "relative" }}>
-      <Toast ref={toast} />
-      {location.pathname === "/" && !appLoading ? (
-        // <HomePage />
-        <NotFound />
+    <>
+      {location.pathname === "/" ? (
+        <HomePage />
       ) : (
         <>
           <Navbar />
-          <Suspense fallback={<LoadingComponent />}>
+          <div className="flex flex-column overflow-auto max-h-screen">
             <Outlet />
-          </Suspense>
+            <Toast ref={toast} />
+          </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

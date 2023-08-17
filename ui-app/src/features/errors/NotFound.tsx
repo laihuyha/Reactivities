@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 const NotFound = () => {
   return (
     <>
-      <div className="flex flex-column justify-content-center align-items-center">
+      <div className="h-screen flex flex-column justify-content-center align-items-center">
         <div className="flex flex-column justify-content-center text-center align-content-center h-full exception-content">
           <NotFoundIMG />
           <span className="text-5xl font-semibold">Not Found!</span>

@@ -1,3 +1,6 @@
+#root {
+  height: 100vh;
+}
 .p-menubar-root-list {
   li.p-menuitem {
     margin: 0 10px 0 10px;
@@ -17,16 +20,6 @@
   ) !important;
 }
 
-.custom-navbar-li {
-  &:hover {
-    color: #181414c6;
-  }
-
-  .p-menuitem-text {
-    color: #ffe6e6 !important;
-  }
-}
-
 @font-face {
   font-family: "Ysabeau Infant";
   src: url(../../../assets/fonts/Ysabeau_Infant/YsabeauInfant-VariableFont_wght.ttf) format("truetype"),
@@ -34,7 +27,7 @@
   font-weight: 200 1000;
 }
 
-.App,
+#root,
 .p-component {
   font-family: "Ysabeau Infant", sans-serif !important;
   font-size: 1rem;

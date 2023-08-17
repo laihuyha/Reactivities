@@ -1,6 +1,7 @@
 import ActivitiesList from "./ActivitiesList";
 import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Sidebar, SidebarProps } from "primereact/sidebar";
 import { Dialog, DialogProps } from "primereact/dialog";
 import { ConfirmDialog } from "primereact/confirmdialog";
@@ -8,7 +9,7 @@ import { useStore } from "../../../app/stores/store";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Button } from "primereact/button";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
+import "./styles/styles.scss";
 
 const ActivitiesDashBoard = () => {
   const { activityStore } = useStore();
@@ -64,7 +65,11 @@ const ActivitiesDashBoard = () => {
 
   return (
     <>
-      <ActivitiesList />
+      <div className="grid">
+        <div className="col-12">
+          <ActivitiesList />
+        </div>
+      </div>
       <Sidebar {...sidebarProps} />
       <Dialog {...dialogProps} />
       <ConfirmDialog />
