@@ -30,10 +30,7 @@ const App = () => {
   }, [appStore, setToastRef, setUpToast]);
 
   return (
-    <div
-      className="App flex flex-column align-content-center justify-content-center h-screen"
-      style={{ position: "relative" }}
-    >
+    <div className="App" style={{ position: "relative" }}>
       <Toast ref={toast} />
       {location.pathname === "/" && !appLoading ? (
         // <HomePage />
