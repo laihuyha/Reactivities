@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import AppStore from "../stores/appStore";
 import router from "../router/route";
+import { store } from "../stores/store";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -38,10 +39,10 @@ axios.interceptors.response.use(
         break;
       case 404:
         router.navigate("/not-found");
-        AppStore.notify?.error("Not Found!");
         break;
       case 500:
-        AppStore.notify?.error(`Internal Server Error!`);
+        store.commonStore.setError(data);
+        router.navigate("/server-error");
         break;
       default:
         break;

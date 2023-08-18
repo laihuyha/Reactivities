@@ -1,8 +1,9 @@
 import { observer } from "mobx-react-lite";
-// import { useStore } from "../../app/stores/store";
+import { useStore } from "../../app/stores/store";
 
 const InternalError = () => {
-  // const { commonStore } = useStore();
+  const { commonStore } = useStore();
+  const { error } = commonStore;
   return (
     <>
       <div className="flex flex-column justify-content-between min-h-screen align-items-center">
@@ -31,12 +32,23 @@ const InternalError = () => {
               </div>
               <h1 className="text-900 font-bold text-5xl mb-2">Error Occured</h1>
               <div className="text-600 mb-5">Something went wrong.</div>
-              <button aria-label="Go to Dashboard" className="p-button p-component p-button-text">
+              <div className="text-5xl font-bold">{error?.statusCode}</div>
+              <div className="font-semibold">{error?.message}</div>
+              {error?.details && (
+                <div className="surface-ground mt-3 border-round">
+                  <h3>Stack Trace</h3>
+                  <code>{error?.details}</code>
+                </div>
+              )}
+              <button aria-label="Go to Dashboard" className="p-button p-component p-button-text mt-2">
                 <span className="p-button-icon p-c p-button-icon-left pi pi-arrow-left"></span>
-                <span className="p-button-label p-c">
-                  <a href="/" className="text-decoration-none">
-                    Go to Dashboard
-                  </a>
+                <span
+                  className="p-button-label p-c"
+                  onClick={() => {
+                    window.history.back();
+                  }}
+                >
+                  Go to Dashboard
                 </span>
                 <span
                   role="presentation"
