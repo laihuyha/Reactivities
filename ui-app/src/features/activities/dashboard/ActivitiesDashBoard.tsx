@@ -65,11 +65,7 @@ const ActivitiesDashBoard = () => {
 
   return (
     <>
-      <div className="grid">
-        <div className="col-12">
-          <ActivitiesList />
-        </div>
-      </div>
+      <ActivitiesList />
       <Sidebar {...sidebarProps} />
       <Dialog {...dialogProps} />
       <ConfirmDialog />

@@ -33,7 +33,7 @@ const App = () => {
       ) : (
         <>
           <Navbar />
-          <div className="flex flex-column overflow-auto max-h-screen">
+          <div className="flex flex-column max-h-screen">
             <Outlet />
             <Toast ref={toast} />
           </div>
