@@ -8,6 +8,7 @@ import { confirmDialog } from "primereact/confirmdialog";
 import { ContextMenu } from "primereact/contextmenu";
 import { MenuItem } from "primereact/menuitem";
 import "./styles/styles.scss";
+import ActivitiesFilter from "./ActivitiesFilter";
 
 const ActivitiesList = () => {
   const { activityStore } = useStore();
@@ -55,6 +56,7 @@ const ActivitiesList = () => {
     <>
       <ContextMenu model={items} ref={cm} breakpoint="767px" />
       <span className="activities-list border-round">
+        <ActivitiesFilter />
         {groupedActivities.map(([groupKey, actitvities]) => (
           <Fragment key={groupKey}>
             <Fieldset className="m-3" legend={toDisplayDateTime(groupKey)} toggleable>
