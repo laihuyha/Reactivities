@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 const HomePage = () => {
   return (
     <>
-      <div className="flex justify-content-center align-items-center flex-column home">
+      <div className="flex justify-content-center align-items-center flex-column border-round home">
         <PrimeReactIcon />
         <span className="text-7xl text-white">Reactivities</span>
         <h2 className="title">Home Page</h2>

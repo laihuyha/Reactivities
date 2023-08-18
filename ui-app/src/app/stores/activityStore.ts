@@ -84,20 +84,25 @@ export default class ActivityStore {
     try {
       if (this.isCreate && !this.isEdit) {
         await ActivityServices.create(activity);
-        this.activities = [...this.activities, activity];
+        runInAction(() => {
+          this.activities = [...this.activities, activity];
+        });
         AppStore.notify?.success("Activity Created Successfully!");
       }
       if (this.isEdit && !this.isCreate) {
         await ActivityServices.update(activity);
         let exist = this.activities.findIndex((e) => e.id === activity.id);
-        this.activities[exist] = { ...this.activities[exist], ...activity };
+        runInAction(() => {
+          this.activities[exist] = { ...this.activities[exist], ...activity };
+        });
         AppStore.notify?.success("Activity Updated Successfully!");
       }
     } catch (error) {
-      console.log(error);
-      AppStore.notify?.error(`Something went wrong! Details: ${error}`);
+      AppStore.notify?.error(`Something went wrong! Details: \n${error}`);
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
       this.setIsCreate(false);
       this.setIsEdit(false);
     }

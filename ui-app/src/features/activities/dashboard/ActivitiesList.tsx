@@ -54,17 +54,17 @@ const ActivitiesList = () => {
   return (
     <>
       <ContextMenu model={items} ref={cm} breakpoint="767px" />
-      <div className="activities-list">
+      <span className="activities-list border-round">
         {groupedActivities.map(([groupKey, actitvities]) => (
           <Fragment key={groupKey}>
-            <Fieldset className="mb-3" legend={toDisplayDateTime(groupKey)} toggleable>
+            <Fieldset className="m-3" legend={toDisplayDateTime(groupKey)} toggleable>
               {actitvities.map((e) => (
                 <ActivityItem key={e.id} activity={e} cmRef={cm} />
               ))}
             </Fieldset>
           </Fragment>
         ))}
-      </div>
+      </span>
     </>
   );
 };

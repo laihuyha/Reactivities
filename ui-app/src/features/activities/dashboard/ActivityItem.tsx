@@ -64,7 +64,7 @@ const ActitvityItem = ({ activity, cmRef }: Props) => {
     <>
       <Card
         title={titleNode}
-        className="m-3 custom-card surface-0 shadow-2 hover:shadow-8 p-3 border-2 border-50 border-round-2xl"
+        className="surface-0 shadow-2 hover:shadow-8 p-3 border-2 border-50 border-round-2xl mt-3 custom-card "
         onContextMenu={(e) => {
           e.preventDefault();
           setSelectedActivity(activity.id);

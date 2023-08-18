@@ -1,4 +1,4 @@
-import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouteObject, createBrowserRouter } from "react-router-dom";
 import App from "../layout/App";
 import HomePage from "../../features/home/HomePage";
 
@@ -35,6 +35,17 @@ export const routes: RouteObject[] = [
           );
           return { Component: ActivityDetailsComponent };
         },
+      },
+      {
+        path: "not-found",
+        lazy: async () => {
+          const { default: NotFoundComponent } = await import("../../features/errors/NotFound");
+          return { Component: NotFoundComponent };
+        },
+      },
+      {
+        path: "*",
+        element: <Navigate to="/not-found" />,
       },
     ],
   },
