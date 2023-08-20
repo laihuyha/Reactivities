@@ -4,6 +4,7 @@ import { MenuItem } from "primereact/menuitem";
 import { useStore } from "../stores/store";
 import { NavLink, useLocation } from "react-router-dom";
 import "./styles/index.scss";
+import router from "../router/route";
 
 const Navbar = () => {
   const { activityStore } = useStore();
@@ -25,7 +26,9 @@ const Navbar = () => {
     {
       label: "Activities",
       style: { borderRadius: 5 },
-      url: "/activities",
+      command: () => {
+        router.navigate("/activities");
+      },
     },
     {
       label: "Create Activity",
