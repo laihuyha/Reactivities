@@ -3,10 +3,13 @@ import { v4 as uuid } from "uuid";
 import Activity from "../models/activity";
 import ActivityServices from "../api/services/activities";
 import AppStore from "./appStore";
+import { dateTimeHelper } from "../../utils/helper";
 
 export default class ActivityStore {
   activities: Activity[] = [];
   selectedActivity?: Activity;
+  filterDateRange?: Date[] = [];
+  selectedCategories: string[] = [];
   isCreate: boolean = false;
   isEdit: boolean = false;
   isView: boolean = false;
@@ -36,20 +39,22 @@ export default class ActivityStore {
 
     x.forEach((activities) => {
       activities[1].sort((a, b) => a.title.localeCompare(b.title));
+      if (this.selectedCategories.length > 0) {
+        activities[1] = activities[1].filter((a) => this.selectedCategories.includes(a.category));
+      }
     });
+
+    x = x.filter((a) => a[1].length > 0);
+
+    if (this.filterDateRange && this.filterDateRange.length > 0) {
+      x = x.filter((a) => {
+        let date = dateTimeHelper.convertTimeString(a[0]);
+        return this.filterDateRange![0] <= date && date <= this.filterDateRange![1];
+      });
+    }
 
     return x;
   }
-
-  testToast = async () => {
-    try {
-      if (this.activities.length > 0) {
-        await ActivityServices.details(`${this.activities[0].id}1e2`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   loadActivitiesData = async () => {
     this.initLoading = true;
@@ -134,6 +139,18 @@ export default class ActivityStore {
       this.selectedActivity = { ...activity };
     } else {
       this.selectedActivity = undefined;
+    }
+  };
+
+  setFilterDateRange = (dateRange: any) => {
+    this.filterDateRange = dateRange;
+  };
+
+  setSelectedCategories = (category: string) => {
+    if (this.selectedCategories.includes(category)) {
+      this.selectedCategories = this.selectedCategories.filter((e) => e !== category);
+    } else {
+      this.selectedCategories = [...this.selectedCategories, category];
     }
   };
 

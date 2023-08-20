@@ -3,12 +3,12 @@ import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { dateTimeHelper } from "../../../utils/helper";
 import { Fieldset } from "primereact/fieldset";
-import ActivityItem from "./ActivityItem";
 import { confirmDialog } from "primereact/confirmdialog";
 import { ContextMenu } from "primereact/contextmenu";
 import { MenuItem } from "primereact/menuitem";
-import "./styles/styles.scss";
+import ActivityItem from "./ActivityItem";
 import ActivitiesFilter from "./ActivitiesFilter";
+import "./styles/styles.scss";
 
 const ActivitiesList = () => {
   const { activityStore } = useStore();
@@ -59,7 +59,7 @@ const ActivitiesList = () => {
         <ActivitiesFilter />
         {groupedActivities.map(([groupKey, actitvities]) => (
           <Fragment key={groupKey}>
-            <Fieldset className="m-3" legend={toDisplayDateTime(groupKey)} toggleable>
+            <Fieldset className="m-3 bg-transparent" legend={toDisplayDateTime(groupKey)} toggleable>
               {actitvities.map((e) => (
                 <ActivityItem key={e.id} activity={e} cmRef={cm} />
               ))}
