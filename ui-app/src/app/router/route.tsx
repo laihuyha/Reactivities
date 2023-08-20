@@ -44,6 +44,13 @@ export const routes: RouteObject[] = [
         },
       },
       {
+        path: "server-error",
+        lazy: async () => {
+          const { default: InternalErrorComponent } = await import("../../features/errors/InternalError");
+          return { Component: InternalErrorComponent };
+        },
+      },
+      {
         path: "*",
         element: <Navigate to="/not-found" />,
       },

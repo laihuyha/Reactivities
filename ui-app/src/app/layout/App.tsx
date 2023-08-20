@@ -12,6 +12,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
 import { Outlet, useLocation } from "react-router-dom";
+import InternalError from "../../features/errors/InternalError";
 
 const App = () => {
   configurePrimeReact();
@@ -26,21 +27,27 @@ const App = () => {
     setUpToast();
   }, [appStore, setToastRef, setUpToast]);
 
-  return (
-    <>
-      {location.pathname === "/" ? (
-        <HomePage />
-      ) : (
-        <>
-          <Navbar />
-          <div className="flex flex-column max-h-screen">
+  const renderApp = () => {
+    if (location.pathname === "/") {
+      return <HomePage />;
+    }
+    if (location.pathname === "/server-error") {
+      return <InternalError />;
+    }
+    return (
+      <>
+        <Navbar />
+        <div className="layout-main-container">
+          <div className="layout-main">
             <Outlet />
-            <Toast ref={toast} />
           </div>
-        </>
-      )}
-    </>
-  );
+          <Toast ref={toast} />
+        </div>
+      </>
+    );
+  };
+
+  return <div className="layout-wrapper layout-static">{renderApp()}</div>;
 };
 
 export default observer(App);

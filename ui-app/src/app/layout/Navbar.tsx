@@ -3,6 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { MenuItem } from "primereact/menuitem";
 import { useStore } from "../stores/store";
 import { NavLink, useLocation } from "react-router-dom";
+import "./styles/index.scss";
 
 const Navbar = () => {
   const { activityStore } = useStore();
@@ -42,17 +43,6 @@ const Navbar = () => {
     },
   ];
 
-  return (
-    <div
-      className="card mb-3"
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 999,
-      }}
-    >
-      <Menubar model={items} start={start} end={end} />
-    </div>
-  );
+  return <Menubar className="layout-topbar" model={items} start={start} end={end} />;
 };
 export default Navbar;
