@@ -8,13 +8,12 @@ import { ConfirmDialog } from "primereact/confirmdialog";
 import { useStore } from "../../../app/stores/store";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { Button } from "primereact/button";
 import "./styles/styles.scss";
 
 const ActivitiesDashBoard = () => {
   const { activityStore } = useStore();
-  const { selectedActivity, isEdit, isView, isCreate, isLoading, initLoading } = activityStore;
-  const { setIsView, setIsEdit, setIsCreate, setSelectedActivity, loadActivitiesData, submitForm } = activityStore;
+  const { selectedActivity, isEdit, isView, isCreate, initLoading } = activityStore;
+  const { setIsView, setIsEdit, setIsCreate, setSelectedActivity, loadActivitiesData } = activityStore;
 
   useEffect(() => {
     loadActivitiesData();
@@ -35,21 +34,7 @@ const ActivitiesDashBoard = () => {
   };
 
   const dialogProps: DialogProps = {
-    header: "Edit Activity",
-    footer: [
-      <div className="card flex justify-content-center" key={"footer"}>
-        <Button
-          key={"saveBtn"}
-          label="Save"
-          icon="pi pi-check"
-          className="p-button bg-primary"
-          loading={isLoading}
-          onClick={() => {
-            selectedActivity && submitForm(selectedActivity);
-          }}
-        />
-      </div>,
-    ],
+    header: isEdit ? "Edit Activity" : "Create Activity",
     draggable: false,
     position: "center",
     visible: isEdit || isCreate,

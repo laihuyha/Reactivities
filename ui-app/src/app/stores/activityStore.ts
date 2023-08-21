@@ -177,9 +177,4 @@ export default class ActivityStore {
   setIsLoading = (isLoading: boolean) => {
     this.isLoading = isLoading;
   };
-
-  handleChangeFormData = (dataField: keyof Activity, value?: any) => {
-    if (!this.selectedActivity) return;
-    this.selectedActivity[dataField] = value;
-  };
 }
