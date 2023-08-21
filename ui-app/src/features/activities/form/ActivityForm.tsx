@@ -71,7 +71,6 @@ const ActivityForm = ({ activity }: Props) => {
                   className="p-button bg-primary"
                   loading={isSubmitting}
                 />
-                <></>
               </div>
             </Form>
           </>
