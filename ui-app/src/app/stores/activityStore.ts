@@ -85,7 +85,7 @@ export default class ActivityStore {
   };
 
   submitForm = async (activity: Activity) => {
-    this.isLoading = true;
+    this.setIsLoading(true);
     try {
       if (this.isCreate && !this.isEdit) {
         await ActivityServices.create(activity);
@@ -105,9 +105,7 @@ export default class ActivityStore {
     } catch (error) {
       AppStore.notify?.error(`Something went wrong! Details: \n${error}`);
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      this.setIsLoading(false);
       this.setIsCreate(false);
       this.setIsEdit(false);
     }
@@ -176,10 +174,5 @@ export default class ActivityStore {
 
   setIsLoading = (isLoading: boolean) => {
     this.isLoading = isLoading;
-  };
-
-  handleChangeFormData = (dataField: keyof Activity, value?: any) => {
-    if (!this.selectedActivity) return;
-    this.selectedActivity[dataField] = value;
   };
 }

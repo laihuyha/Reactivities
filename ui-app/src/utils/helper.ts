@@ -27,12 +27,25 @@ const toDisplayDateTime = (timeString?: string, locale = "vi-VN", format?: Intl.
   return converted.toLocaleDateString(locale, format);
 };
 
+const toSimpleDateTime = (timeString?: string) => {
+  if (!timeString) return "";
+  const formatter = new Intl.DateTimeFormat("vi-VN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date(timeString));
+  const date = formatter.filter((x) => x.value !== "/" && x.value !== "-").map((x) => x.value);
+  return date.reverse().join("");
+};
+
 const helper = {
   modelToColumns,
 };
+
 const dateTimeHelper = {
   convertTimeString,
   toDisplayDateTime,
+  toSimpleDateTime,
 };
 
 export { helper, dateTimeHelper };

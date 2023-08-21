@@ -1,8 +1,11 @@
-import { Calendar, CalendarChangeEvent } from "primereact/calendar";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
 import Activity from "../../../app/models/activity";
+import { Form, Formik } from "formik";
+import { Button } from "primereact/button";
 import { useStore } from "../../../app/stores/store";
+import * as yup from "yup";
+import TextInput from "../../../app/common/form/TextInput";
+import TextAreaInput from "../../../app/common/form/TextAreaInput";
+import DateInput from "../../../app/common/form/DateInput";
 import { dateTimeHelper } from "../../../utils/helper";
 
 interface Props {
@@ -11,76 +14,68 @@ interface Props {
 
 const ActivityForm = ({ activity }: Props) => {
   const { activityStore } = useStore();
-  const { handleChangeFormData } = activityStore;
-  const { convertTimeString } = dateTimeHelper;
+  const { submitForm } = activityStore;
+  const { toSimpleDateTime } = dateTimeHelper;
+  const validationSchema = yup.object({
+    title: yup.string().required("Title is required"),
+    date: yup.date().required("Date is required"),
+    category: yup.string().required("Category is required"),
+    city: yup.string().required("City is required"),
+    description: yup.string(),
+    venue: yup.string(),
+  });
+
   return (
     <>
-      <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
-      <div className="flex justify-content-center">
-        <InputText
-          className="col-12"
-          placeholder="Title"
-          defaultValue={activity?.title}
-          onChange={(e) => {
-            handleChangeFormData("title", e.target.value);
-          }}
-        />
-      </div>
-      <Calendar
-        className="col-12 p-0 mt-2 mb-2"
-        value={convertTimeString(activity?.date)}
-        dateFormat="dd/mm/yy"
-        onChange={(e: CalendarChangeEvent) => {
-          const value = e.target.value?.toLocaleString("vi-VN", {
-            day: "numeric",
-            month: "numeric",
-            year: "numeric",
-          });
-          handleChangeFormData("date", value?.replaceAll("/", ""));
+      <Formik
+        validationSchema={validationSchema}
+        enableReinitialize
+        initialValues={activity!}
+        onSubmit={(e) => {
+          e = { ...e, date: toSimpleDateTime(e.date) };
+          submitForm(e);
         }}
-        inputClassName="col-12"
-        placeholder="Select a date"
-      />
-      <div className="flex justify-content-center mb-2">
-        <InputText
-          className="col-12"
-          placeholder="Category"
-          defaultValue={activity?.category}
-          onChange={(e) => {
-            handleChangeFormData("category", e.target.value);
-          }}
-        />
-      </div>
-      <div className="flex justify-content-center mb-2">
-        <InputText
-          className="col-12"
-          placeholder="Venue"
-          defaultValue={activity?.venue}
-          onChange={(e) => {
-            handleChangeFormData("venue", e.target.value);
-          }}
-        />
-      </div>
-      <div className="flex justify-content-center mb-2">
-        <InputText
-          className="col-12"
-          placeholder="City"
-          defaultValue={activity?.city}
-          onChange={(e) => {
-            handleChangeFormData("city", e.target.value);
-          }}
-        />
-      </div>
-      <div className="flex justify-content-center">
-        <InputTextarea
-          className="col-12"
-          placeholder="Descriptions"
-          defaultValue={activity?.description}
-          onChange={(e) => {
-            handleChangeFormData("description", e.target.value);
-          }}
-        />
-      </div>
+      >
+        {({ handleSubmit, isValid, dirty, isSubmitting }) => (
+          <>
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+              autoComplete="off"
+            >
+              <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
+              <div className="flex flex-column justify-content-center mb-3">
+                <TextInput name="title" placeholder="Title" className="col-12 p-inputtext" />
+              </div>
+              <div className="flex flex-column justify-content-center mb-3">
+                <TextInput name="category" placeholder="Category" className="col-12 p-inputtext" />
+              </div>
+              <DateInput name="date" placeholder="Date" className="col-12 p-0" />
+              <div className="flex flex-column justify-content-center mb-3">
+                <TextInput name="city" placeholder="City" className="col-12 p-inputtext" />
+              </div>
+              <div className="flex flex-column justify-content-center mb-3">
+                <TextInput name="venue" placeholder="Venue" className="col-12 p-inputtext" />
+              </div>
+              <div className="flex justify-content-center">
+                <TextAreaInput name="description" placeholder="Description" className="p-inputtextarea col-12 mb-2" />
+              </div>
+              <div className="card flex justify-content-center mt-2 mb-0">
+                <Button
+                  disabled={isSubmitting || !isValid || !dirty}
+                  label="Save"
+                  icon="pi pi-check"
+                  type="submit"
+                  className="p-button bg-primary"
+                  loading={isSubmitting}
+                />
+              </div>
+            </Form>
+          </>
+        )}
+      </Formik>
     </>
   );
 };
