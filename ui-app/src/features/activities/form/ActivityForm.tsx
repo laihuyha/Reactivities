@@ -7,6 +7,7 @@ import TextInput from "../../../app/common/form/TextInput";
 import TextAreaInput from "../../../app/common/form/TextAreaInput";
 import DateInput from "../../../app/common/form/DateInput";
 import { dateTimeHelper } from "../../../utils/helper";
+import AppStore from "../../../app/stores/appStore";
 
 interface Props {
   activity?: Activity;
@@ -15,6 +16,7 @@ interface Props {
 const ActivityForm = ({ activity }: Props) => {
   const { activityStore } = useStore();
   const { isLoading } = activityStore;
+  const { submitForm, setIsCreate, setIsEdit, setSelectedActivity } = activityStore;
   const { toSimpleDateTime } = dateTimeHelper;
   const validationSchema = yup.object({
     title: yup.string().required("Title is required"),
@@ -24,20 +26,21 @@ const ActivityForm = ({ activity }: Props) => {
     description: yup.string(),
     venue: yup.string(),
   });
+
   return (
     <>
       <Formik
         validationSchema={validationSchema}
         enableReinitialize
-        initialValues={activity as Activity}
+        initialValues={activity!}
         onSubmit={(e) => {
           e = { ...e, date: toSimpleDateTime(e.date) };
-          console.log(e);
+          submitForm(e);
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, isValid, dirty }) => (
           <>
-            <Form onSubmit={handleSubmit} autoComplete="off">
+            <Form autoComplete="off">
               <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
               <div className="flex flex-column justify-content-center mb-3">
                 <TextInput name="title" placeholder="Title" className="col-12 p-inputtext" />
@@ -55,16 +58,28 @@ const ActivityForm = ({ activity }: Props) => {
               <div className="flex justify-content-center">
                 <TextAreaInput name="description" placeholder="Description" className="p-inputtextarea col-12 mb-2" />
               </div>
-              <div className="card flex justify-content-center mt-2 mb-0">
-                <Button
-                  label="Save"
-                  icon="pi pi-check"
-                  type="submit"
-                  className="p-button bg-primary"
-                  loading={isLoading}
-                />
-              </div>
             </Form>
+            <div className="card flex justify-content-center mt-2 mb-0">
+              <Button
+                label="Save"
+                icon="pi pi-check"
+                type="submit"
+                className="p-button bg-primary"
+                loading={isLoading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (isValid && dirty) {
+                    handleSubmit();
+                  } else {
+                    setIsEdit(false);
+                    setIsCreate(false);
+                    setSelectedActivity(undefined);
+                    AppStore.notify?.warning("Nothing changed!, You can't update it");
+                    return;
+                  }
+                }}
+              />
+            </div>
           </>
         )}
       </Formik>

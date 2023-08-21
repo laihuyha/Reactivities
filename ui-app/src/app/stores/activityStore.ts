@@ -85,8 +85,9 @@ export default class ActivityStore {
   };
 
   submitForm = async (activity: Activity) => {
-    this.isLoading = true;
+    this.setIsLoading(true);
     try {
+      console.log(this.isLoading);
       if (this.isCreate && !this.isEdit) {
         await ActivityServices.create(activity);
         runInAction(() => {
@@ -105,9 +106,7 @@ export default class ActivityStore {
     } catch (error) {
       AppStore.notify?.error(`Something went wrong! Details: \n${error}`);
     } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
+      this.setIsLoading(false);
       this.setIsCreate(false);
       this.setIsEdit(false);
     }
