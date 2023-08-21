@@ -6,6 +6,7 @@ import * as yup from "yup";
 import TextInput from "../../../app/common/form/TextInput";
 import TextAreaInput from "../../../app/common/form/TextAreaInput";
 import DateInput from "../../../app/common/form/DateInput";
+import { dateTimeHelper } from "../../../utils/helper";
 
 interface Props {
   activity?: Activity;
@@ -14,6 +15,7 @@ interface Props {
 const ActivityForm = ({ activity }: Props) => {
   const { activityStore } = useStore();
   const { isLoading } = activityStore;
+  const { toSimpleDateTime } = dateTimeHelper;
   const validationSchema = yup.object({
     title: yup.string().required("Title is required"),
     date: yup.date().required("Date is required"),
@@ -29,6 +31,7 @@ const ActivityForm = ({ activity }: Props) => {
         enableReinitialize
         initialValues={activity as Activity}
         onSubmit={(e) => {
+          e = { ...e, date: toSimpleDateTime(e.date) };
           console.log(e);
         }}
       >
