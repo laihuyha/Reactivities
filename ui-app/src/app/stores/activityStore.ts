@@ -87,7 +87,6 @@ export default class ActivityStore {
   submitForm = async (activity: Activity) => {
     this.setIsLoading(true);
     try {
-      console.log(this.isLoading);
       if (this.isCreate && !this.isEdit) {
         await ActivityServices.create(activity);
         runInAction(() => {
