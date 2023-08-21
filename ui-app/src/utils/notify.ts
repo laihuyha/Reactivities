@@ -18,7 +18,7 @@ export default class Notify {
     this.initToastRef(toastRef);
   }
 
-  initToastRef = (toastRef: RefObject<Toast>) => {
+  private initToastRef = (toastRef: RefObject<Toast>) => {
     this.toastRef = toastRef;
   };
 
