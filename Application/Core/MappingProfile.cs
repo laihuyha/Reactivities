@@ -6,7 +6,7 @@ namespace Application.Core
     {
         public MappingProfile()
         {
-            CreateMap<Domain.Entities.Activity, Domain.Entities.Activity>();
+            _ = CreateMap<Domain.Entities.Activity, Domain.Entities.Activity>();
         }
     }
 }

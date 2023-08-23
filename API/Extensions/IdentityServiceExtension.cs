@@ -8,8 +8,8 @@ namespace API.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services)
         {
-            services.AddIdentityCore<AppUser>(options => options.Password.RequireNonAlphanumeric = false).AddEntityFrameworkStores<DataContext>();
-            services.AddAuthentication();
+            _ = services.AddIdentityCore<AppUser>(options => options.Password.RequireNonAlphanumeric = false).AddEntityFrameworkStores<DataContext>();
+            _ = services.AddAuthentication();
             return services;
         }
     }

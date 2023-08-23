@@ -15,7 +15,7 @@ namespace Application.Activities
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+                _ = RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
             }
         }
 
@@ -36,8 +36,8 @@ namespace Application.Activities
             {
                 try
                 {
-                    await _context.Activities.AddAsync(request.Activity, cancellationToken);
-                    await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
+                    _ = await _context.Activities.AddAsync(request.Activity, cancellationToken);
+                    _ = await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
                     return Result<Unit>.Success(Unit.Value);
                 }
                 catch (Exception ex)

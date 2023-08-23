@@ -18,9 +18,9 @@ namespace Persistence
             Dictionary<int, string> AvailabelLocationDictionary = new();
             for (var i = 0; i < AvailabelActivities.Count; i++)
             {
-                AvailabelActivitiesDictionary.TryAdd(i, AvailabelActivities[i]);
-                AvailabelCityDictionary.TryAdd(i, AvailabelCity[i]);
-                AvailabelLocationDictionary.TryAdd(i, AvailabelLocation[i]);
+                _ = AvailabelActivitiesDictionary.TryAdd(i, AvailabelActivities[i]);
+                _ = AvailabelCityDictionary.TryAdd(i, AvailabelCity[i]);
+                _ = AvailabelLocationDictionary.TryAdd(i, AvailabelLocation[i]);
             }
 
             if (context.Activities.Any()) return;
@@ -41,9 +41,9 @@ namespace Persistence
                     Description = dateSubtract > 0 ? $"Activity {(int)DateTime.Now.Subtract(randomDate).TotalDays / 30} months ago" : "Recently"
                 };
 
-                await context.Activities.AddAsync(activity);
+                _ = await context.Activities.AddAsync(activity);
             }
-            await context.SaveChangesAsync();
+            _ = await context.SaveChangesAsync();
         }
     }
 }

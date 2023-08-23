@@ -16,7 +16,7 @@ namespace Application.Activities
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+                _ = RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
             }
         }
 
@@ -43,9 +43,9 @@ namespace Application.Activities
                     var activity = await _context.Activities.FindAsync(new object[] { request.Activity.Id }, cancellationToken: cancellationToken); // Find activity by ID
                     if (activity != null)
                     {
-                        _mapper.Map(request.Activity, activity); // Map request.Activity to activity
+                        _ = _mapper.Map(request.Activity, activity); // Map request.Activity to activity
 
-                        await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
+                        _ = await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
                         return Result<Unit>.Success(Unit.Value);
                     }
                     return Result<Unit>.Failure("Activity not found");
