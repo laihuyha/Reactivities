@@ -13,9 +13,10 @@ using Serilog.Events;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAppServicesExtension(builder.Configuration);
+builder.Services.AddIdentityServices();
 
 Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console()
-.WriteTo.File("Logs/system.log", rollingInterval: RollingInterval.Day, restrictedToMinimumLevel: LogEventLevel.Information)
+.WriteTo.File("Logs/system.log", restrictedToMinimumLevel: LogEventLevel.Information, rollingInterval: RollingInterval.Day)
 .CreateBootstrapLogger();
 
 builder.Host.UseSerilog();

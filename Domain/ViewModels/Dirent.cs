@@ -17,6 +17,4 @@ namespace Domain.ViewModels
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string d_name;
     }
-
-
 }

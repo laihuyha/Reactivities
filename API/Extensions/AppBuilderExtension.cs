@@ -6,9 +6,9 @@ namespace API.Extensions
 {
     public static class AppBuilderExtension
     {
-        public static IApplicationBuilder UseAppBuilderExtension(this IApplicationBuilder app, IConfiguration config)
+        public static IApplicationBuilder UseAppBuilderExtension(this IApplicationBuilder app)
         {
-            app.UseSerilogRequestLogging();
+            _ = app.UseSerilogRequestLogging();
             return app;
         }
     }
