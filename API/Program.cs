@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAppServicesExtension(builder.Configuration); // Extension
 builder.Services.AddIdentityServices(builder.Configuration); // Extension
 
-Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration().CreateBootstrapLogger();
 
 builder.Host.UseHostBuilderExtension(); // Extension
 
