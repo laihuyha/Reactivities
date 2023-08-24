@@ -1,6 +1,5 @@
 using System;
 using API.Extensions;
-using API.Middleware;
 using Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -14,14 +13,12 @@ using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAppServicesExtension(builder.Configuration);
-builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddAppServicesExtension(builder.Configuration); // Extension
+builder.Services.AddIdentityServices(builder.Configuration); // Extension
 
-Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console()
-.WriteTo.File("Logs/system.log", restrictedToMinimumLevel: LogEventLevel.Information, rollingInterval: RollingInterval.Day)
-.CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateBootstrapLogger();
 
-builder.Host.UseSerilog();
+builder.Host.UseHostBuilderExtension(); // Extension
 
 var app = builder.Build();
 
@@ -38,17 +35,9 @@ if (!app.Environment.IsDevelopment())
     _ = app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
+app.UseAppBuilderExtension(); // Extension
 
 app.MapControllers();
-
-app.UseCors("CorsPolicy");
-
-app.UseMiddleware<ExceptionMiddleWare>();
 
 using (var scope = app.Services.CreateScope())
 {
