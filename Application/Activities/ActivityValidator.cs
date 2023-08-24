@@ -7,12 +7,12 @@ namespace Application.Activities
     {
         public ActivityValidator()
         {
-            RuleFor(x => x.Title).NotEmpty();
-            RuleFor(x => x.Date).NotEmpty();
-            RuleFor(x => x.Category).NotEmpty();
-            RuleFor(x => x.City).NotEmpty();
-            RuleFor(x => x.Description);
-            RuleFor(x => x.Venue);
+            _ = RuleFor(x => x.Title).NotEmpty();
+            _ = RuleFor(x => x.Date).NotEmpty();
+            _ = RuleFor(x => x.Category).NotEmpty();
+            _ = RuleFor(x => x.City).NotEmpty();
+            _ = RuleFor(x => x.Description);
+            _ = RuleFor(x => x.Venue);
         }
     }
 }

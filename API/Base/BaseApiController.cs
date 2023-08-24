@@ -13,17 +13,11 @@ namespace API.Base
 
         protected IActionResult HandleResult<T>(Result<T> result)
         {
-            if (result == null) return NotFound();
-
-            if (result.IsSuccess && result.Value != null)
-            {
-                return Ok(result.Value);
-            }
-            if (result.IsSuccess && result.Value == null)
-            {
-                return NotFound();
-            }
-            return BadRequest(result.Error);
+            return result == null
+                ? NotFound()
+                : result.IsSuccess && result.Value != null
+                ? Ok(result.Value)
+                : result.IsSuccess && result.Value == null ? NotFound() : BadRequest(result.Error);
         }
     }
 }

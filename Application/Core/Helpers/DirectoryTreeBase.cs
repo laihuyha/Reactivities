@@ -23,7 +23,10 @@ namespace Application.Core.Helpers
     /// </summary>
     public abstract partial class DirectoryTreeBase
     {
-        public readonly byte DT_DIR = 4; // Unix Directory
+        /// <summary>
+        /// Unix Directory
+        /// </summary>
+        public readonly byte DT_DIR = 4;
         public abstract Task<List<TreeNode>> GetDirectoryTreeStructure(string path, string configPath);
 
         public readonly Regex ArchiveRegex = ArchiveExtensionRegex();

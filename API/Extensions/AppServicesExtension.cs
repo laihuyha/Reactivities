@@ -16,18 +16,18 @@ namespace API.Extensions
         {
             // Add services to the container.
 
-            services.AddControllers();
+            _ = services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-            services.AddDbContext<DataContext>(options => options.UseSqlite(config.GetConnectionString("DefaultConnection")));
+            _ = services.AddEndpointsApiExplorer();
+            _ = services.AddSwaggerGen();
+            _ = services.AddDbContext<DataContext>(options => options.UseSqlite(config.GetConnectionString("DefaultConnection")));
 
-            services.AddCors(opt => opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+            _ = services.AddCors(opt => opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 
-            services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddAutoMapper(typeof(MappingProfile));
-            services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssemblyContaining<Create>();
+            _ = services.AddMediatR(typeof(List.Handler).Assembly);
+            _ = services.AddAutoMapper(typeof(MappingProfile));
+            _ = services.AddFluentValidationAutoValidation();
+            _ = services.AddValidatorsFromAssemblyContaining<Create>();
             return services;
         }
     }

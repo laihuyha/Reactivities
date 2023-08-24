@@ -39,6 +39,5 @@ msbuild.wrn
 API.code-workspace
 **.db-shm
 **.db-wal
-API/Reactivity.db
 **/[Ll]ogs
 **/[Ll]ogs/

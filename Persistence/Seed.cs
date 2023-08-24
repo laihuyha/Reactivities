@@ -3,13 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
     public static class Seed
     {
-        public static async Task SeedData(DataContext context)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+                {
+                    new AppUser {DisplayName = "Test User", UserName = "ax001", Email = "ax001@ax.com"},
+                    new AppUser {DisplayName = "Mahesvara", UserName = "Tatsuya", Email = "ax002@ax.com"},
+                    new AppUser {DisplayName = "Emiya", UserName = "Shiro", Email = "ax003@ax.com"},
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Passw0rd");
+                }
+            }
+
             List<string> AvailabelCity = new() { "London", "NewYork", "California", "WashingtonDC", "HoChiMinh", "Paris", "Tokyo", "Kyoto" };
             List<string> AvailabelActivities = new() { "eat", "drinks", "play games", "take photos", "fuck", "shopping", "rest", "go somewhere" };
             List<string> AvailabelLocation = new() { "Pub", "Bar", "Restaurant", "Gaming House", "Pagoda", "Shopping center", "House", "Downtown" };
@@ -18,9 +34,9 @@ namespace Persistence
             Dictionary<int, string> AvailabelLocationDictionary = new();
             for (var i = 0; i < AvailabelActivities.Count; i++)
             {
-                AvailabelActivitiesDictionary.TryAdd(i, AvailabelActivities[i]);
-                AvailabelCityDictionary.TryAdd(i, AvailabelCity[i]);
-                AvailabelLocationDictionary.TryAdd(i, AvailabelLocation[i]);
+                _ = AvailabelActivitiesDictionary.TryAdd(i, AvailabelActivities[i]);
+                _ = AvailabelCityDictionary.TryAdd(i, AvailabelCity[i]);
+                _ = AvailabelLocationDictionary.TryAdd(i, AvailabelLocation[i]);
             }
 
             if (context.Activities.Any()) return;
@@ -41,9 +57,9 @@ namespace Persistence
                     Description = dateSubtract > 0 ? $"Activity {(int)DateTime.Now.Subtract(randomDate).TotalDays / 30} months ago" : "Recently"
                 };
 
-                await context.Activities.AddAsync(activity);
+                _ = await context.Activities.AddAsync(activity);
             }
-            await context.SaveChangesAsync();
+            _ = await context.SaveChangesAsync();
         }
     }
 }
