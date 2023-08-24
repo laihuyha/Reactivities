@@ -15,7 +15,7 @@ using Serilog.Events;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAppServicesExtension(builder.Configuration);
-builder.Services.AddIdentityServices();
+builder.Services.AddIdentityServices(builder.Configuration);
 
 Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console()
 .WriteTo.File("Logs/system.log", restrictedToMinimumLevel: LogEventLevel.Information, rollingInterval: RollingInterval.Day)
@@ -39,6 +39,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
