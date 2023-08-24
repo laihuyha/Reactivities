@@ -1,7 +1,9 @@
 using System;
 using API.Extensions;
 using API.Middleware;
+using Domain.Entities;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -52,8 +54,9 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<DataContext>();
+        var userManager = services.GetRequiredService<UserManager<AppUser>>();
         await context.Database.MigrateAsync();
-        await Seed.SeedData(context);
+        await Seed.SeedData(context, userManager);
     }
     catch (Exception ex)
     {

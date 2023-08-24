@@ -3,13 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
     public static class Seed
     {
-        public static async Task SeedData(DataContext context)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+                {
+                    new AppUser {DisplayName = "Test User", UserName = "ax001", Email = "ax001@ax.com"},
+                    new AppUser {DisplayName = "Mahesvara", UserName = "Tatsuya", Email = "ax002@ax.com"},
+                    new AppUser {DisplayName = "Emiya", UserName = "Shiro", Email = "ax003@ax.com"},
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Passw0rd");
+                }
+            }
+
             List<string> AvailabelCity = new() { "London", "NewYork", "California", "WashingtonDC", "HoChiMinh", "Paris", "Tokyo", "Kyoto" };
             List<string> AvailabelActivities = new() { "eat", "drinks", "play games", "take photos", "fuck", "shopping", "rest", "go somewhere" };
             List<string> AvailabelLocation = new() { "Pub", "Bar", "Restaurant", "Gaming House", "Pagoda", "Shopping center", "House", "Downtown" };
