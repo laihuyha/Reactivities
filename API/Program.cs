@@ -1,49 +1,50 @@
 using System;
 using API.Extensions;
-using API.Middleware;
+using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAppServicesExtension(builder.Configuration);
+builder.Services.AddAppServicesExtension(builder.Configuration); // Extension
+builder.Services.AddIdentityServices(builder.Configuration); // Extension
 
-Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console()
-.WriteTo.File("Logs/system.log", rollingInterval: RollingInterval.Day, restrictedToMinimumLevel: LogEventLevel.Information)
-.CreateBootstrapLogger();
+builder.Services.AddControllers(option =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    option.Filters.Add(new AuthorizeFilter(policy));
+});
 
-builder.Host.UseSerilog();
+Log.Logger = new LoggerConfiguration().CreateBootstrapLogger();
+
+builder.Host.UseHostBuilderExtension(); // Extension
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    _ = app.UseExceptionHandler("/Error");
+    _ = app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseAppBuilderExtension(); // Extension
 
 app.MapControllers();
-
-app.UseCors("CorsPolicy");
-
-app.UseMiddleware<ExceptionMiddleWare>();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -51,8 +52,9 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<DataContext>();
+        var userManager = services.GetRequiredService<UserManager<AppUser>>();
         await context.Database.MigrateAsync();
-        await Seed.SeedData(context);
+        await Seed.SeedData(context, userManager);
     }
     catch (Exception ex)
     {

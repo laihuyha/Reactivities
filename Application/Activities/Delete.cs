@@ -29,8 +29,8 @@ namespace Application.Activities
                     var activity = await _context.Activities.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken); // Find activity by ID
                     if (activity != null)
                     {
-                        _context.Remove(activity); // Remove activity
-                        await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
+                        _ = _context.Remove(activity); // Remove activity
+                        _ = await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
                         return Result<Unit>.Success(Unit.Value);
                     }
                     return Result<Unit>.Failure("Activity not found");
