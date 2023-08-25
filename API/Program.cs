@@ -1,27 +1,31 @@
 using System;
 using API.Extensions;
-using API.Middleware;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAppServicesExtension(builder.Configuration);
-builder.Services.AddIdentityServices();
+builder.Services.AddAppServicesExtension(builder.Configuration); // Extension
+builder.Services.AddIdentityServices(builder.Configuration); // Extension
 
-Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console()
-.WriteTo.File("Logs/system.log", restrictedToMinimumLevel: LogEventLevel.Information, rollingInterval: RollingInterval.Day)
-.CreateBootstrapLogger();
+builder.Services.AddControllers(option =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    option.Filters.Add(new AuthorizeFilter(policy));
+});
 
-builder.Host.UseSerilog();
+Log.Logger = new LoggerConfiguration().CreateBootstrapLogger();
+
+builder.Host.UseHostBuilderExtension(); // Extension
 
 var app = builder.Build();
 
@@ -38,15 +42,9 @@ if (!app.Environment.IsDevelopment())
     _ = app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseAppBuilderExtension(); // Extension
 
 app.MapControllers();
-
-app.UseCors("CorsPolicy");
-
-app.UseMiddleware<ExceptionMiddleWare>();
 
 using (var scope = app.Services.CreateScope())
 {
