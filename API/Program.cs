@@ -1,20 +1,27 @@
 using System;
 using API.Extensions;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAppServicesExtension(builder.Configuration); // Extension
 builder.Services.AddIdentityServices(builder.Configuration); // Extension
+
+builder.Services.AddControllers(option =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    option.Filters.Add(new AuthorizeFilter(policy));
+});
 
 Log.Logger = new LoggerConfiguration().CreateBootstrapLogger();
 

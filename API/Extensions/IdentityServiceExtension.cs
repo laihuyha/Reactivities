@@ -13,7 +13,7 @@ namespace API.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            _ = services.AddIdentityCore<AppUser>(options => options.Password.RequireNonAlphanumeric = false).AddEntityFrameworkStores<DataContext>();
+            _ = services.AddIdentityCore<AppUser>(options => { options.Password.RequireNonAlphanumeric = false; options.User.RequireUniqueEmail = true; }).AddEntityFrameworkStores<DataContext>();
             _ = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
