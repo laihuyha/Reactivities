@@ -4,6 +4,9 @@ body {
   min-height: 100%;
   background-color: var(--surface-ground);
   -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 body,

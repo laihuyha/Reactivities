@@ -56,6 +56,13 @@ export const routes: RouteObject[] = [
       },
     ],
   },
+  {
+    path: "login",
+    lazy: async () => {
+      const { default: LoginComponent } = await import("../../features/users/Login");
+      return { Component: LoginComponent };
+    },
+  },
 ];
 
 const router = createBrowserRouter(routes);

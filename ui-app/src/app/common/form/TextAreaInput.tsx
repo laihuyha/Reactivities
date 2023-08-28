@@ -14,8 +14,8 @@ const TextAreaInput = (props: Props) => {
   return (
     <>
       <label>{props.label}</label>
-      <InputTextarea {...field} {...props} autoResize />
-      {meta.touched && meta.error ? <div className="text-red-500 m-2">{meta.error}</div> : null}
+      <InputTextarea {...field} {...props} className={props.className ?? "p-inputtextarea"} autoResize />
+      {meta.touched && meta.error ? <div className="text-red-500 m-2 mt-0">{meta.error}</div> : null}
     </>
   );
 };
