@@ -1,11 +1,15 @@
-import { Formik, FormikValues } from "formik";
+import { Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import { Checkbox } from "primereact/checkbox";
 import TextInput from "../../app/common/form/TextInput";
 import * as yup from "yup";
 import PasswordInput from "../../app/common/form/PasswordInput";
+import { useStore } from "../../app/stores/store";
+import { Button } from "primereact/button";
 
 const Login = () => {
+  const { userStore } = useStore();
+  const { login } = userStore;
   const validationSchema = yup.object({
     username: yup.string().required("UserName is required"),
     password: yup.string().required("Password is required"),
@@ -17,11 +21,11 @@ const Login = () => {
           enableReinitialize
           validationSchema={validationSchema}
           initialValues={{ username: "", password: "", remember: false }}
-          onSubmit={(values: FormikValues) => {
-            console.log(values);
+          onSubmit={async (values) => {
+            await login(values);
           }}
         >
-          {({ handleSubmit, setFieldValue, values }) => (
+          {({ handleSubmit, setFieldValue, values, isSubmitting }) => (
             <form onSubmit={handleSubmit} className="flex flex-column align-items-center justify-content-center">
               <div
                 style={{
@@ -53,7 +57,7 @@ const Login = () => {
                       className="p-password p-component p-inputwrapper p-input-icon-right w-full mb-3"
                       name="password"
                       placeholder="Password"
-                      feedBack={false}
+                      feedback={false}
                     />
                     <div className="flex align-items-center justify-content-between mb-5 gap-5">
                       <div className="flex align-items-center">
@@ -64,7 +68,7 @@ const Login = () => {
                         ></Checkbox>
                         <label>Remember me</label>
                       </div>
-                      <a
+                      {/* <a
                         href="#"
                         className="font-medium no-underline ml-2 text-right cursor-pointer"
                         style={{
@@ -72,17 +76,18 @@ const Login = () => {
                         }}
                       >
                         Forgot password?
-                      </a>
+                      </a> */}
                     </div>
-                    <button
+                    <Button
                       aria-label="Sign In"
                       className="p-button p-component w-full p-3 text-xl fluid"
                       type="submit"
+                      loading={isSubmitting}
                     >
                       <span className="p-button-label p-c" data-pc-section="label">
                         Sign In
                       </span>
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

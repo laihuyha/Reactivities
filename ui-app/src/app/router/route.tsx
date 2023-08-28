@@ -37,6 +37,13 @@ export const routes: RouteObject[] = [
         },
       },
       {
+        path: "login",
+        lazy: async () => {
+          const { default: LoginComponent } = await import("../../features/users/Login");
+          return { Component: LoginComponent };
+        },
+      },
+      {
         path: "not-found",
         lazy: async () => {
           const { default: NotFoundComponent } = await import("../../features/errors/NotFound");
@@ -55,13 +62,6 @@ export const routes: RouteObject[] = [
         element: <Navigate to="/not-found" />,
       },
     ],
-  },
-  {
-    path: "login",
-    lazy: async () => {
-      const { default: LoginComponent } = await import("../../features/users/Login");
-      return { Component: LoginComponent };
-    },
   },
 ];
 

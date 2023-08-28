@@ -14,6 +14,7 @@ axios.interceptors.response.use(
   },
   (error: AxiosError) => {
     const { data, status, config } = error.response as AxiosResponse;
+    console.log(error.response);
     switch (status) {
       case 400:
         if (config.method === "get" && data.errors.hasOwnProperty("id")) {

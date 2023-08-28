@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
 import { Outlet, useLocation } from "react-router-dom";
 import InternalError from "../../features/errors/InternalError";
+import Login from "../../features/users/Login";
 
 const App = () => {
   configurePrimeReact();
@@ -27,12 +28,24 @@ const App = () => {
     setUpToast();
   }, [appStore, setToastRef, setUpToast]);
 
+  const ToastElement = () => {
+    return <Toast ref={toast} />;
+  };
+
   const renderApp = () => {
     if (location.pathname === "/") {
       return <HomePage />;
     }
     if (location.pathname === "/server-error") {
       return <InternalError />;
+    }
+    if (location.pathname === "/login") {
+      return (
+        <>
+          <ToastElement />
+          <Login />
+        </>
+      );
     }
     return (
       <>
@@ -41,7 +54,7 @@ const App = () => {
           <div className="layout-main">
             <Outlet />
           </div>
-          <Toast ref={toast} />
+          <ToastElement />
         </div>
       </>
     );

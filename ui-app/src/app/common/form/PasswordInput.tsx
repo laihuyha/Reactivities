@@ -7,7 +7,7 @@ interface Props {
   placeholder?: string;
   className?: string;
   inputClassName?: string;
-  feedBack?: boolean;
+  feedback?: boolean;
 }
 
 const PasswordInput = (props: Props) => {
@@ -20,7 +20,8 @@ const PasswordInput = (props: Props) => {
         {...props}
         placeholder={props.placeholder ?? "Password"}
         inputClassName={props.inputClassName ?? "p-inputtext p-component p-password-input w-full p-3 md:w-30rem"}
-        feedback={props.feedBack ?? true}
+        feedback={props.feedback ?? true}
+        toggleMask
       />
       {meta.touched && meta.error ? <div className="text-red-500 m-2 mt-0">{meta.error}</div> : null}
     </>
