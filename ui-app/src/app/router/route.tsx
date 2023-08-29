@@ -44,24 +44,24 @@ export const routes: RouteObject[] = [
         },
       },
       {
-        path: "not-found",
-        lazy: async () => {
-          const { default: NotFoundComponent } = await import("../../features/errors/NotFound");
-          return { Component: NotFoundComponent };
-        },
-      },
-      {
-        path: "server-error",
-        lazy: async () => {
-          const { default: InternalErrorComponent } = await import("../../features/errors/InternalError");
-          return { Component: InternalErrorComponent };
-        },
-      },
-      {
         path: "*",
         element: <Navigate to="/not-found" />,
       },
     ],
+  },
+  {
+    path: "not-found",
+    lazy: async () => {
+      const { default: NotFoundComponent } = await import("../../features/errors/NotFound");
+      return { Component: NotFoundComponent };
+    },
+  },
+  {
+    path: "server-error",
+    lazy: async () => {
+      const { default: InternalErrorComponent } = await import("../../features/errors/InternalError");
+      return { Component: InternalErrorComponent };
+    },
   },
 ];
 

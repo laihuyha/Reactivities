@@ -32,7 +32,7 @@ const ActivityForm = ({ activity }: Props) => {
         enableReinitialize
         initialValues={activity!}
         onSubmit={(e) => {
-          e = { ...e, date: toSimpleDateTime(e.date) };
+          e = { ...e, date: typeof e.date === "object" ? toSimpleDateTime(e.date) : e.date };
           submitForm(e);
         }}
       >

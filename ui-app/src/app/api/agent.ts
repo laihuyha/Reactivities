@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import AppStore from "../stores/appStore";
+// import AppStore from "../stores/appStore";
 import router from "../router/route";
 import { store } from "../stores/store";
 
@@ -14,7 +14,6 @@ axios.interceptors.response.use(
   },
   (error: AxiosError) => {
     const { data, status, config } = error.response as AxiosResponse;
-    console.log(error.response);
     switch (status) {
       case 400:
         if (config.method === "get" && data.errors.hasOwnProperty("id")) {
@@ -29,14 +28,17 @@ axios.interceptors.response.use(
           }
           throw modalStateErrors.flat();
         } else {
-          AppStore.notify?.error(data);
+          // AppStore.notify?.error(data);
+          store.notif.error(data);
         }
         break;
       case 401:
-        AppStore.notify?.error("Unauthorized!");
+        // AppStore.notify?.error("Unauthorized!");
+        store.notif.error("Unauthorized!");
         break;
       case 403:
-        AppStore.notify?.error("Forbidden!");
+        // AppStore.notify?.error("Forbidden!");
+        store.notif.error("Forbidden!");
         break;
       case 404:
         router.navigate("/not-found");

@@ -7,10 +7,7 @@ import Navbar from "./Navbar";
 import HomePage from "../../features/home/HomePage";
 import { configurePrimeReact } from "../config/primeReactConfig";
 import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
-import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
-import { useEffect, useRef } from "react";
-import { Toast } from "primereact/toast";
 import { Outlet, useLocation } from "react-router-dom";
 import InternalError from "../../features/errors/InternalError";
 import Login from "../../features/users/Login";
@@ -18,19 +15,7 @@ import Login from "../../features/users/Login";
 const App = () => {
   configurePrimeReact();
   fontAwesomeConfig();
-  const { appStore } = useStore();
-  const { setToastRef, setUpToast } = appStore;
-  const toast = useRef<Toast>(null);
   const location = useLocation();
-
-  useEffect(() => {
-    setToastRef(toast);
-    setUpToast();
-  }, [appStore, setToastRef, setUpToast]);
-
-  const ToastElement = () => {
-    return <Toast ref={toast} />;
-  };
 
   const renderApp = () => {
     if (location.pathname === "/") {
@@ -42,7 +27,6 @@ const App = () => {
     if (location.pathname === "/login") {
       return (
         <>
-          <ToastElement />
           <Login />
         </>
       );
@@ -54,7 +38,6 @@ const App = () => {
           <div className="layout-main">
             <Outlet />
           </div>
-          <ToastElement />
         </div>
       </>
     );

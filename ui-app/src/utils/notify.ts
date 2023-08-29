@@ -7,18 +7,20 @@ export interface ToastSetUp {
 }
 
 export default class Notify {
-  private toastRef?: RefObject<Toast>;
+  toastRef?: RefObject<Toast>;
 
   private readonly ToastMessageProps: ToastMessage = {
     severity: "info",
     className: "p-toast-container",
   };
 
-  constructor(toastRef: RefObject<Toast>) {
-    this.initToastRef(toastRef);
+  constructor(toastRef?: RefObject<Toast>) {
+    if (toastRef) {
+      this.initToastRef(toastRef);
+    }
   }
 
-  private initToastRef = (toastRef: RefObject<Toast>) => {
+  initToastRef = (toastRef: RefObject<Toast>) => {
     this.toastRef = toastRef;
   };
 

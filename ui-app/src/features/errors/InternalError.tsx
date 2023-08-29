@@ -48,7 +48,7 @@ const InternalError = () => {
                     window.history.back();
                   }}
                 >
-                  Go to Dashboard
+                  Go back
                 </span>
                 <span
                   role="presentation"

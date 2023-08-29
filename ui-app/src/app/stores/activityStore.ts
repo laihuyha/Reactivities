@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { v4 as uuid } from "uuid";
+import { dateTimeHelper } from "../../utils/helper";
+import { store } from "./store";
 import Activity from "../models/activity";
 import ActivityServices from "../api/services/activities";
-import AppStore from "./appStore";
-import { dateTimeHelper } from "../../utils/helper";
 
 export default class ActivityStore {
   activities: Activity[] = [];
@@ -92,7 +92,8 @@ export default class ActivityStore {
         runInAction(() => {
           this.activities = [...this.activities, activity];
         });
-        AppStore.notify?.success("Activity Created Successfully!");
+        // AppStore.notify?.success("Activity Created Successfully!");
+        store.notif.success("Activity Created Successfully!");
       }
       if (this.isEdit && !this.isCreate) {
         await ActivityServices.update(activity);
@@ -100,10 +101,12 @@ export default class ActivityStore {
         runInAction(() => {
           this.activities[exist] = { ...this.activities[exist], ...activity };
         });
-        AppStore.notify?.success("Activity Updated Successfully!");
+        // AppStore.notify?.success("Activity Updated Successfully!");
+        store.notif.success("Activity Updated Successfully!");
       }
     } catch (error) {
-      AppStore.notify?.error(`Something went wrong! Details: \n${error}`);
+      // AppStore.notify?.error(`Something went wrong! Details: \n${error}`);
+      store.notif.error(`Something went wrong! Details: \n${error}`);
     } finally {
       this.setIsLoading(false);
       this.setIsCreate(false);
@@ -116,10 +119,12 @@ export default class ActivityStore {
     this.isLoading = true;
     try {
       await ActivityServices.delete(this.selectedActivity?.id);
-      AppStore.notify?.success("Activity Deleted Successfully!");
+      // AppStore.notify?.success("Activity Deleted Successfully!");
+      store.notif.success("Activity Deleted Successfully!");
     } catch (error) {
       console.log(error);
-      AppStore.notify?.error(`Something went wrong! Details: ${error}`);
+      // AppStore.notify?.error(`Something went wrong! Details: ${error}`);
+      store.notif.error(`Something went wrong! Details: ${error}`);
     } finally {
       runInAction(() => {
         this.activities = this.activities.filter((e) => e.id !== this.selectedActivity?.id);
