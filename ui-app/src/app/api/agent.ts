@@ -35,6 +35,9 @@ axios.interceptors.response.use(
       case 401:
         // AppStore.notify?.error("Unauthorized!");
         store.notif.error("Unauthorized!");
+        if (window.location.pathname !== "/login") {
+          router.navigate("/login");
+        }
         break;
       case 403:
         // AppStore.notify?.error("Forbidden!");
