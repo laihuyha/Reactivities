@@ -1,4 +1,4 @@
-import { HTMLAttributeAnchorTarget } from "react";
+import { MenuItem } from "primereact/menuitem";
 
 /* AppMenu Types */
 type CommandProps = {
@@ -6,26 +6,10 @@ type CommandProps = {
   item: any;
 };
 
-export interface MenuModel {
-  label: string;
-  icon?: string;
-  items?: MenuModel[];
+export interface AppMenuItem extends MenuItem {
   to?: string;
-  url?: string;
-  target?: HTMLAttributeAnchorTarget;
-  seperator?: boolean;
-}
-
-export interface AppMenuItem extends MenuModel {
-  items?: AppMenuItem[];
-  badge?: "UPDATED" | "NEW";
-  badgeClass?: string;
-  class?: string;
-  preventExact?: boolean;
-  visible?: boolean;
-  disabled?: boolean;
-  replaceUrl?: boolean;
   command?: ({ originalEvent, item }: CommandProps) => void;
+  items?: AppMenuItem[];
 }
 
 export interface AppMenuItemProps {

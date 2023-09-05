@@ -1,26 +1,50 @@
-import { AppMenuItem as MenuItem } from "../../types/layout";
-import AppMenuItem from "./AppMenuItem";
+import { Sidebar } from "primereact/sidebar";
+import { AppMenuItem } from "../../types/layout";
+import { Menu } from "primereact/menu";
 
 interface SideBarMenuProps {
-  children?: MenuItem[];
+  children?: AppMenuItem[];
   className?: string;
+  isShow?: boolean;
+  setIsShow?: (isShow: boolean) => void;
 }
-// https://github.com/primefaces/sakai-react/blob/master/types/layout.d.ts#L88
-// https://github.com/primefaces/sakai-react/blob/master/styles/layout/_menu.scss
 
-const SideBarMenu = (props: SideBarMenuProps) => {
+type RequiredSetIsShowIfIsShow = {
+  isShow: boolean;
+  setIsShow: (isShow: boolean) => void;
+};
+
+type OptionalIsShowAndSetIsShow = {
+  isShow?: undefined;
+  setIsShow?: undefined;
+};
+
+type PropsCondition = RequiredSetIsShowIfIsShow | OptionalIsShowAndSetIsShow;
+
+// const recursiveChildren = (children?: AppMenuItem[]) => {
+//   if (!children) return [];
+//   return children.reduce((acc, child) => {
+//     if (child.items) {
+//       acc.push(...recursiveChildren(child.items));
+//     } else {
+//       acc.push(child);
+//     }
+//     return acc;
+//   }, [] as AppMenuItem[]);
+// };
+
+const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
+  // const items = recursiveChildren(props.children);
+  const items = props.children;
+  // console.log(items);
   return (
-    <>
-      <ul className="layout-menu">
-        {props.children?.map((item, i) => {
-          return !item?.seperator ? (
-            <AppMenuItem item={item} root={true} index={i} key={item.label} />
-          ) : (
-            <li className="menu-separator"></li>
-          );
-        })}
-      </ul>
-    </>
+    <Sidebar
+      visible={props.isShow}
+      onHide={() => (props.isShow ? props.setIsShow(false) : undefined)}
+      maskClassName="side-bar-bgmask layout-sidebar"
+    >
+      <Menu model={items} className="sidebar-menu-item w-full" />
+    </Sidebar>
   );
 };
 

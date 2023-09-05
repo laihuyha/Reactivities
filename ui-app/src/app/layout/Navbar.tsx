@@ -7,8 +7,9 @@ import "./styles/index.scss";
 import router from "../router/route";
 
 const Navbar = () => {
-  const { activityStore } = useStore();
+  const { activityStore, appStore } = useStore();
   const { setIsCreate, initFormData } = activityStore;
+  const { setSideBarShowState } = appStore;
   const location = useLocation();
 
   const start = (
@@ -43,6 +44,12 @@ const Navbar = () => {
               initFormData();
             },
           }),
+    },
+    {
+      label: "show sidebar",
+      command: () => {
+        setSideBarShowState(true);
+      },
     },
   ];
 

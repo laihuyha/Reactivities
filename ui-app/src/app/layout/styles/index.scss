@@ -1,3 +1,5 @@
+@import "variables"; // Import the file where $defaultTransition is defined
+
 body {
   margin: 0;
   padding: 0;
@@ -42,6 +44,25 @@ body,
 
 .layout-main {
   flex: 1 1 auto;
+}
+
+.side-bar-bgmask {
+  background-color: transparent !important;
+}
+
+.layout-sidebar {
+  transition: $defaultTransition !important;
+  .sidebar-menu-item {
+    border: none !important;
+  }
+
+  > .p-menuitem-link {
+    color: #4776e6;
+  }
+}
+
+.none-border {
+  border: none !important;
 }
 
 .text-decoration-none {
