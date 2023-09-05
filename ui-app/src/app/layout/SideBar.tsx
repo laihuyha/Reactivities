@@ -36,7 +36,6 @@ type PropsCondition = RequiredSetIsShowIfIsShow | OptionalIsShowAndSetIsShow;
 const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
   // const items = recursiveChildren(props.children);
   const items = props.children;
-  // console.log(items);
   return (
     <Sidebar
       visible={props.isShow}
