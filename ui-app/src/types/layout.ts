@@ -13,7 +13,7 @@ export interface AppMenuItem extends MenuItem {
 }
 
 export interface AppMenuItemProps {
-  item?: AppMenuItem;
+  items?: AppMenuItem;
   parentKey?: string;
   index?: number;
   root?: boolean;

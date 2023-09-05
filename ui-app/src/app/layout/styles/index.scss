@@ -1,4 +1,5 @@
 @import "variables"; // Import the file where $defaultTransition is defined
+@import "mixins";
 
 body {
   margin: 0;
@@ -44,6 +45,128 @@ body,
 
 .layout-main {
   flex: 1 1 auto;
+}
+
+.layout-menu {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  user-select: none;
+
+  .layout-root-menuitem {
+    > .layout-menuitem-root-text {
+      font-size: 0.857rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--surface-900);
+      margin: 0.75rem 0;
+    }
+
+    > a {
+      display: none;
+    }
+  }
+
+  li.active-menuitem {
+    > a {
+      .layout-submenu-toggler {
+        transform: rotate(-180deg);
+      }
+    }
+
+    > ul {
+      max-height: auto;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    a {
+      display: flex;
+      align-items: center;
+      position: relative;
+      outline: 0 none;
+      color: var(--text-color);
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      border-radius: $borderRadius;
+      transition: background-color $defaultTransition, box-shadow $defaultTransition;
+
+      .layout-menuitem-icon {
+        margin-right: 0.5rem;
+      }
+
+      .layout-submenu-toggler {
+        font-size: 75%;
+        margin-left: auto;
+        transition: transform $defaultTransition;
+      }
+
+      &.rotated-icon {
+        .layout-menuitem-icon {
+          transform: rotate(90deg);
+        }
+      }
+
+      &.active-route {
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      &:hover {
+        background-color: var(--surface-hover);
+      }
+
+      &:focus {
+        @include focused-inset();
+      }
+    }
+
+    ul {
+      overflow: hidden;
+      max-height: 0;
+      border-radius: $borderRadius;
+
+      li {
+        a {
+          margin-left: 1rem;
+        }
+
+        li {
+          a {
+            margin-left: 2rem;
+          }
+
+          li {
+            a {
+              margin-left: 2.5rem;
+            }
+
+            li {
+              a {
+                margin-left: 3rem;
+              }
+
+              li {
+                a {
+                  margin-left: 3.5rem;
+                }
+
+                li {
+                  a {
+                    margin-left: 4rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .side-bar-bgmask {

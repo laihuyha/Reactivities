@@ -47,6 +47,19 @@ const App = () => {
         label: "Create Activity",
         to: "/createActivity",
       },
+      {
+        label: "Test",
+        items: [
+          {
+            label: "Test1",
+            items: [{ label: "Test1-1" }, { label: "Test1-2" }],
+          },
+          {
+            label: "Test2",
+            items: [{ label: "Test2-1" }, { label: "Test2-2" }],
+          },
+        ],
+      },
     ];
 
     return (
