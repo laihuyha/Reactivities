@@ -1,22 +1,27 @@
-import { observer } from "mobx-react-lite";
 import { AppMenuItemProps } from "../../types/layout";
-import { CSSTransition } from "react-transition-group";
 import { classNames } from "primereact/utils";
+import { CSSTransition } from "react-transition-group";
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 import { Ripple } from "primereact/ripple";
-import { Link } from "react-router-dom";
 
-const AppMenuitem = observer((props: AppMenuItemProps) => {
+const AppMenuitem = (props: AppMenuItemProps) => {
+  const { pathname } = useLocation();
+  const [activeMenu, setActiveMenu] = useState("");
   const item = props.items;
+  const key = props.parentKey ? props.parentKey + "-" + props.index : String(props.index);
+  const active = activeMenu === key || activeMenu.startsWith(key + "-");
+  const isActiveRoute = item!.to && pathname === item!.to;
   const subMenu = item!.items && item!.visible !== false && (
     <CSSTransition
       timeout={{ enter: 1000, exit: 450 }}
       classNames="layout-submenu"
-      in={props.root ? true : false}
+      in={props.root ? true : active}
       key={item!.label}
     >
       <ul>
         {item!.items.map((child, i) => {
-          return <AppMenuitem items={child} index={i} className={""} parentKey={""} key={child.label} />;
+          return <AppMenuitem items={child} index={i} className={""} parentKey={key} key={child.label} />;
         })}
       </ul>
     </CSSTransition>
@@ -34,11 +39,11 @@ const AppMenuitem = observer((props: AppMenuItemProps) => {
     }
 
     // // toggle active state
-    // if (item!.items) setActiveMenu(active ? (props.parentKey as string) : key);
-    // else setActiveMenu(key);
+    if (item!.items) setActiveMenu(active ? (props.parentKey as string) : key);
+    else setActiveMenu(key);
   };
   return (
-    <li className={classNames({ "layout-root-menuitem": props.root, "active-menuitem": "menuitem" })}>
+    <li className={classNames({ "layout-root-menuitem": props.root, "active-menuitem": active })}>
       {props.root && item!.visible !== false && <div className="layout-menuitem-root-text">{item!.label}</div>}
       {(!item!.to || item!.items) && item!.visible !== false ? (
         <a
@@ -60,7 +65,7 @@ const AppMenuitem = observer((props: AppMenuItemProps) => {
           to={item!.to}
           target={item!.target}
           onClick={(e) => itemClick(e)}
-          className={classNames(item!.className, "p-ripple")}
+          className={classNames(item!.className, "p-ripple", { "active-route": isActiveRoute })}
           tabIndex={0}
         >
           <i className={classNames("layout-menuitem-icon", item!.icon)}></i>
@@ -73,6 +78,6 @@ const AppMenuitem = observer((props: AppMenuItemProps) => {
       {subMenu}
     </li>
   );
-});
+};
 
 export default AppMenuitem;

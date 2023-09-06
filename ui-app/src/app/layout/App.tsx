@@ -67,7 +67,7 @@ const App = () => {
         {/* <Navbar /> */}
         <div className="layout-main-container">
           <div className="layout-main">
-            <SideBarMenu children={item} isShow={sideBarShow} setIsShow={setSideBarShowState} />
+            <SideBarMenu children={item} isCollapsed={sideBarShow} setCollapsedState={setSideBarShowState} />
             <div
               className={
                 sideBarShow ? "layout-sidebar layout-sidebar-open col-offset-2" : "layout-sidebar layout-sidebar-closed"

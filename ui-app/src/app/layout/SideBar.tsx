@@ -5,8 +5,6 @@ import AppMenuitem from "./AppMenuitem";
 interface SideBarMenuProps {
   children?: AppMenuItem[];
   className?: string;
-  isShow?: boolean;
-  setIsShow?: (isShow: boolean) => void;
 }
 
 type RequiredSetIsShowIfIsShow = {
@@ -38,17 +36,18 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
   // const items = recursiveChildren(props.children);
   //https://github.com/primefaces/sakai-react/blob/master/layout/AppMenu.tsx#L10
   //https://github.com/primefaces/sakai-react/blob/master/styles/layout/_mixins.scss
-  const items = props.children;
   return (
-    <Sidebar visible={true} maskClassName="side-bar-bgmask layout-sidebar" onHide={() => {}}>
+    <Sidebar
+      visible={props.isCollapsed}
+      maskClassName="side-bar-bgmask layout-sidebar"
+      onHide={() => {
+        props.setCollapsedState!(false);
+      }}
+    >
       <ul className="layout-menu">
-        {items?.map((item, i) => {
-          return !item?.separator ? (
-            <AppMenuitem items={item} root={true} index={i} key={item.label} />
-          ) : (
-            <li className="menu-separator"></li>
-          );
-        })}
+        {props.children?.map((item, i) => (
+          <AppMenuitem items={item} root={true} index={i} key={item.label} />
+        ))}
       </ul>
     </Sidebar>
   );

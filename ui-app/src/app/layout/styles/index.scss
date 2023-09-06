@@ -169,6 +169,25 @@ body,
   }
 }
 
+.layout-submenu-enter-active {
+  max-height: 1000px !important;
+  transition: max-height 1s ease-in-out;
+}
+
+.layout-submenu-enter-done {
+  max-height: 1000px !important;
+}
+
+.layout-submenu-exit {
+  max-height: 1000px !important;
+}
+
+.layout-submenu-exit-active {
+  overflow: hidden;
+  max-height: 0 !important;
+  transition: max-height 0.45s cubic-bezier(0, 1, 0, 1);
+}
+
 .side-bar-bgmask {
   background-color: transparent !important;
 }
@@ -177,10 +196,6 @@ body,
   transition: $defaultTransition !important;
   .sidebar-menu-item {
     border: none !important;
-  }
-
-  > .p-menuitem-link {
-    color: #4776e6;
   }
 }
 
