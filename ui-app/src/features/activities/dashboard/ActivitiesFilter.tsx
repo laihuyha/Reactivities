@@ -9,8 +9,7 @@ import { Checkbox } from "primereact/checkbox";
 import Activity from "../../../app/models/activity";
 
 const ActivitiesFilter = () => {
-  const { activityStore, appStore } = useStore();
-  const { setSideBarShowState } = appStore;
+  const { activityStore } = useStore();
   const { activities, filterDateRange, selectedCategories } = activityStore;
   const { setFilterDateRange, setSelectedCategories } = activityStore;
   const menuRight = useRef<Menu>(null);
@@ -60,13 +59,6 @@ const ActivitiesFilter = () => {
             showButtonBar
             showIcon
           />
-        </div>
-        <div
-          onClick={() => {
-            setSideBarShowState(true);
-          }}
-        >
-          show sidebar
         </div>
         <div>
           <Button

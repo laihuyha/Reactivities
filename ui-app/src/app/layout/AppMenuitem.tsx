@@ -49,7 +49,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
         <a
           href={item!.url}
           onClick={(e) => itemClick(e)}
-          className={classNames(item!.className, "p-ripple")}
+          className={classNames(item!.className, "p-ripple", "text-decoration-none")}
           target={item!.target}
           tabIndex={0}
         >
@@ -65,7 +65,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
           to={item!.to}
           target={item!.target}
           onClick={(e) => itemClick(e)}
-          className={classNames(item!.className, "p-ripple", { "active-route": isActiveRoute })}
+          className={classNames(item!.className, "p-ripple", "text-decoration-none", { "active-route": isActiveRoute })}
           tabIndex={0}
         >
           <i className={classNames("layout-menuitem-icon", item!.icon)}></i>

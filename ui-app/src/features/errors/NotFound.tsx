@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { ReactComponent as NotFoundIMG } from "../../assets/asset-404.svg";
 import "./styles.scss";
-import { NavLink } from "react-router-dom";
+import { Button } from "primereact/button";
 
 const NotFound = () => {
   return (
@@ -11,9 +11,14 @@ const NotFound = () => {
           <NotFoundIMG />
           <span className="text-5xl font-semibold">Not Found!</span>
           <span className="m-3">Looks like you are lost.</span>
-          <NavLink to="/" className="btn-grad">
+          <Button
+            className="btn-grad"
+            onClick={() => {
+              window.history.go(-2);
+            }}
+          >
             Go back HomePage
-          </NavLink>
+          </Button>
         </div>
       </div>
     </>

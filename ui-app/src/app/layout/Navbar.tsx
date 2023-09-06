@@ -9,7 +9,7 @@ import router from "../router/route";
 const Navbar = () => {
   const { activityStore, appStore } = useStore();
   const { setIsCreate, initFormData } = activityStore;
-  const { setSideBarShowState } = appStore;
+  const { setSideBarCollapseState } = appStore;
   const location = useLocation();
 
   const start = (
@@ -48,7 +48,7 @@ const Navbar = () => {
     {
       label: "show sidebar",
       command: () => {
-        setSideBarShowState(true);
+        setSideBarCollapseState(true);
       },
     },
   ];

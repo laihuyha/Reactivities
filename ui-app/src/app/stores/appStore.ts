@@ -49,12 +49,12 @@ import { makeAutoObservable } from "mobx";
 
 //#region : 3. Init Notify class inside Store at first
 export default class AppStore {
-  sideBarShow: boolean = true;
+  sideBarCollapsed: boolean = false;
   constructor() {
     makeAutoObservable(this);
   }
 
-  setSideBarShowState = (state: boolean) => {
-    this.sideBarShow = state;
+  setSideBarCollapseState = (state: boolean) => {
+    this.sideBarCollapsed = state;
   };
 }

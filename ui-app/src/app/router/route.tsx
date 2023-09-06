@@ -18,7 +18,7 @@ export const routes: RouteObject[] = [
         },
       },
       {
-        path: "createActivity",
+        path: "activities/create",
         lazy: async () => {
           const { default: ActivityFormComponent } = await import("../../features/activities/form/ActivityForm");
           return { Component: ActivityFormComponent };

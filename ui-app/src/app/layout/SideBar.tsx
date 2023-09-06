@@ -19,30 +19,19 @@ type OptionalIsShowAndSetIsShow = {
 
 type PropsCondition = RequiredSetIsShowIfIsShow | OptionalIsShowAndSetIsShow;
 
-const recursiveChildren = (children?: AppMenuItem[]) => {
-  if (!children) return [];
-  return children.reduce((acc, child) => {
-    if (child.items) {
-      acc.push(...recursiveChildren(child.items));
-    } else {
-      let item = child;
-      acc.push(item);
-    }
-    return acc;
-  }, [] as AppMenuItem[]);
-};
-
 const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
   // const items = recursiveChildren(props.children);
   //https://github.com/primefaces/sakai-react/blob/master/layout/AppMenu.tsx#L10
   //https://github.com/primefaces/sakai-react/blob/master/styles/layout/_mixins.scss
   return (
     <Sidebar
-      visible={props.isCollapsed}
-      maskClassName="side-bar-bgmask layout-sidebar"
+      visible={true}
+      maskClassName="side-bar-bgmask layout-sidebar max-w-18rem"
       onHide={() => {
         props.setCollapsedState!(false);
       }}
+      showCloseIcon={false}
+      closeOnEscape={false}
     >
       <ul className="layout-menu">
         {props.children?.map((item, i) => (

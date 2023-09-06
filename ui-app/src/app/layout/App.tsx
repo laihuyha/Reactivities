@@ -3,6 +3,7 @@ import "primereact/resources/primereact.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "../layout/styles/index.scss";
+import "../layout/styles/layout.scss";
 // import Navbar from "./Navbar";
 import HomePage from "../../features/home/HomePage";
 import InternalError from "../../features/errors/InternalError";
@@ -20,7 +21,7 @@ const App = () => {
   fontAwesomeConfig();
   const location = useLocation();
   const { appStore } = useStore();
-  const { sideBarShow, setSideBarShowState } = appStore;
+  const { sideBarCollapsed, setSideBarCollapseState } = appStore;
 
   const renderApp = () => {
     if (location.pathname === "/") {
@@ -38,25 +39,14 @@ const App = () => {
     }
 
     const item: AppMenuItem[] = [
-      { label: "Home", to: "/" },
+      { label: "Home", items: [{ label: "Home Page", to: "/" }] },
       {
         label: "Activities",
-        to: "/activities",
-      },
-      {
-        label: "Create Activity",
-        to: "/createActivity",
-      },
-      {
-        label: "Test",
         items: [
+          { label: "List", to: "/activities" },
           {
-            label: "Test1",
-            items: [{ label: "Test1-1" }, { label: "Test1-2" }],
-          },
-          {
-            label: "Test2",
-            items: [{ label: "Test2-1" }, { label: "Test2-2" }],
+            label: "Create",
+            to: "/activities/create",
           },
         ],
       },
@@ -67,10 +57,12 @@ const App = () => {
         {/* <Navbar /> */}
         <div className="layout-main-container">
           <div className="layout-main">
-            <SideBarMenu children={item} isCollapsed={sideBarShow} setCollapsedState={setSideBarShowState} />
+            <SideBarMenu children={item} isCollapsed={sideBarCollapsed} setCollapsedState={setSideBarCollapseState} />
             <div
               className={
-                sideBarShow ? "layout-sidebar layout-sidebar-open col-offset-2" : "layout-sidebar layout-sidebar-closed"
+                !sideBarCollapsed
+                  ? "layout-sidebar layout-sidebar-open offset-2"
+                  : "layout-sidebar layout-sidebar-closed"
               }
             >
               <Outlet />
