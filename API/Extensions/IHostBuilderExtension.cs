@@ -17,10 +17,7 @@ namespace API.Extensions
             .Enrich.WithEnvironmentUserName()
             .Enrich.WithExceptionDetails()
             .Enrich.WithMachineName()
-            .WriteTo.Console()
-            .WriteTo.File(
-                "Logs/api.log",
-                rollingInterval: RollingInterval.Day));
+            .WriteTo.Console());
             return host;
         }
     }
