@@ -28,10 +28,8 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
   return (
     <Sidebar
       visible={true}
-      maskClassName="side-bar-bgmask layout-sidebar max-w-18rem"
-      onHide={() => {
-        props.setCollapsedState!(false);
-      }}
+      maskClassName={`side-bar-bgmask layout-sidebar ${props.isCollapsed ? "max-w-5rem" : "max-w-16rem"}`}
+      onHide={() => props.setCollapsedState!(false)}
       showCloseIcon={false}
       closeOnEscape={false}
       header={[
@@ -59,21 +57,21 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
         </Fragment>,
       ]}
       style={{
-        width: props.isCollapsed ? "30%" : "100%",
         transition: "ease-in-out 0.2s",
         position: "relative",
       }}
-    >
-      {props.isCollapsed ? (
-        <></>
-      ) : (
-        <ul className="layout-menu">
-          {props.children?.map((item, i) => (
-            <AppMenuitem items={item} root={true} index={i} key={item.label} />
-          ))}
-        </ul>
-      )}
-    </Sidebar>
+      children={
+        props.isCollapsed ? (
+          <></>
+        ) : (
+          <ul className="layout-menu">
+            {props.children?.map((item, i) => (
+              <AppMenuitem items={item} root={true} index={i} key={item.label} />
+            ))}
+          </ul>
+        )
+      }
+    />
   );
 };
 

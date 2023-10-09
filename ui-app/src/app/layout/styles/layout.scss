@@ -84,7 +84,7 @@
       }
 
       &:hover {
-        background-color: var(--surface-hover);
+        background-color: var(--surface-c);
       }
 
       &:focus {
@@ -186,9 +186,9 @@
 }
 
 .offset-2 {
-  margin-left: 14%;
+  margin-left: 15vw;
 }
 
 .offset-1 {
-  margin-left: 1%;
+  margin-left: 1vw;
 }
