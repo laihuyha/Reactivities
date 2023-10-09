@@ -62,7 +62,7 @@ const App = () => {
               className={
                 !sideBarCollapsed
                   ? "layout-sidebar layout-sidebar-open offset-2"
-                  : "layout-sidebar layout-sidebar-closed"
+                  : "layout-sidebar layout-sidebar-closed offset-1"
               }
             >
               <Outlet />

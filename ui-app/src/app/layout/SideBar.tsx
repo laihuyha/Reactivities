@@ -1,6 +1,8 @@
 import { Sidebar } from "primereact/sidebar";
 import { AppMenuItem } from "../../types/layout";
 import AppMenuitem from "./AppMenuitem";
+import { Fragment } from "react";
+import { ToggleButton } from "primereact/togglebutton";
 
 interface SideBarMenuProps {
   children?: AppMenuItem[];
@@ -32,13 +34,51 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
       }}
       showCloseIcon={false}
       closeOnEscape={false}
-      header={<></>}
+      header={[
+        <Fragment key={"toggle-collapsed"}>
+          {/* <InputSwitch
+            checked={props.isCollapsed ?? true}
+            onChange={(e: InputSwitchChangeEvent) => {
+              props.setCollapsedState && props.setCollapsedState(e.value ? e.value : false);
+            }}
+          /> */}
+          <ToggleButton
+            offLabel=""
+            onLabel=""
+            onIcon="pi pi-arrow-circle-right"
+            offIcon="pi pi-arrow-circle-left"
+            checked={props.isCollapsed ?? true}
+            onChange={(e) => {
+              props.setCollapsedState && props.setCollapsedState(e.value ? e.value : false);
+            }}
+            style={{
+              position: "absolute",
+              top: 0,
+              right: "-2rem",
+              width: "2rem",
+              height: "1rem",
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              boxShadow: "none",
+            }}
+          />
+        </Fragment>,
+      ]}
+      style={{
+        width: props.isCollapsed ? "30%" : "100%",
+        transition: "ease-in-out 0.2s",
+        position: "relative",
+      }}
     >
-      <ul className="layout-menu">
-        {props.children?.map((item, i) => (
-          <AppMenuitem items={item} root={true} index={i} key={item.label} />
-        ))}
-      </ul>
+      {props.isCollapsed ? (
+        <></>
+      ) : (
+        <ul className="layout-menu">
+          {props.children?.map((item, i) => (
+            <AppMenuitem items={item} root={true} index={i} key={item.label} />
+          ))}
+        </ul>
+      )}
     </Sidebar>
   );
 };
