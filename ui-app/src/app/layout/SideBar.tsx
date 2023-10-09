@@ -32,6 +32,7 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
       }}
       showCloseIcon={false}
       closeOnEscape={false}
+      header={<></>}
     >
       <ul className="layout-menu">
         {props.children?.map((item, i) => (

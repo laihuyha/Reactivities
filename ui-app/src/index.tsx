@@ -17,7 +17,7 @@ const RenderedApp = () => {
     if (!notif.toastRef) {
       notif.initToastRef(toast);
     }
-  }, [notif.toastRef, notif.initToastRef, toast]);
+  }, [notif, toast]);
 
   return (
     <>

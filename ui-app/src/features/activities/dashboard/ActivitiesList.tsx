@@ -59,11 +59,13 @@ const ActivitiesList = () => {
         <ActivitiesFilter />
         {groupedActivities.map(([groupKey, actitvities]) => (
           <Fragment key={groupKey}>
-            <Fieldset className="m-3 bg-transparent" legend={toDisplayDateTime(groupKey)} toggleable>
-              {actitvities.map((e) => (
-                <ActivityItem key={e.id} activity={e} cmRef={cm} />
-              ))}
-            </Fieldset>
+            <div className="m-3 bg-transparent">
+              <Fieldset legend={toDisplayDateTime(groupKey)} toggleable>
+                {actitvities.map((e) => (
+                  <ActivityItem key={e.id} activity={e} cmRef={cm} />
+                ))}
+              </Fieldset>
+            </div>
           </Fragment>
         ))}
       </span>

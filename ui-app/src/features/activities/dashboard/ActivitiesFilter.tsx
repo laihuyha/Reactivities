@@ -23,7 +23,7 @@ const ActivitiesFilter = () => {
             name="category"
             value={activity.category}
             onChange={(e) => {
-              setSelectedCategories(e.value);
+              setSelectedCategories(e.value as any);
             }}
             checked={selectedCategories.some((item) => item === activity.category)}
           />
