@@ -36,12 +36,6 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
       closeOnEscape={false}
       header={[
         <Fragment key={"toggle-collapsed"}>
-          {/* <InputSwitch
-            checked={props.isCollapsed ?? true}
-            onChange={(e: InputSwitchChangeEvent) => {
-              props.setCollapsedState && props.setCollapsedState(e.value ? e.value : false);
-            }}
-          /> */}
           <ToggleButton
             offLabel=""
             onLabel=""
