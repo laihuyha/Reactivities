@@ -5,6 +5,7 @@ namespace Domain.ViewModels
     public class DirectoryEntry : Entry
     {
         public string Path { get; set; }
+        public string Name { get; set; }
     }
 
     public class FileEntry : Entry
