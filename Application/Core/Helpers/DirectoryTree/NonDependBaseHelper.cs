@@ -1,19 +1,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Application.Core.Helpers.DirectoryTree.Base;
 using Domain.ViewModels;
 
 namespace Application.Core.Helpers.DirectoryTree
 {
-    public class NonDependBaseHelper : DirectoryTreeBase
+    public class NonDependBaseHelper : DirectoryBaseHelper
     {
-        /// <summary>
-        /// Using DFS
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="configPath"></param>
-        /// <returns></returns>
-        public override async Task<List<TreeNode>> GetDirectoryTreeStructure(string path, string configPath)
+        // /// <summary>
+        // /// Using DFS
+        // /// </summary>
+        // /// <param name="path"></param>
+        // /// <param name="configPath"></param>
+        // /// <returns></returns>
+        public async Task<List<TreeNode>> GetDirectoryTreeStructure(string path, string configPath)
         {
             var rootDir = new DirectoryInfo(path);
 
@@ -30,7 +31,7 @@ namespace Application.Core.Helpers.DirectoryTree
 
                 foreach (var item in childItems)
                 {
-                    if (item is FileInfo file && ArchiveRegex.IsMatch(file.Extension))
+                    if (item is FileInfo file && ArchiveExtensionRegex().IsMatch(file.Extension))
                     {
                         childNodes.Add(new TreeNode
                         {
