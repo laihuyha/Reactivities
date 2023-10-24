@@ -45,7 +45,8 @@ namespace Application.Core.Helpers.DirectoryTree.DirectorySpecification
 
         public IEnumerable<Entry> GetDirectoryContents(string path)
         {
-            var hFindFile = FindFirstFile(Path.Combine(path, "*"), out WIN32_FIND_DATA findData);
+            var searchPattern = Path.Combine(path, "*");
+            var hFindFile = FindFirstFile(searchPattern, out WIN32_FIND_DATA findData);
 
             if (hFindFile.ToInt64() == -1)
             {
