@@ -192,3 +192,14 @@
 .offset-1 {
   margin-left: 1vw;
 }
+
+#sidebar-toggle-btn {
+  position: absolute;
+  top: 0;
+  right: -2rem;
+  width: 2rem;
+  height: 1rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  box-shadow: none;
+}

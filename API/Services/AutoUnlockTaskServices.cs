@@ -90,6 +90,7 @@ namespace Persistence.Sevices
         public void Dispose()
         {
             _timerMidnight?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }
