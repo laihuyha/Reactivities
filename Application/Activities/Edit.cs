@@ -10,7 +10,7 @@ using Persistence;
 
 namespace Application.Activities
 {
-    public class Edit
+    public static class Edit
     {
         public class CommandValidator : AbstractValidator<Command>
         {

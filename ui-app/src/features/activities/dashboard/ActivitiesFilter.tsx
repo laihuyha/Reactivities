@@ -1,18 +1,18 @@
-import { observer } from "mobx-react-lite";
-import { Button } from "primereact/button";
-import { Calendar } from "primereact/calendar";
-import { useRef } from "react";
-import { Menu } from "primereact/menu";
-import { MenuItem } from "primereact/menuitem";
-import { useStore } from "../../../app/stores/store";
-import { Checkbox } from "primereact/checkbox";
-import Activity from "../../../app/models/activity";
+import { observer } from "mobx-react-lite"
+import { Button } from "primereact/button"
+import { Calendar } from "primereact/calendar"
+import { useRef } from "react"
+import { Menu } from "primereact/menu"
+import { MenuItem } from "primereact/menuitem"
+import { useStore } from "../../../app/stores/store"
+import { Checkbox } from "primereact/checkbox"
+import Activity from "../../../app/models/activity"
 
 const ActivitiesFilter = () => {
-  const { activityStore } = useStore();
-  const { activities, filterDateRange, selectedCategories } = activityStore;
-  const { setFilterDateRange, setSelectedCategories } = activityStore;
-  const menuRight = useRef<Menu>(null);
+  const { activityStore } = useStore()
+  const { activities, filterDateRange, selectedCategories } = activityStore
+  const { setFilterDateRange, setSelectedCategories } = activityStore
+  const menuRight = useRef<Menu>(null)
 
   const itemTemplate = (activity: Activity) => {
     return (
@@ -23,7 +23,7 @@ const ActivitiesFilter = () => {
             name="category"
             value={activity.category}
             onChange={(e) => {
-              setSelectedCategories(e.value);
+              setSelectedCategories(e.value as any)
             }}
             checked={selectedCategories.some((item) => item === activity.category)}
           />
@@ -32,15 +32,15 @@ const ActivitiesFilter = () => {
           </label>
         </div>
       </>
-    );
-  };
+    )
+  }
 
-  const items: MenuItem[] = [];
+  const items: MenuItem[] = []
 
   activities.forEach((a) => {
-    if (items.some((e) => e.label === a.category)) return;
-    items.push({ label: a.category, template: itemTemplate(a) });
-  });
+    if (items.some((e) => e.label === a.category)) return
+    items.push({ label: a.category, template: itemTemplate(a) })
+  })
 
   return (
     <>
@@ -51,7 +51,7 @@ const ActivitiesFilter = () => {
             className="ml-3 w-auto"
             value={filterDateRange}
             onChange={(e) => {
-              setFilterDateRange(e.value);
+              setFilterDateRange(e.value)
             }}
             selectionMode="range"
             dateFormat="dd/mm/yy"
@@ -79,7 +79,7 @@ const ActivitiesFilter = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default observer(ActivitiesFilter);
+export default observer(ActivitiesFilter)

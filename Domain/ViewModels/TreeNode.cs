@@ -7,6 +7,7 @@ namespace Domain.ViewModels
         public string Key { get; set; }
         public string Title { get; set; }
         public bool IsDirectory { get; set; }
+        public bool IsLeaf { get; set; }
         public List<TreeNode> Children { get; set; }
     }
 }

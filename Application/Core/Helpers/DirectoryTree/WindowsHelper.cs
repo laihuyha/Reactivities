@@ -1,29 +1,37 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
+using System.Linq;
 using System.Threading.Tasks;
+using Application.Core.Helpers.DirectoryTree.Base;
+using Application.Core.Helpers.DirectoryTree.Interface;
 using Domain.ViewModels;
 
-namespace Application.Core.Helpers.DirectoryTree
+namespace Business.Helpers.DirectoryTree
 {
-    public class WindowsHelper : DirectoryTreeBase, IDisposable
+    /// <summary>
+    /// NOTE : This is a helper class just only for Windows System, doesn't work on Linux
+    /// Using OS Apis
+    /// <br/>
+    /// <br/>
+    /// Usage Example: <br/>
+    /// <code>
+    ///     var folderFetcher = new WindowsHelper(dfsOperations: new WindowsDirectorySpecification());
+    ///     var data = await folderFetcher.GetDirectoryTreeStructure("E:\\Games", "");
+    /// </code>
+    /// </summary>
+    public class WindowsHelper : DirectoryBaseHelper, IDisposable
     {
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern nint FindFirstFile(string lpFileName, out WIN32_FIND_DATA lpFindFileData);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool FindNextFile(nint hFindFile, out WIN32_FIND_DATA lpFindFileData);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool FindClose(nint hFindFile);
-
         private bool disposed;
 
-        ~WindowsHelper()
+        public WindowsHelper(IDFSOperations dfsOperations) : base(dfsOperations)
         {
-            Dispose(false);
         }
+
+        public WindowsHelper(IRecursiveOperations recursiveOperations) : base(recursiveOperations)
+        {
+        }
+
+        ~WindowsHelper() => Dispose(false);
 
         public void Dispose()
         {
@@ -47,75 +55,27 @@ namespace Application.Core.Helpers.DirectoryTree
                 disposed = true;
             }
         }
-        public override async Task<List<TreeNode>> GetDirectoryTreeStructure(string path, string configPath)
+
+        public async Task<List<TreeNode>> GetDirectoryTreeStructure(string path, string configPath)
         {
             var rootNode = new List<TreeNode>();
-            var tasks = new List<Task>();
+            var traversedPaths = new HashSet<string>();
             try
             {
-                tasks.Add(GetRecursivelyAsync(path, configPath, rootNode));
-                await Task.WhenAll(tasks);
+                // tasks.Add(ProcessDirectoryAsync(path, configPath, rootNode));
+                // var watch = new Stopwatch();
+                // watch.Start();
+                await UseGetDFSAsync(path, configPath, rootNode, traversedPaths);
+                // await Task.WhenAll(tasks);
+                // watch.Stop();
+                // Console.BackgroundColor = ConsoleColor.DarkGreen;
+                // Console.WriteLine($"Time taken: {watch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error accessing {path}: {e.Message}");
             }
-            return rootNode;
-        }
-
-        private async Task GetRecursivelyAsync(string currentPath, string configPath, List<TreeNode> rootNode)
-        {
-            var hFindFile = FindFirstFile(Path.Combine(currentPath, "*"), out WIN32_FIND_DATA findFileData);
-            if (hFindFile == IntPtr.Zero)
-            {
-                Console.WriteLine($"Error finding files in directory {currentPath}");
-                return;
-            }
-
-            try
-            {
-                do
-                {
-                    string entryName = findFileData.cFileName;
-
-                    if (entryName is "." or ".." or "@eaDir")
-                    {
-                        continue;
-                    }
-
-                    string entryPath = Path.Combine(currentPath, entryName);
-
-                    if ((findFileData.dwFileAttributes & FileAttributes.Directory) != 0)
-                    {
-                        var subNode = new TreeNode
-                        {
-                            Key = entryPath[configPath.Length..],
-                            Title = entryName,
-                            IsDirectory = true,
-                            Children = new List<TreeNode>()
-                        };
-                        rootNode.Add(subNode);
-                        await GetRecursivelyAsync(entryPath, configPath, subNode.Children);
-                    }
-                    else if (findFileData.dwFileAttributes == FileAttributes.Archive && ArchiveRegex.IsMatch(entryName))
-                    {
-                        rootNode.Add(new TreeNode
-                        {
-                            Key = entryPath[configPath.Length..],
-                            Title = entryName,
-                            IsDirectory = false
-                        });
-                    }
-                } while (FindNextFile(hFindFile, out findFileData));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error reading dir {currentPath}: {e.Message}");
-            }
-            finally
-            {
-                _ = FindClose(hFindFile);
-            }
+            return rootNode.SelectMany(e => e.Children).ToList();
         }
     }
 }

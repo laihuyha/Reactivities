@@ -1,29 +1,29 @@
-import { Card } from "primereact/card";
-import { dateTimeHelper } from "../../../utils/helper";
-import Activity from "../../../app/models/activity";
-import { Tag } from "primereact/tag";
-import { useLoaderData } from "react-router-dom";
-import { useStore } from "../../../app/stores/store";
+import { Card } from "primereact/card"
+import { dateTimeHelper } from "../../../utils/helper"
+import Activity from "../../../app/models/activity"
+import { Tag } from "primereact/tag"
+import { useLoaderData } from "react-router-dom"
+import { useStore } from "../../../app/stores/store"
 interface Props {
   activity?: Activity;
 }
 const ActivityDetails = ({ activity }: Props) => {
-  const { activityStore } = useStore();
-  const { activities } = activityStore;
-  const activityId = useLoaderData();
-  const act = activities.find((a) => a.id === activityId);
-  const actitityData = activity ?? act;
+  const { activityStore } = useStore()
+  const { activities } = activityStore
+  const activityId = useLoaderData()
+  const act = activities.find((a) => a.id === activityId)
+  const actitityData = activity ?? act
   const header = (
     <img style={{ maxHeight: "33rem" }} alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
-  );
+  )
 
   const footer = (
     <div className="flex align-items-center justify-content-between">
       <p className="m-0">{actitityData?.description}</p>
     </div>
-  );
+  )
 
-  const { toDisplayDateTime } = dateTimeHelper;
+  const { toDisplayDateTime } = dateTimeHelper
 
   return actitityData ? (
     <div className="card" style={{ width: "100%", height: "100%" }}>
@@ -50,7 +50,7 @@ const ActivityDetails = ({ activity }: Props) => {
     </div>
   ) : (
     <></>
-  );
-};
+  )
+}
 
-export default ActivityDetails;
+export default ActivityDetails

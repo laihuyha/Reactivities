@@ -2,11 +2,15 @@ using System;
 using System.Threading.Tasks;
 using API.Base;
 using Application.Activities;
+using Application.Core.Helpers.DirectoryTree.DirectorySpecification;
+using Business.Helpers.DirectoryTree;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]

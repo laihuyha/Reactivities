@@ -1,21 +1,21 @@
-import Activity from "../../../app/models/activity";
-import { Form, Formik } from "formik";
-import { Button } from "primereact/button";
-import { useStore } from "../../../app/stores/store";
-import * as yup from "yup";
-import TextInput from "../../../app/common/form/TextInput";
-import TextAreaInput from "../../../app/common/form/TextAreaInput";
-import DateInput from "../../../app/common/form/DateInput";
-import { dateTimeHelper } from "../../../utils/helper";
+import { Form, Formik } from "formik"
+import { Button } from "primereact/button"
+import { dateTimeHelper } from "../../../utils/helper"
+import { useStore } from "../../../app/stores/store"
+import TextInput from "../../../app/common/form/TextInput"
+import TextAreaInput from "../../../app/common/form/TextAreaInput"
+import DateInput from "../../../app/common/form/DateInput"
+import Activity from "../../../app/models/activity"
+import * as yup from "yup"
 
 interface Props {
   activity?: Activity;
 }
 
 const ActivityForm = ({ activity }: Props) => {
-  const { activityStore } = useStore();
-  const { submitForm } = activityStore;
-  const { toSimpleDateTime } = dateTimeHelper;
+  const { activityStore } = useStore()
+  const { submitForm } = activityStore
+  const { toSimpleDateTime } = dateTimeHelper
   const validationSchema = yup.object({
     title: yup.string().required("Title is required"),
     date: yup.date().required("Date is required"),
@@ -23,7 +23,7 @@ const ActivityForm = ({ activity }: Props) => {
     city: yup.string().required("City is required"),
     description: yup.string(),
     venue: yup.string(),
-  });
+  })
 
   return (
     <>
@@ -32,16 +32,16 @@ const ActivityForm = ({ activity }: Props) => {
         enableReinitialize
         initialValues={activity!}
         onSubmit={(e) => {
-          e = { ...e, date: toSimpleDateTime(e.date) };
-          submitForm(e);
+          e = { ...e, date: typeof e.date === "object" ? toSimpleDateTime(e.date) : e.date }
+          submitForm(e)
         }}
       >
         {({ handleSubmit, isValid, dirty, isSubmitting }) => (
           <>
             <Form
               onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit();
+                e.preventDefault()
+                handleSubmit()
               }}
               autoComplete="off"
             >
@@ -77,6 +77,6 @@ const ActivityForm = ({ activity }: Props) => {
         )}
       </Formik>
     </>
-  );
-};
-export default ActivityForm;
+  )
+}
+export default ActivityForm

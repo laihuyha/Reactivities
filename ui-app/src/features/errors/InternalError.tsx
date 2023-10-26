@@ -1,9 +1,9 @@
-import { observer } from "mobx-react-lite";
-import { useStore } from "../../app/stores/store";
+import { observer } from "mobx-react-lite"
+import { useStore } from "../../app/stores/store"
 
 const InternalError = () => {
-  const { commonStore } = useStore();
-  const { error } = commonStore;
+  const { commonStore } = useStore()
+  const { error } = commonStore
   return (
     <>
       <div className="flex flex-column justify-content-between min-h-screen align-items-center">
@@ -45,10 +45,10 @@ const InternalError = () => {
                 <span
                   className="p-button-label p-c"
                   onClick={() => {
-                    window.history.back();
+                    window.history.back()
                   }}
                 >
-                  Go to Dashboard
+                  Go back
                 </span>
                 <span
                   role="presentation"
@@ -64,7 +64,7 @@ const InternalError = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default observer(InternalError);
+export default observer(InternalError)

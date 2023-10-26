@@ -1,36 +1,36 @@
-import { Fragment, useRef } from "react";
-import { useStore } from "../../../app/stores/store";
-import { observer } from "mobx-react-lite";
-import { dateTimeHelper } from "../../../utils/helper";
-import { Fieldset } from "primereact/fieldset";
-import { confirmDialog } from "primereact/confirmdialog";
-import { ContextMenu } from "primereact/contextmenu";
-import { MenuItem } from "primereact/menuitem";
-import ActivityItem from "./ActivityItem";
-import ActivitiesFilter from "./ActivitiesFilter";
-import "./styles/styles.scss";
+import { Fragment, useRef } from "react"
+import { useStore } from "../../../app/stores/store"
+import { observer } from "mobx-react-lite"
+import { dateTimeHelper } from "../../../utils/helper"
+import { Fieldset } from "primereact/fieldset"
+import { confirmDialog } from "primereact/confirmdialog"
+import { ContextMenu } from "primereact/contextmenu"
+import { MenuItem } from "primereact/menuitem"
+import ActivityItem from "./ActivityItem"
+import ActivitiesFilter from "./ActivitiesFilter"
+import "./styles/styles.scss"
 
 const ActivitiesList = () => {
-  const { activityStore } = useStore();
-  const { groupedActivities } = activityStore;
-  const { setIsView, setIsEdit, setSelectedActivity, deleteActivity } = activityStore;
-  const { toDisplayDateTime } = dateTimeHelper;
+  const { activityStore } = useStore()
+  const { groupedActivities } = activityStore
+  const { setIsView, setIsEdit, setSelectedActivity, deleteActivity } = activityStore
+  const { toDisplayDateTime } = dateTimeHelper
 
-  const cm = useRef<any>(null);
+  const cm = useRef<any>(null)
 
   const items: MenuItem[] = [
     {
       label: "View",
       icon: "pi pi-fw pi-search",
       command: () => {
-        setIsView(true);
+        setIsView(true)
       },
     },
     {
       label: "Edit",
       icon: "pi pi-fw pi-file-edit",
       command: () => {
-        setIsEdit(true);
+        setIsEdit(true)
       },
     },
     {
@@ -45,12 +45,12 @@ const ActivitiesList = () => {
           acceptClassName: "p-button-danger",
           accept: deleteActivity,
           reject: () => {
-            setSelectedActivity(undefined);
+            setSelectedActivity(undefined)
           },
-        });
+        })
       },
     },
-  ];
+  ]
 
   return (
     <>
@@ -59,16 +59,18 @@ const ActivitiesList = () => {
         <ActivitiesFilter />
         {groupedActivities.map(([groupKey, actitvities]) => (
           <Fragment key={groupKey}>
-            <Fieldset className="m-3 bg-transparent" legend={toDisplayDateTime(groupKey)} toggleable>
-              {actitvities.map((e) => (
-                <ActivityItem key={e.id} activity={e} cmRef={cm} />
-              ))}
-            </Fieldset>
+            <div className="m-3 bg-transparent">
+              <Fieldset legend={toDisplayDateTime(groupKey)} toggleable>
+                {actitvities.map((e) => (
+                  <ActivityItem key={e.id} activity={e} cmRef={cm} />
+                ))}
+              </Fieldset>
+            </div>
           </Fragment>
         ))}
       </span>
     </>
-  );
-};
+  )
+}
 
-export default observer(ActivitiesList);
+export default observer(ActivitiesList)
