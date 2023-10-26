@@ -7,4 +7,4 @@ interface Activity {
     city: string;
     venue: string;
 }
-export default Activity;
+export default Activity

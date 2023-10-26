@@ -1,7 +1,7 @@
-import PrimeReact, { FilterMatchMode } from "primereact/api";
+import PrimeReact, { FilterMatchMode } from "primereact/api"
 
 export const configurePrimeReact = () => {
-  PrimeReact.cssTransition = true;
+  PrimeReact.cssTransition = true
 
   PrimeReact.filterMatchModeOptions = {
     text: [
@@ -26,9 +26,9 @@ export const configurePrimeReact = () => {
       FilterMatchMode.DATE_BEFORE,
       FilterMatchMode.DATE_AFTER,
     ],
-  };
+  }
 
-  PrimeReact.ripple = true;
+  PrimeReact.ripple = true
 
   PrimeReact.zIndex = {
     modal: 1100,
@@ -36,7 +36,7 @@ export const configurePrimeReact = () => {
     menu: 1000,
     tooltip: 1100,
     toast: 1200,
-  };
+  }
 
-  PrimeReact.autoZIndex = true;
-};
+  PrimeReact.autoZIndex = true
+}

@@ -1,14 +1,14 @@
-import { observer } from "mobx-react-lite";
-import { Card } from "primereact/card";
-import { NavLink } from "react-router-dom";
-import { useStore } from "../../../app/stores/store";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEraser } from "@fortawesome/free-solid-svg-icons";
-import { MutableRefObject } from "react";
-import { confirmDialog } from "primereact/confirmdialog";
-import { Tag } from "primereact/tag";
-import { dateTimeHelper } from "../../../utils/helper";
-import Activity from "../../../app/models/activity";
+import { observer } from "mobx-react-lite"
+import { Card } from "primereact/card"
+import { NavLink } from "react-router-dom"
+import { useStore } from "../../../app/stores/store"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEraser } from "@fortawesome/free-solid-svg-icons"
+import { MutableRefObject } from "react"
+import { confirmDialog } from "primereact/confirmdialog"
+import { Tag } from "primereact/tag"
+import { dateTimeHelper } from "../../../utils/helper"
+import Activity from "../../../app/models/activity"
 
 interface Props {
   activity: Activity;
@@ -16,9 +16,9 @@ interface Props {
 }
 
 const ActitvityItem = ({ activity, cmRef }: Props) => {
-  const { activityStore } = useStore();
-  const { setSelectedActivity, deleteActivity } = activityStore;
-  const { toDisplayDateTime } = dateTimeHelper;
+  const { activityStore } = useStore()
+  const { setSelectedActivity, deleteActivity } = activityStore
+  const { toDisplayDateTime } = dateTimeHelper
 
   const titleNode = (
     <>
@@ -39,26 +39,26 @@ const ActitvityItem = ({ activity, cmRef }: Props) => {
               draggable: false,
               acceptClassName: "p-button-danger",
               accept: async () => {
-                setSelectedActivity(activity.id);
-                await deleteActivity();
+                setSelectedActivity(activity.id)
+                await deleteActivity()
               },
               reject: () => {
-                setSelectedActivity(undefined);
+                setSelectedActivity(undefined)
               },
-            });
+            })
           }}
         >
           <FontAwesomeIcon icon={faEraser} size="2xs" style={{ color: "var(--red-400)" }} />
         </div>
       </div>
     </>
-  );
+  )
 
   const footer = (
     <div className="flex align-items-center justify-content-between">
       <p className="m-0">{activity.description}</p>
     </div>
-  );
+  )
 
   return (
     <>
@@ -66,9 +66,9 @@ const ActitvityItem = ({ activity, cmRef }: Props) => {
         title={titleNode}
         className="surface-0 shadow-2 hover:shadow-8 p-3 border-2 border-50 border-round-2xl mt-3 custom-card "
         onContextMenu={(e) => {
-          e.preventDefault();
-          setSelectedActivity(activity.id);
-          cmRef.current.show(e);
+          e.preventDefault()
+          setSelectedActivity(activity.id)
+          cmRef.current.show(e)
         }}
         footer={footer}
       >
@@ -92,7 +92,7 @@ const ActitvityItem = ({ activity, cmRef }: Props) => {
         </div>
       </Card>
     </>
-  );
-};
+  )
+}
 
-export default observer(ActitvityItem);
+export default observer(ActitvityItem)

@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx"
 // import Notify, { ToastSetUp } from "../../utils/notify";
 // import { RefObject } from "react";
 // import { Toast } from "primereact/toast";
@@ -49,12 +49,12 @@ import { makeAutoObservable } from "mobx";
 
 //#region : 3. Init Notify class inside Store at first
 export default class AppStore {
-  sideBarCollapsed: boolean = false;
+  sideBarCollapsed: boolean = false
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
 
   setSideBarCollapseState = (state: boolean) => {
-    this.sideBarCollapsed = state;
-  };
+    this.sideBarCollapsed = state
+  }
 }

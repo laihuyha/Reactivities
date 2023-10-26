@@ -1,77 +1,70 @@
-import { Menubar } from "primereact/menubar";
-import { MenuItem } from "primereact/menuitem";
-import { useStore } from "../stores/store";
-import { NavLink, useLocation } from "react-router-dom";
-import "./styles/index.scss";
-import router from "../router/route";
-// import { Menu } from "primereact/menu";
-// import { classNames } from "primereact/utils";
-// import { Avatar } from "primereact/avatar";
+import { Menubar } from "primereact/menubar"
+import { MenuItem } from "primereact/menuitem"
+import { useStore } from "../stores/store"
+import { NavLink, useLocation } from "react-router-dom"
+import { Button } from "primereact/button"
+import { Menu } from "primereact/menu"
+import { useRef } from "react"
+import "./styles/index.scss"
+import router from "../router/route"
+import { Avatar } from "primereact/avatar"
 
 const Navbar = () => {
-  const { activityStore, userStore } = useStore();
-  const { setIsCreate, initFormData } = activityStore;
-  const { isLogin } = userStore;
-  const location = useLocation();
+  const { activityStore, userStore } = useStore()
+  const { setIsCreate, initFormData } = activityStore
+  const { isLogin, user } = userStore
+  const location = useLocation()
+  const menuLeft = useRef<Menu>(null)
 
   const start = (
     <NavLink
       to={"/"}
+      // eslint-disable-next-line react/no-children-prop
       children={
         <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="mr-2" />
       }
     />
-  );
+  )
 
-  // let userMenuItems: MenuItem[] = [
-  //   { label: "Profile", icon: "pi pi-fw pi-user" },
-  //   { label: "Settings", icon: "pi pi-fw pi-cog" },
-  //   { separator: true },
-  //   {
-  //     command: () => {},
-  //     template: (item, options) => {
-  //       console.log(item);
-  //       return (
-  //         <button
-  //           onClick={(e) => options.onClick(e)}
-  //           className={classNames(
-  //             options.className,
-  //             "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
-  //           )}
-  //         >
-  //           <Avatar
-  //             image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png"
-  //             className="mr-2"
-  //             shape="circle"
-  //           />
-  //           <div className="flex flex-column align">
-  //             <span className="font-bold">Amy Elsner</span>
-  //             <span className="text-sm">Agent</span>
-  //           </div>
-  //         </button>
-  //       );
-  //     },
-  //   },
-  // ];
+  const userMenuItem = [
+    {
+      label: "Account",
+      icon: "pi pi-fw pi-user",
+    },
+    {
+      label: "Log Out",
+      icon: "pi pi-fw pi-sign-out",
+    },
+  ]
 
-  // const userMenu = (
-  //   <Menu
-  //     model={userMenuItems}
-  //     appendTo={"self"}
-  //     style={{
-  //       marginTop: "20vh",
-  //     }}
-  //   />
-  // );
+  const userMenu = (
+    <Button
+      onClick={(event) => menuLeft?.current?.toggle(event)}
+      aria-controls="popup_menu_right"
+      aria-haspopup
+      style={{
+        fontSize: "0.75rem",
+        backgroundColor: "transparent",
+        border: "none",
+        boxShadow: "none",
+      }}
+    >
+      <Avatar image={user?.image ?? ""} className="mr-2" shape="circle" />
+      <div className="flex flex-column align">
+        <span className="font-bold">{user?.displayName}</span>
+        <span className="text-sm">{user?.username}</span>
+      </div>
+    </Button>
+  )
 
-  const end = isLogin ? <></> : <></>;
+  const end = isLogin ? userMenu : <></>
 
   const items: MenuItem[] = [
     {
       label: "Activities",
       style: { borderRadius: 5 },
       command: () => {
-        router.navigate("/activities");
+        router.navigate("/activities")
       },
     },
     {
@@ -83,19 +76,18 @@ const Navbar = () => {
         ? { url: "createActivity" }
         : {
             command: () => {
-              setIsCreate(true);
-              initFormData();
+              setIsCreate(true)
+              initFormData()
             },
           }),
     },
-    // {
-    //   label: "show sidebar",
-    //   command: () => {
-    //     setSideBarCollapseState(true);
-    //   },
-    // },
-  ];
+  ]
 
-  return <Menubar className="layout-topbar" model={items} start={start} end={end} />;
-};
-export default Navbar;
+  return (
+    <>
+      <Menu model={userMenuItem} popup ref={menuLeft} id="popup_menu_left" popupAlignment="left" />
+      <Menubar className="layout-topbar" model={items} start={start} end={end} />;
+    </>
+  )
+}
+export default Navbar

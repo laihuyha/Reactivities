@@ -1,8 +1,8 @@
-import { Sidebar } from "primereact/sidebar";
-import { AppMenuItem } from "../../types/layout";
-import { Fragment } from "react";
-import { ToggleButton } from "primereact/togglebutton";
-import AppMenuitem from "./AppMenuitem";
+import { Sidebar } from "primereact/sidebar"
+import { AppMenuItem } from "../../types/layout"
+import { Fragment } from "react"
+import { ToggleButton } from "primereact/togglebutton"
+import AppMenuitem from "./AppMenuitem"
 
 interface SideBarMenuProps {
   children?: AppMenuItem[];
@@ -29,6 +29,7 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
     <Sidebar
       visible={true}
       maskClassName={`side-bar-bgmask layout-sidebar ${props.isCollapsed ? "max-w-4rem" : "max-w-16rem"}`}
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       onHide={() => props.setCollapsedState!(false)}
       showCloseIcon={false}
       closeOnEscape={false}
@@ -42,7 +43,7 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
             offIcon="pi pi-arrow-circle-left"
             checked={props.isCollapsed ?? true}
             onChange={(e) => {
-              props.setCollapsedState && props.setCollapsedState(e.value ? e.value : false);
+              props.setCollapsedState && props.setCollapsedState(e.value ? e.value : false)
             }}
           />
         </Fragment>,
@@ -51,6 +52,7 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
         transition: "ease-in-out 0.2s",
         position: "relative",
       }}
+      // eslint-disable-next-line react/no-children-prop
       children={
         props.isCollapsed ? (
           <></>
@@ -63,7 +65,7 @@ const SideBarMenu = (props: PropsCondition & SideBarMenuProps) => {
         )
       }
     />
-  );
-};
+  )
+}
 
-export default SideBarMenu;
+export default SideBarMenu

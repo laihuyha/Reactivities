@@ -1,19 +1,20 @@
-import { Formik } from "formik";
-import { observer } from "mobx-react-lite";
-import { Checkbox } from "primereact/checkbox";
-import TextInput from "../../app/common/form/TextInput";
-import * as yup from "yup";
-import PasswordInput from "../../app/common/form/PasswordInput";
-import { useStore } from "../../app/stores/store";
-import { Button } from "primereact/button";
+/* eslint-disable react/react-in-jsx-scope */
+import { Formik } from "formik"
+import { observer } from "mobx-react-lite"
+import { Checkbox } from "primereact/checkbox"
+import TextInput from "../../app/common/form/TextInput"
+import * as yup from "yup"
+import PasswordInput from "../../app/common/form/PasswordInput"
+import { useStore } from "../../app/stores/store"
+import { Button } from "primereact/button"
 
 const Login = () => {
-  const { userStore } = useStore();
-  const { login } = userStore;
+  const { userStore } = useStore()
+  const { login } = userStore
   const validationSchema = yup.object({
     username: yup.string().required("UserName is required"),
     password: yup.string().required("Password is required"),
-  });
+  })
   return (
     <>
       <div className="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
@@ -22,7 +23,7 @@ const Login = () => {
           validationSchema={validationSchema}
           initialValues={{ username: "", password: "", remember: false }}
           onSubmit={async (values) => {
-            await login(values);
+            await login(values)
           }}
         >
           {({ handleSubmit, setFieldValue, values, isSubmitting }) => (
@@ -96,7 +97,7 @@ const Login = () => {
         </Formik>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default observer(Login);
+export default observer(Login)

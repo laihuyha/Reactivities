@@ -1,7 +1,7 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react-lite"
 
 const Register = () => {
-  return <></>;
-};
+  return <></>
+}
 
-export default observer(Register);
+export default observer(Register)
