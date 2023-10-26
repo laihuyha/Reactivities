@@ -12,7 +12,7 @@ import { Avatar } from "primereact/avatar"
 const Navbar = () => {
   const { activityStore, userStore } = useStore()
   const { setIsCreate, initFormData } = activityStore
-  const { isLogin, user } = userStore
+  const { isLogin, user, logout } = userStore
   const location = useLocation()
   const menuLeft = useRef<Menu>(null)
 
@@ -26,7 +26,7 @@ const Navbar = () => {
     />
   )
 
-  const userMenuItem = [
+  const userMenuItem: MenuItem[] = [
     {
       label: "Account",
       icon: "pi pi-fw pi-user",
@@ -34,6 +34,7 @@ const Navbar = () => {
     {
       label: "Log Out",
       icon: "pi pi-fw pi-sign-out",
+      command: () => logout(),
     },
   ]
 
