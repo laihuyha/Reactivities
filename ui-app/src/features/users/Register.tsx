@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { observer } from "mobx-react-lite";
 import { Dialog } from "primereact/dialog";
 import { useStore } from "../../app/stores/store";
@@ -28,4 +29,4 @@ const Register = () => {
   );
 };
 
-export default observer(Register);
+export default observer(Register)

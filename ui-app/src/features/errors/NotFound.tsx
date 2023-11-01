@@ -1,7 +1,7 @@
-import { observer } from "mobx-react-lite";
-import { ReactComponent as NotFoundIMG } from "../../assets/asset-404.svg";
-import "./styles.scss";
-import { Button } from "primereact/button";
+import { observer } from "mobx-react-lite"
+import { ReactComponent as NotFoundIMG } from "../../assets/asset-404.svg"
+import "./styles.scss"
+import { Button } from "primereact/button"
 
 const NotFound = () => {
   return (
@@ -14,7 +14,7 @@ const NotFound = () => {
           <Button
             className="btn-grad"
             onClick={() => {
-              window.history.go(-2);
+              window.history.go(-2)
             }}
           >
             Go back HomePage
@@ -22,7 +22,7 @@ const NotFound = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default observer(NotFound);
+export default observer(NotFound)

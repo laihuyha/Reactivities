@@ -1,6 +1,6 @@
-import { useField } from "formik";
-import { Calendar } from "primereact/calendar";
-import { dateTimeHelper } from "../../../utils/helper";
+import { useField } from "formik"
+import { Calendar } from "primereact/calendar"
+import { dateTimeHelper } from "../../../utils/helper"
 
 interface Props {
   placeholder: string;
@@ -10,8 +10,8 @@ interface Props {
 }
 
 const DateInput = (props: Props) => {
-  const { convertTimeString } = dateTimeHelper;
-  const [field, meta, helper] = useField(props.name);
+  const { convertTimeString } = dateTimeHelper
+  const [field, meta, helper] = useField(props.name)
   return (
     <div className="mb-3">
       <Calendar
@@ -24,6 +24,6 @@ const DateInput = (props: Props) => {
       />
       {meta.touched && meta.error ? <div className="text-red-500 m-2">{meta.error}</div> : null}
     </div>
-  );
-};
-export default DateInput;
+  )
+}
+export default DateInput

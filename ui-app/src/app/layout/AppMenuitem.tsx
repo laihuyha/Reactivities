@@ -1,17 +1,18 @@
-import { AppMenuItemProps } from "../../types/layout";
-import { classNames } from "primereact/utils";
-import { CSSTransition } from "react-transition-group";
-import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { Ripple } from "primereact/ripple";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { AppMenuItemProps } from "../../types/layout"
+import { classNames } from "primereact/utils"
+import { CSSTransition } from "react-transition-group"
+import { Link, useLocation } from "react-router-dom"
+import { useState } from "react"
+import { Ripple } from "primereact/ripple"
 
 const AppMenuitem = (props: AppMenuItemProps) => {
-  const { pathname } = useLocation();
-  const [activeMenu, setActiveMenu] = useState("");
-  const item = props.items;
-  const key = props.parentKey ? props.parentKey + "-" + props.index : String(props.index);
-  const active = activeMenu === key || activeMenu.startsWith(key + "-");
-  const isActiveRoute = item!.to && pathname === item!.to;
+  const { pathname } = useLocation()
+  const [activeMenu, setActiveMenu] = useState("")
+  const item = props.items
+  const key = props.parentKey ? props.parentKey + "-" + props.index : String(props.index)
+  const active = activeMenu === key || activeMenu.startsWith(key + "-")
+  const isActiveRoute = item!.to && pathname === item!.to
   const subMenu = item!.items && item!.visible !== false && (
     <CSSTransition
       timeout={{ enter: 1000, exit: 450 }}
@@ -21,27 +22,27 @@ const AppMenuitem = (props: AppMenuItemProps) => {
     >
       <ul>
         {item!.items.map((child, i) => {
-          return <AppMenuitem items={child} index={i} className={""} parentKey={key} key={child.label} />;
+          return <AppMenuitem items={child} index={i} className={""} parentKey={key} key={child.label} />
         })}
       </ul>
     </CSSTransition>
-  );
+  )
   const itemClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     //avoid processing disabled items
     if (item!.disabled) {
-      event.preventDefault();
-      return;
+      event.preventDefault()
+      return
     }
 
     //execute command
     if (item!.command) {
-      item!.command({ originalEvent: event, item: item });
+      item!.command({ originalEvent: event, item: item })
     }
 
     // // toggle active state
-    if (item!.items) setActiveMenu(active ? (props.parentKey as string) : key);
-    else setActiveMenu(key);
-  };
+    if (item!.items) setActiveMenu(active ? (props.parentKey as string) : key)
+    else setActiveMenu(key)
+  }
   return (
     <li className={classNames({ "layout-root-menuitem": props.root, "active-menuitem": active })}>
       {props.root && item!.visible !== false && <div className="layout-menuitem-root-text">{item!.label}</div>}
@@ -77,7 +78,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
 
       {subMenu}
     </li>
-  );
-};
+  )
+}
 
-export default AppMenuitem;
+export default AppMenuitem

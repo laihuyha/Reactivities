@@ -48,7 +48,7 @@ export default class ActivityStore {
 
     if (this.filterDateRange && this.filterDateRange.length > 0) {
       x = x.filter((a) => {
-        let date = dateTimeHelper.convertTimeString(a[0]);
+        const date = dateTimeHelper.convertTimeString(a[0]);
         return this.filterDateRange![0] <= date && date <= this.filterDateRange![1];
       });
     }
@@ -97,7 +97,7 @@ export default class ActivityStore {
       }
       if (this.isEdit && !this.isCreate) {
         await ActivityServices.update(activity);
-        let exist = this.activities.findIndex((e) => e.id === activity.id);
+        const exist = this.activities.findIndex((e) => e.id === activity.id);
         runInAction(() => {
           this.activities[exist] = { ...this.activities[exist], ...activity };
         });
@@ -136,7 +136,7 @@ export default class ActivityStore {
 
   setSelectedActivity = (activityId?: string) => {
     if (!activityId) return;
-    let activity = this.activities.find((e) => e.id === activityId);
+    const activity = this.activities.find((e) => e.id === activityId);
 
     if (activity) {
       this.selectedActivity = { ...activity };

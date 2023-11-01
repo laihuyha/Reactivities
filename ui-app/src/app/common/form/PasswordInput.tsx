@@ -1,5 +1,5 @@
-import { useField } from "formik";
-import { Password } from "primereact/password";
+import { useField } from "formik"
+import { Password } from "primereact/password"
 
 interface Props {
   name: string;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const PasswordInput = (props: Props) => {
-  const [field, meta] = useField(props.name);
+  const [field, meta] = useField(props.name)
   return (
     <>
       <label>{props.label}</label>
@@ -25,7 +25,7 @@ const PasswordInput = (props: Props) => {
       />
       {meta.touched && meta.error ? <div className="text-red-500 m-2 mt-0">{meta.error}</div> : null}
     </>
-  );
-};
+  )
+}
 
-export default PasswordInput;
+export default PasswordInput

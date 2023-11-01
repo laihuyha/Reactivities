@@ -12,11 +12,19 @@ import { configurePrimeReact } from "../config/primeReactConfig";
 import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
 import { observer } from "mobx-react-lite";
 import { Outlet, useLocation } from "react-router-dom";
+import { useStore } from "../stores/store";
+import { useEffect } from "react";
 
 const App = () => {
   configurePrimeReact();
   fontAwesomeConfig();
   const location = useLocation();
+  const { commonStore, userStore } = useStore();
+  useEffect(() => {
+    if (commonStore.token) {
+      userStore.getCurrentUser().finally(() => {});
+    }
+  }, [commonStore, userStore]);
 
   const renderApp = () => {
     if (location.pathname === "/") {
@@ -35,11 +43,9 @@ const App = () => {
 
     return (
       <>
-        {/* <Navbar /> */}
+        <Navbar />
         <div className="layout-main-container">
           <div className="layout-main">
-            {/* <SideBarMenu children={item} isCollapsed={sideBarCollapsed} setCollapsedState={setSideBarCollapseState} /> */}
-            <Navbar />
             {/* <div
               className={
                 !sideBarCollapsed

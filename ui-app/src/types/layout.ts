@@ -1,4 +1,4 @@
-import { MenuItem } from "primereact/menuitem";
+import { MenuItem } from "primereact/menuitem"
 
 /* AppMenu Types */
 type CommandProps = {

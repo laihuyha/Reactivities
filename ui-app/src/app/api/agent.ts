@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import axios, { AxiosError, AxiosResponse } from "axios";
 // import AppStore from "../stores/appStore";
 import router from "../router/route";
@@ -6,6 +7,12 @@ import { store } from "../stores/store";
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 axios.defaults.baseURL = process.env.REACT_APP_API;
+
+axios.interceptors.request.use(async (config) => {
+  const token = store.commonStore.token;
+  if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 axios.interceptors.response.use(
   async (response) => {
@@ -16,14 +23,14 @@ axios.interceptors.response.use(
     const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
       case 400:
-        if (config.method === "get" && data.errors.hasOwnProperty("id")) {
+        if (config.method === "get" && data?.errors.hasOwnProperty("id")) {
           router.navigate("/not-found");
         }
-        if (data.errors) {
+        if (data?.errors) {
           const modalStateErrors = [];
-          for (const key in data.errors) {
-            if (data.errors[key]) {
-              modalStateErrors.push(data.errors[key]);
+          for (const key in data?.errors) {
+            if (data?.errors[key]) {
+              modalStateErrors.push(data?.errors[key]);
             }
           }
           throw modalStateErrors.flat();
@@ -61,9 +68,9 @@ const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
   get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-  post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-  put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-  patch: <T>(url: string, body: {}) => axios.patch<T>(url, body).then(responseBody),
+  post: <T>(url: string, body: object) => axios.post<T>(url, body).then(responseBody),
+  put: <T>(url: string, body: object) => axios.put<T>(url, body).then(responseBody),
+  patch: <T>(url: string, body: object) => axios.patch<T>(url, body).then(responseBody),
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
