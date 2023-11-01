@@ -6,7 +6,7 @@ import router from "../router/route";
 
 export default class UserStore {
   user: User | null = null;
-  isVisibleRegisterForm: boolean = false;
+  isVisibleRegisterForm = false;
   constructor() {
     makeAutoObservable(this);
   }
@@ -27,12 +27,23 @@ export default class UserStore {
   };
 
   logout = () => {
-    store.commonStore.setTokenString(undefined);
+    store.commonStore.setTokenString(null);
     this.user = null;
     router.navigate("/");
   };
 
   setIsVisibleRegisterForm = (value: boolean) => {
     this.isVisibleRegisterForm = value;
+  }
+  
+  getCurrentUser = async () => {
+    try {
+      const user = await AccountServices.getCurrent();
+      runInAction(() => {
+        this.user = user;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 }

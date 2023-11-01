@@ -53,10 +53,11 @@ namespace API.Controllers
                 : BadRequest(result.Errors);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> CurrentUser()
         {
-            var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email)?.Value);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
             return user == null ? NoContent() : Ok(new UserDTO { DisplayName = user.DisplayName, Image = null, UserName = user.UserName, Token = _tokenService.CreateToken(user) });
         }
     }

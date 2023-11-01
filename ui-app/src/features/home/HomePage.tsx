@@ -34,7 +34,7 @@ const HomePage = () => {
         <Register />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default observer(HomePage);
+export default observer(HomePage)
