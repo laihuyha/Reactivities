@@ -6,6 +6,7 @@ import router from "../router/route";
 
 export default class UserStore {
   user: User | null = null;
+  isVisibleRegisterForm: boolean = false;
   constructor() {
     makeAutoObservable(this);
   }
@@ -29,5 +30,9 @@ export default class UserStore {
     store.commonStore.setTokenString(undefined);
     this.user = null;
     router.navigate("/");
+  };
+
+  setIsVisibleRegisterForm = (value: boolean) => {
+    this.isVisibleRegisterForm = value;
   };
 }
