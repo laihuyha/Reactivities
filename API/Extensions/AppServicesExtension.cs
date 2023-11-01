@@ -1,7 +1,9 @@
 using Application.Activities;
 using Application.Core;
+using Application.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -34,6 +36,9 @@ namespace API.Extensions
             _ = services.AddAutoMapper(typeof(MappingProfile));
             _ = services.AddFluentValidationAutoValidation();
             _ = services.AddValidatorsFromAssemblyContaining<Create>();
+            _ = services.AddHttpContextAccessor();
+
+            _ = services.AddScoped<IUserAccessor, UserAccessor>();
             return services;
         }
     }

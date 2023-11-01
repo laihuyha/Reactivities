@@ -18,7 +18,7 @@ namespace Application.Activities
             public Handler(DataContext context) => _context = context;
             public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Activity>>.Success(await _context.Activities.ToListAsync(cancellationToken: cancellationToken));
+                return Result<List<Activity>>.Success(await _context.Activities.Include(e => e.Attendees).ThenInclude(u => u.AppUser).ToListAsync(cancellationToken: cancellationToken));
             }
         }
     }
