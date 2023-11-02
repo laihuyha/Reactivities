@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { LoginDTO, User } from "../models/user";
+import { LoginDTO, User, UserFormValues } from "../models/user";
 import AccountServices from "../api/services/accountServices";
 import { store } from "./store";
 import router from "../router/route";
@@ -26,6 +26,20 @@ export default class UserStore {
     }
   };
 
+  register = async (creds: UserFormValues) => {
+    try {
+      const user = await AccountServices.register(creds);
+      store.commonStore.setTokenString(user.token);
+      runInAction(() => {
+        this.user = user;
+        router.navigate("/activities");
+      });
+      this.setIsVisibleRegisterForm(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   logout = () => {
     store.commonStore.setTokenString(null);
     this.user = null;
@@ -34,8 +48,8 @@ export default class UserStore {
 
   setIsVisibleRegisterForm = (value: boolean) => {
     this.isVisibleRegisterForm = value;
-  }
-  
+  };
+
   getCurrentUser = async () => {
     try {
       const user = await AccountServices.getCurrent();
