@@ -14,8 +14,15 @@ const Register = () => {
   const { isVisibleRegisterForm, setIsVisibleRegisterForm, register } = userStore;
   const validationSchema = yup.object({
     username: yup.string().required("UserName is required"),
-    password: yup.string().required("Password is required"),
-    email: yup.string().required("Email is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,16}$/,
+        "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, and one number"
+      ),
+    email: yup.string().required("Email is required").email(),
     displayName: yup.string().required("Display Name is required"),
   });
 
@@ -32,6 +39,9 @@ const Register = () => {
             Register
           </div>
         }
+        style={{
+          width: "28vw",
+        }}
       >
         <Formik
           enableReinitialize

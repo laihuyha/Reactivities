@@ -38,8 +38,16 @@ namespace API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(Register register)
         {
-            if (await _userManager.Users.AnyAsync(x => x.UserName == register.UserName)) return BadRequest("Username is taken");
-            if (await _userManager.Users.AnyAsync(x => x.Email == register.Email)) return BadRequest($"Email is {register.Email} taken");
+            if (await _userManager.Users.AnyAsync(x => x.UserName == register.UserName))
+            {
+                ModelState.AddModelError("UserName", "Username is taken");
+                return ValidationProblem();
+            }
+            if (await _userManager.Users.AnyAsync(x => x.Email == register.Email))
+            {
+                ModelState.AddModelError("Email", "Email is taken");
+                return ValidationProblem();
+            }
             var user = new AppUser
             {
                 DisplayName = register.DisplayName,
