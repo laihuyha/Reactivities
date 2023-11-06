@@ -1,8 +1,6 @@
-using AutoMapper;
-
 namespace Application.Core
 {
-    public class MappingProfile : Profile
+    public class MappingProfile : AutoMapper.Profile
     {
         public MappingProfile()
         {

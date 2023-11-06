@@ -1,6 +1,6 @@
 namespace Application.Profile
 {
-    public class Profiles
+    public class Profile
     {
         public string UserName { get; set; }
         public string DisplayName { get; set; }
