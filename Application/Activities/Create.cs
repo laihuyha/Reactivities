@@ -48,7 +48,12 @@ namespace Application.Activities
                         IsHost = true
                     };
                     request.Activity.Attendees.Add(attendee);
+
+                    // Nếu dùng AddAsync cho request.Activity thì sẽ bị thiếu attendee nên cần đảm bảo add attendee vào context trước
+                    // Nếu dùng Add thì ko cần dùng lệnh _ = await _context.ActivityAttendees.AddAsync(attendee, cancellationToken); này nữa
+                    _ = await _context.ActivityAttendees.AddAsync(attendee, cancellationToken);
                     _ = await _context.Activities.AddAsync(request.Activity, cancellationToken);
+
                     _ = await _context.SaveChangesAsync(cancellationToken); // Save changes to DB
                     return Result<Unit>.Success(Unit.Value);
                 }
