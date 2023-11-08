@@ -1,19 +1,19 @@
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
+import { observer } from "mobx-react-lite";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import InternalError from "../../features/errors/InternalError";
+import HomePage from "../../features/home/HomePage";
+import Login from "../../features/users/Login";
+import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
+import { configurePrimeReact } from "../config/primeReactConfig";
 import "../layout/styles/index.scss";
 import "../layout/styles/layout.scss";
-import Navbar from "./Navbar";
-import HomePage from "../../features/home/HomePage";
-import InternalError from "../../features/errors/InternalError";
-import Login from "../../features/users/Login";
-import { configurePrimeReact } from "../config/primeReactConfig";
-import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
-import { observer } from "mobx-react-lite";
-import { Outlet, useLocation } from "react-router-dom";
 import { useStore } from "../stores/store";
-import { useEffect } from "react";
+import Navbar from "./Navbar";
 
 const App = () => {
   configurePrimeReact();
@@ -22,7 +22,7 @@ const App = () => {
   const { commonStore, userStore } = useStore();
   useEffect(() => {
     if (commonStore.token) {
-      userStore.getCurrentUser().finally(() => {});
+      userStore.getCurrentUser();
     }
   }, [commonStore, userStore]);
 

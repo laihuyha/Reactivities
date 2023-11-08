@@ -11,18 +11,17 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            List<AppUser> users = new()
+            {
+                new() {DisplayName = "Test User", UserName = "ax001", Email = "ax001@ax.com"},
+                new() {DisplayName = "Mahesvara", UserName = "Tatsuya", Email = "ax002@ax.com"},
+                new() {DisplayName = "Emiya", UserName = "Shiro", Email = "ax003@ax.com"},
+            };
             if (!userManager.Users.Any())
             {
-                var users = new List<AppUser>
+                foreach (AppUser user in users)
                 {
-                    new AppUser {DisplayName = "Test User", UserName = "ax001", Email = "ax001@ax.com"},
-                    new AppUser {DisplayName = "Mahesvara", UserName = "Tatsuya", Email = "ax002@ax.com"},
-                    new AppUser {DisplayName = "Emiya", UserName = "Shiro", Email = "ax003@ax.com"},
-                };
-
-                foreach (var user in users)
-                {
-                    await userManager.CreateAsync(user, "Passw0rd");
+                    _ = await userManager.CreateAsync(user, "Passw0rd");
                 }
             }
 
@@ -32,21 +31,24 @@ namespace Persistence
             Dictionary<int, string> AvailabelCityDictionary = new();
             Dictionary<int, string> AvailabelActivitiesDictionary = new();
             Dictionary<int, string> AvailabelLocationDictionary = new();
-            for (var i = 0; i < AvailabelActivities.Count; i++)
+            for (int i = 0; i < AvailabelActivities.Count; i++)
             {
                 _ = AvailabelActivitiesDictionary.TryAdd(i, AvailabelActivities[i]);
                 _ = AvailabelCityDictionary.TryAdd(i, AvailabelCity[i]);
                 _ = AvailabelLocationDictionary.TryAdd(i, AvailabelLocation[i]);
             }
 
-            if (context.Activities.Any()) return;
-
-            for (var i = 0; i < 20; i++)
+            if (context.Activities.Any())
             {
-                var random = new Random();
-                var randomDate = DateTime.Now.AddMonths(random.Next(-10, 0));
-                var dateSubtract = (int)(DateTime.Now.Subtract(randomDate).TotalDays / 30);
-                var activity = new Activity
+                return;
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                Random random = new();
+                DateTime randomDate = DateTime.Now.AddMonths(random.Next(-10, 0));
+                int dateSubtract = (int)(DateTime.Now.Subtract(randomDate).TotalDays / 30);
+                Activity activity = new()
                 {
                     Title = $"Past Activity {i}",
                     Date = randomDate.ToString("yyyyMMdd"),
@@ -54,7 +56,14 @@ namespace Persistence
                     City = AvailabelCityDictionary.GetValueOrDefault(random.Next(0, 8)),
                     Id = Guid.NewGuid(),
                     Venue = AvailabelLocationDictionary.GetValueOrDefault(random.Next(0, 8)),
-                    Description = dateSubtract > 0 ? $"Activity {(int)DateTime.Now.Subtract(randomDate).TotalDays / 30} months ago" : "Recently"
+                    Description = dateSubtract > 0 ? $"Activity {(int)DateTime.Now.Subtract(randomDate).TotalDays / 30} months ago" : "Recently",
+                    Attendees = new List<ActivityAttendee>
+                    {
+                        new() {
+                            AppUser = users[random.Next(0, users.Count - 1)],
+                            IsHost = true
+                        }
+                    }
                 };
 
                 _ = await context.Activities.AddAsync(activity);

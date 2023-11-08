@@ -4,6 +4,7 @@ using API.Base;
 using Application.Activities;
 using Application.Attendance;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -30,6 +31,7 @@ namespace API.Controllers
             return Ok(await Mediator.Send(new Create.Command { Activity = activity }));
         }
 
+        [Authorize(Policy = "IsHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivity(string id, Activity activity)
         {
