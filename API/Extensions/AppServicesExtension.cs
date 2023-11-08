@@ -32,7 +32,7 @@ namespace API.Extensions
 
             _ = services.AddCors(opt => opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 
-            _ = services.AddMediatR(typeof(List.Handler).Assembly);
+            _ = services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(List.Handler).Assembly));
             _ = services.AddAutoMapper(typeof(MappingProfile));
             _ = services.AddFluentValidationAutoValidation();
             _ = services.AddValidatorsFromAssemblyContaining<Create>();
