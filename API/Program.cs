@@ -17,12 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAppServicesExtension(builder.Configuration); // Extension
 builder.Services.AddIdentityServices(builder.Configuration); // Extension
 
-builder.Services.AddControllers(option =>
-{
-    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-    option.Filters.Add(new AuthorizeFilter(policy));
-});
-
 Log.Logger = new LoggerConfiguration().CreateBootstrapLogger();
 
 builder.Host.UseHostBuilderExtension(); // Extension

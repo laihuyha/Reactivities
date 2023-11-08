@@ -11,15 +11,14 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            var users = new List<AppUser>
+            {
+                new() {DisplayName = "Test User", UserName = "ax001", Email = "ax001@ax.com"},
+                new() {DisplayName = "Mahesvara", UserName = "Tatsuya", Email = "ax002@ax.com"},
+                new() {DisplayName = "Emiya", UserName = "Shiro", Email = "ax003@ax.com"},
+            };
             if (!userManager.Users.Any())
             {
-                var users = new List<AppUser>
-                {
-                    new AppUser {DisplayName = "Test User", UserName = "ax001", Email = "ax001@ax.com"},
-                    new AppUser {DisplayName = "Mahesvara", UserName = "Tatsuya", Email = "ax002@ax.com"},
-                    new AppUser {DisplayName = "Emiya", UserName = "Shiro", Email = "ax003@ax.com"},
-                };
-
                 foreach (var user in users)
                 {
                     await userManager.CreateAsync(user, "Passw0rd");
@@ -54,7 +53,14 @@ namespace Persistence
                     City = AvailabelCityDictionary.GetValueOrDefault(random.Next(0, 8)),
                     Id = Guid.NewGuid(),
                     Venue = AvailabelLocationDictionary.GetValueOrDefault(random.Next(0, 8)),
-                    Description = dateSubtract > 0 ? $"Activity {(int)DateTime.Now.Subtract(randomDate).TotalDays / 30} months ago" : "Recently"
+                    Description = dateSubtract > 0 ? $"Activity {(int)DateTime.Now.Subtract(randomDate).TotalDays / 30} months ago" : "Recently",
+                    Attendees = new List<ActivityAttendee>
+                    {
+                        new() {
+                            AppUser = users[random.Next(0, users.Count - 1)],
+                            IsHost = true
+                        }
+                    }
                 };
 
                 _ = await context.Activities.AddAsync(activity);

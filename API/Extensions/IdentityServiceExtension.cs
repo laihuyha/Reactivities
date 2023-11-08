@@ -1,7 +1,9 @@
 using System.Text;
 using API.Services;
 using Domain.Entities;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +26,8 @@ namespace API.Extensions
                     ValidateAudience = false
                 };
             });
+            _ = services.AddAuthorization(opt => opt.AddPolicy("IsHost", policy => policy.Requirements.Add(new IsHostRequirement())));
+            _ = services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             _ = services.AddScoped<TokenService>();
             return services;
         }
