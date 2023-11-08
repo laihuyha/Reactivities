@@ -11,7 +11,7 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
-            var users = new List<AppUser>
+            List<AppUser> users = new()
             {
                 new() {DisplayName = "Test User", UserName = "ax001", Email = "ax001@ax.com"},
                 new() {DisplayName = "Mahesvara", UserName = "Tatsuya", Email = "ax002@ax.com"},
@@ -19,9 +19,9 @@ namespace Persistence
             };
             if (!userManager.Users.Any())
             {
-                foreach (var user in users)
+                foreach (AppUser user in users)
                 {
-                    await userManager.CreateAsync(user, "Passw0rd");
+                    _ = await userManager.CreateAsync(user, "Passw0rd");
                 }
             }
 
@@ -31,21 +31,24 @@ namespace Persistence
             Dictionary<int, string> AvailabelCityDictionary = new();
             Dictionary<int, string> AvailabelActivitiesDictionary = new();
             Dictionary<int, string> AvailabelLocationDictionary = new();
-            for (var i = 0; i < AvailabelActivities.Count; i++)
+            for (int i = 0; i < AvailabelActivities.Count; i++)
             {
                 _ = AvailabelActivitiesDictionary.TryAdd(i, AvailabelActivities[i]);
                 _ = AvailabelCityDictionary.TryAdd(i, AvailabelCity[i]);
                 _ = AvailabelLocationDictionary.TryAdd(i, AvailabelLocation[i]);
             }
 
-            if (context.Activities.Any()) return;
-
-            for (var i = 0; i < 20; i++)
+            if (context.Activities.Any())
             {
-                var random = new Random();
-                var randomDate = DateTime.Now.AddMonths(random.Next(-10, 0));
-                var dateSubtract = (int)(DateTime.Now.Subtract(randomDate).TotalDays / 30);
-                var activity = new Activity
+                return;
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                Random random = new();
+                DateTime randomDate = DateTime.Now.AddMonths(random.Next(-10, 0));
+                int dateSubtract = (int)(DateTime.Now.Subtract(randomDate).TotalDays / 30);
+                Activity activity = new()
                 {
                     Title = $"Past Activity {i}",
                     Date = randomDate.ToString("yyyyMMdd"),
