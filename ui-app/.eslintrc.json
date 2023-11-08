@@ -12,8 +12,8 @@
   "plugins": ["@typescript-eslint", "react"],
   "rules": {
     "no-extra-semi": "error",
-    "semi": ["error", "never"], // This enforces no semicolons
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
     "react/react-in-jsx-scope": "off"
   }
 }

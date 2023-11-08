@@ -1,26 +1,31 @@
-import { makeAutoObservable } from "mobx"
-import { ServerError } from "../interfaces/serverError"
+import { makeAutoObservable, reaction } from "mobx";
+import { ServerError } from "../interfaces/serverError";
 
 export default class CommonStore {
-  error: ServerError | null = null
-  token?: string
+  error: ServerError | null = null;
+  token: string | null = localStorage.getItem("token");
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this);
+
+    // This reaction will run only when token changes
+    reaction(
+      () => this.token,
+      (token) => {
+        if (token) {
+          localStorage.setItem("token", token);
+        } else {
+          localStorage.removeItem("token");
+        }
+      }
+    );
   }
 
   setError = (error: any) => {
-    this.error = error
-  }
+    this.error = error;
+  };
 
-  setTokenString = (token?: string) => {
-    if (token) {
-      localStorage.setItem("token", token)
-      this.token = token
-      return
-    }
-
-    localStorage.removeItem("token")
-    this.token = undefined
-  }
+  setTokenString = (token: string | null) => {
+    this.token = token;
+  };
 }

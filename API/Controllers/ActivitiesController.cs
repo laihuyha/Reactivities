@@ -2,15 +2,12 @@ using System;
 using System.Threading.Tasks;
 using API.Base;
 using Application.Activities;
-using Application.Core.Helpers.DirectoryTree.DirectorySpecification;
-using Business.Helpers.DirectoryTree;
+using Application.Attendance;
 using Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
@@ -44,6 +41,12 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteActivity(string id)
         {
             return HandleResult(await Mediator.Send(new Delete.Command { Id = Guid.Parse(id) }));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Attend(Guid Id)
+        {
+            return HandleResult(await Mediator.Send(new UpdateAttendance.Command { Id = Id }));
         }
     }
 }

@@ -1,8 +1,12 @@
 using Application.Activities;
 using Application.Core;
+using Application.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +20,11 @@ namespace API.Extensions
         {
             // Add services to the container.
 
-            _ = services.AddControllers();
+            _ = services.AddControllers(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             _ = services.AddEndpointsApiExplorer();
             _ = services.AddSwaggerGen();
@@ -24,10 +32,13 @@ namespace API.Extensions
 
             _ = services.AddCors(opt => opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 
-            _ = services.AddMediatR(typeof(List.Handler).Assembly);
+            _ = services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(List.Handler).Assembly));
             _ = services.AddAutoMapper(typeof(MappingProfile));
             _ = services.AddFluentValidationAutoValidation();
             _ = services.AddValidatorsFromAssemblyContaining<Create>();
+            _ = services.AddHttpContextAccessor();
+
+            _ = services.AddScoped<IUserAccessor, UserAccessor>();
             return services;
         }
     }

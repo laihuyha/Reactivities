@@ -1,14 +1,15 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { observer } from "mobx-react-lite"
-import "./styles/styles.scss"
-import "../../app/layout/styles/index.scss"
-import { ReactComponent as PrimeReactIcon } from "../../assets/primereact-logo-light.svg"
-import { NavLink } from "react-router-dom"
-import { useStore } from "../../app/stores/store"
+import { observer } from "mobx-react-lite";
+import "./styles/styles.scss";
+import "../../app/layout/styles/index.scss";
+import { ReactComponent as PrimeReactIcon } from "../../assets/primereact-logo-light.svg";
+import { NavLink } from "react-router-dom";
+import { useStore } from "../../app/stores/store";
+import { Button } from "primereact/button";
+import Register from "../users/Register";
 
 const HomePage = () => {
-  const { userStore } = useStore()
-  const { isLogin } = userStore
+  const { userStore } = useStore();
+  const { isLogin, setIsVisibleRegisterForm } = userStore;
   return (
     <>
       <div className="flex justify-content-center align-items-center flex-column border-round home">
@@ -25,11 +26,12 @@ const HomePage = () => {
               Login
             </NavLink>
             <span>or</span>
-            <NavLink to="/register" className="btn-grad">
+            <Button className="btn-grad" onClick={() => setIsVisibleRegisterForm(true)}>
               Register
-            </NavLink>
+            </Button>
           </div>
         )}
+        <Register />
       </div>
     </>
   )
