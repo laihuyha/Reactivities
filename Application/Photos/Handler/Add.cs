@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Photos
+namespace Application.Photos.Handler
 {
-    public class Add
+    public static class Add
     {
         public class Command : IRequest<Result<Photo>>
         {

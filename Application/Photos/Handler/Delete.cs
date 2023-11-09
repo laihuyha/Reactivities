@@ -7,9 +7,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Photos
+namespace Application.Photos.Handler
 {
-    public class Delete
+    public static class Delete
     {
         public class Command : IRequest<Result<Unit>>
         {

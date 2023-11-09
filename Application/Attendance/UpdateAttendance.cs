@@ -11,7 +11,7 @@ using Persistence;
 
 namespace Application.Attendance
 {
-    public class UpdateAttendance
+    public static class UpdateAttendance
     {
         public class Command : IRequest<Result<Unit>>
         {
