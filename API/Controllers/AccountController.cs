@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.DTO;
@@ -65,8 +66,8 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> CurrentUser()
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
-            return user == null ? NoContent() : Ok(new UserDTO { DisplayName = user.DisplayName, Image = null, UserName = user.UserName, Token = _tokenService.CreateToken(user) });
+            var user = await _userManager.Users.Include(e => e.Photos).FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            return user == null ? NoContent() : Ok(new UserDTO { DisplayName = user.DisplayName, Image = user.Photos?.FirstOrDefault(e => e.IsMain)?.Url, UserName = user.UserName, Token = _tokenService.CreateToken(user) });
         }
     }
 }
