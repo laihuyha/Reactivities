@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import InternalError from "../../features/errors/InternalError";
 import HomePage from "../../features/home/HomePage";
-import Login from "../../features/users/Login";
+import Login from "../../features/auth/Login";
 import { fontAwesomeConfig } from "../config/fontAwesomeConfig";
 import { configurePrimeReact } from "../config/primeReactConfig";
 import "../layout/styles/index.scss";
