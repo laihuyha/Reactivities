@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 // import AppStore from "../stores/appStore";
 import router from "../router/route";
 import { store } from "../stores/store";
+import { PaginationResult } from "../models/pagination";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -17,6 +18,11 @@ axios.interceptors.request.use(async (config) => {
 axios.interceptors.response.use(
   async (response) => {
     await sleep(1000);
+    const pagination = response.headers["pagination"];
+    if (pagination) {
+      response.data = new PaginationResult(response.data, JSON.parse(pagination));
+      return response;
+    }
     return response;
   },
   (error: AxiosError) => {
