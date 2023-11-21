@@ -5,7 +5,7 @@ import { ReactComponent as PrimeReactIcon } from "../../assets/primereact-logo-l
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../app/stores/store";
 import { Button } from "primereact/button";
-import Register from "../users/Register";
+import Register from "../auth/Register";
 
 const HomePage = () => {
   const { userStore } = useStore();

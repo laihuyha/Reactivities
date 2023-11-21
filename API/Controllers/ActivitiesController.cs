@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using API.Base;
 using Application.Activities;
 using Application.Attendance;
+using Application.Core;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,9 @@ namespace API.Controllers
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetActivities()
+        public async Task<IActionResult> GetActivities([FromQuery] PagingParams param)
         {
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
         }
 
         [HttpGet("{id}")]
@@ -45,7 +46,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = Guid.Parse(id) }));
         }
 
-        [HttpPost]
+        [HttpPost("attend/{id}")]
         public async Task<IActionResult> Attend(Guid Id)
         {
             return HandleResult(await Mediator.Send(new UpdateAttendance.Command { Id = Id }));

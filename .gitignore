@@ -41,3 +41,4 @@ API.code-workspace
 **.db-wal
 **/[Ll]ogs
 **/[Ll]ogs/
+API/appsettings.Development.json

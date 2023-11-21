@@ -13,6 +13,6 @@ namespace Application.Activities.DTO
         public string City { get; set; }
         public string Venue { get; set; }
         public string HostUserName { get; set; }
-        public ICollection<Profile.Profile> Attendees { get; set; }
+        public ICollection<AttendeeDto> Attendees { get; set; }
     }
 }
