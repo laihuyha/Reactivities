@@ -35,7 +35,7 @@ namespace Application.Core.Helpers.DirectoryTree.Base
             await _recursiveOperations.GetDirectoryStructureRecursivelyAsync(rootPath, configPath, result);
         }
 
-        // 12/12/2023: Every List<TreeNode> should be replace with LinkedList<TreeNode> for better performance, the disadvantage is highly memory usage
+        // 12/12/2023: Every List<TreeNode> should be replaced with LinkedList<TreeNode> for better performance, the disadvantage is highly memory usage
         protected async Task UseGetDFSAsync(string rootPath, string configPath, List<TreeNode> result, HashSet<string> traversedPaths)
         {
             try
